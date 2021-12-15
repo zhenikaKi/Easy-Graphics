@@ -42,7 +42,7 @@ android {
 
 dependencies {
     //MPAndroidChart
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.github.PhilJay:MPAndroidChart:${Version.CHART_LIBRARY}")
     //UI
     implementation("com.google.android.material:material:${Version.MATERIAL}")
     implementation("androidx.constraintlayout:constraintlayout:${Version.CONSTRAIN}")

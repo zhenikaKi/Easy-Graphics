@@ -2,12 +2,14 @@ package ru.easygraphics
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.fragment_charts_list.*
+import ru.easygraphics.databinding.ActivityMainBinding
 
+private lateinit var binding: ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportFragmentManager.beginTransaction().replace(R.id.container,ChartsListFragment()).commit()
     }
 }

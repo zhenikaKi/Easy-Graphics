@@ -23,4 +23,6 @@ object Version {
     const val BUILD_GRADLE = "7.0.2"
 
     const val ROOM = "2.3.0"
+
+    const val CHART_LIBRARY = "v3.1.0"
 }
