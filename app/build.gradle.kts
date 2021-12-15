@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     kotlin("android.extensions")
+    id("kotlin-android")
 }
 
 android {
@@ -55,6 +56,7 @@ dependencies {
 
     //Room
     implementation("androidx.room:room-ktx:${Version.ROOM}")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     /*todo определиться со стеком
     //Moxy - Version.MOXY: 2.1.2
