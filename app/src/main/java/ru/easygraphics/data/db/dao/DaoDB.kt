@@ -5,4 +5,6 @@ interface DaoDB {
     fun chartLineDao(): ChartLineDao
     fun horizontalValueDao(): HorizontalValueDao
     fun verticalValueDao(): VerticalValueDao
+    fun chartLineDataDao(): ChartLineDataDao
+    fun chartAllDataDao(): ChartAllDataDao
 }

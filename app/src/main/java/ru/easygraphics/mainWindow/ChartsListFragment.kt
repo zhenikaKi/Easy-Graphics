@@ -38,7 +38,11 @@ class ChartsListFragment : Fragment() {
         )
 
         coroutineScope.launch {
-            //получить график
+            val chartData = db.chartAllDataDao().getAllDataOnChartId(1)
+            Log.d(LOG_TAG, "$chartData")
+
+
+            /*//получить график
             val chart = db.chartDao().getChart(1)
             Log.d(LOG_TAG, "$chart")
 
@@ -56,7 +60,7 @@ class ChartsListFragment : Fragment() {
                                 "Y: ${yValue.value} (id=${yValue.yValueId})")
                     }
                 }
-            }
+            }*/
         }
     }
 
