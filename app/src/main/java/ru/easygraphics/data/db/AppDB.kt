@@ -36,9 +36,9 @@ abstract class AppDB: RoomDatabase(), DaoDB {
             //создаем график
             val chartId = createChart(db)
             //создаем линии графика
-            val morningLineId = createLine(db, chartId, "Утром", Color.CYAN)
-            val dayLineId = createLine(db, chartId, "Днем", Color.GREEN)
-            val eveningLineId = createLine(db, chartId, "Вечером", Color.GRAY)
+            val morningLineId = createLine(db, chartId, "Утром", "#00D7FF")
+            val dayLineId = createLine(db, chartId, "Днем", "#30BF56")
+            val eveningLineId = createLine(db, chartId, "Вечером", "#5C5269")
             //создаем подписи по оси X
             val xValues = createXValues(db, chartId)
             //создаем наборы значений по оси Y
@@ -58,11 +58,11 @@ abstract class AppDB: RoomDatabase(), DaoDB {
             return db.insert(DB.TABLE_CHARTS, SQLiteDatabase.CONFLICT_REPLACE, cV)
         }
 
-        private fun createLine(db: SupportSQLiteDatabase, chartId: Long, name: String, color: Int): Long {
+        private fun createLine(db: SupportSQLiteDatabase, chartId: Long, name: String, hexColor: String): Long {
             val cV = ContentValues()
             cV.put(DB.CHART_ID, chartId)
             cV.put(DB.COLUMN_NAME, name)
-            cV.put(DB.COLOR, color.toString())
+            cV.put(DB.COLOR, hexColor)
             return db.insert(DB.TABLE_CHART_LINES, SQLiteDatabase.CONFLICT_REPLACE, cV)
         }
 
