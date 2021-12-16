@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     kotlin("android.extensions")
+    id("kotlin-android")
 }
 
 android {
@@ -49,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation("com.pes.materialcolorpicker:library:1.2.5")
     //MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:${Version.CHART_LIBRARY}")
     //UI
@@ -64,6 +66,7 @@ dependencies {
     //Room
     implementation("androidx.room:room-ktx:${Version.ROOM}")
     implementation("androidx.room:room-runtime:${Version.ROOM}")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     kapt("androidx.room:room-compiler:${Version.ROOM}")
 
     //Cicerone
