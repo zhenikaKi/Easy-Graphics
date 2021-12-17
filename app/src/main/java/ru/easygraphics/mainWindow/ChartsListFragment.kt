@@ -27,7 +27,7 @@ class ChartsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
         binding.floatingActionButton.setOnClickListener{
-             requireActivity().supportFragmentManager.beginTransaction().add(R.id.container,
+             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container,
                  ChartDescriptionFragment()
              ).commit()
         }
