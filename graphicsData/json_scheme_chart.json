@@ -1,0 +1,48 @@
+{
+    "id": "#json_scheme_chart",
+    "type": "object",
+    "description": "Данные по конкретной диаграмме",
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Название диаграммы"
+        },
+        "countDecimal": {
+            "type": "integer",
+            "enum": [0, 1, 2],
+            "description": "Количество цифр после запятой в подписи по оси Y"
+        },
+        "xValueType": {
+            "type": "integer",
+            "enum": [1, 2, 3],
+            "description": "Тип подписи по оси X (1 - строка, 2 - число, 3 - дата)"
+        },
+        "xValueDateFormat": {
+            "type": "integer",
+            "enum": [null, 1, 2, 3],
+            "description": "Вариант отображения даты при xValueType = 3 (1 - дд.мм.гггг, 2 - дд.мм, 3 - гггг.мм.дд)"
+        },
+        "xName": {
+            "type": "string",
+            "description": "Название оси X"
+        },
+        "yName": {
+            "type": "string",
+            "description": "Название оси Y"
+        },
+        "xValues": {
+            "type": "array",
+            "description": "Значения по оси X",
+            "items": {
+            "type": "string"
+            }
+        },
+        "lines": {
+            "type": "array",
+            "description": "Данные по всем линиям диаграммы",
+            "items": {
+            "$ref":"json_scheme_line.json"
+            }
+        }
+    }
+}

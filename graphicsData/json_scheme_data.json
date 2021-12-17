@@ -1,0 +1,22 @@
+{
+    "title": "Структура данных",
+    "description": "Описание структуры храние данных по диаграммам",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "integer",
+            "description": "Версия БД"
+        },
+        "date": {
+            "type": "string",
+            "description": "Дата формирования структуры данных"
+        },
+        "charts": {
+            "type": "array",
+            "description": "Данные по всем диаграммам",
+            "items": {
+            "$ref":"json_scheme_chart.json"
+            }
+        }
+    }
+}
