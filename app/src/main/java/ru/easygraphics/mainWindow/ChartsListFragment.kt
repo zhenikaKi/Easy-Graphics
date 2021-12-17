@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import kotlinx.coroutines.*
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.R
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
 class ChartsListFragment : Fragment() {
@@ -24,10 +25,12 @@ class ChartsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.floatingActionButton.setOnClickListener{
-             requireActivity().supportFragmentManager.beginTransaction().add(R.id.container,ChartDescriptionFragment()).commit()
-        }
         printDataFromDBForTest()
+        binding.floatingActionButton.setOnClickListener{
+             requireActivity().supportFragmentManager.beginTransaction().add(R.id.container,
+                 ChartDescriptionFragment()
+             ).commit()
+        }
     }
 
     //todo для теста

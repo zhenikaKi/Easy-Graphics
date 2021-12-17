@@ -1,4 +1,4 @@
-package ru.easygraphics.mainWindow
+package ru.easygraphics.chartsettingsWindow
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
