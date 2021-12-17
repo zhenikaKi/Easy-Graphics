@@ -1,0 +1,22 @@
+{
+    "id": "#json_scheme_line",
+    "type": "object",
+    "description": "Данные по конкретной линии диаграммы",
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Название линии"
+        },
+        "color": {
+            "type": "string",
+            "description": "Код цвета линии"
+        },
+        "yValues": {
+            "type": "array",
+            "description": "Значения по оси Y. Каждое значение соответствует подписи по оси X в json_scheme_chart.xValues. Если значения нет, то записывать null",
+            "items": {
+                "type": "number"
+            }
+        }
+    }
+}
