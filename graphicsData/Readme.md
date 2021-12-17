@@ -1,5 +1,5 @@
 ### Экспорти импорт данных
-Экспорт и импорт делается из json-объекта. Основная структура описана в [json_scheme_data.json](#json_scheme_data.json), параметры графика и подписи по оси X - в [json_scheme_chart.json](#json_scheme_chart.json), а параметры линий и подписей по оси Y - в [json_scheme_line.json](json_scheme_line.json).
+Экспорт и импорт делается из json-объекта. Основная структура описана в [json_scheme_data.json](json_scheme_data.json), параметры графика и подписи по оси X - в [json_scheme_chart.json](json_scheme_chart.json), а параметры линий и подписей по оси Y - в [json_scheme_line.json](json_scheme_line.json).
 
 ___Пример данных___
 ```json
