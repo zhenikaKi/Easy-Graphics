@@ -17,7 +17,7 @@ data class ChartLine(
     /** ID линии диаграммы */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DB.LINE_ID)
-    val lineId: Long,
+    val lineId: Long?,
 
     /** ID диаграммы, к которой относятся линия */
     @ColumnInfo(name = DB.CHART_ID)
