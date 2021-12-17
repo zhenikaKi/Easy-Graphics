@@ -24,6 +24,7 @@ object Version {
 
     const val ROOM = "2.3.0"
 
+    const val COLOR_PICKER = "1.2.5"
     const val CHART_LIBRARY = "v3.1.0"
     const val CICERONE = "7.1"
     const val COROUTINES = "1.5.1"
