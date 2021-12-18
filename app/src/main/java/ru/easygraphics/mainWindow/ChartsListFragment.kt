@@ -6,14 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.*
+import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.R
-import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
+import ru.easygraphics.helpers.consts.Scopes
+
 class ChartsListFragment : Fragment() {
+    private val scope = getKoin().createScope<ChartsListFragment>()
+    private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
     private lateinit var binding: FragmentChartsListBinding
+
+    companion object {
+        fun newInstance(): Fragment = ChartsListFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,17 +36,15 @@ class ChartsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
         binding.floatingActionButton.setOnClickListener{
-             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container,
-                 ChartDescriptionFragment()
-             ).commit()
+            router.navigateTo(ChartDescriptionScreen())
         }
     }
 
     //todo для теста
     private fun printDataFromDBForTest() {
         val LOG_TAG = "logApp"
-        val scope = getKoin().createScope<ChartsListFragment>()
-        val db: AppDB = scope.get()
+
+        val db: AppDB = scope.get(qualifier = named(Scopes.DB))
         val coroutineScope = CoroutineScope(
             Dispatchers.IO
                     + SupervisorJob() //дочерние корутины выполняются независимо от ошибок в других корутинах
