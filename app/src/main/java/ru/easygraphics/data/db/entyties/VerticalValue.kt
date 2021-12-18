@@ -24,7 +24,7 @@ data class VerticalValue(
     /** ID значения */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DB.Y_VALUE_ID)
-    val yValueId: Long,
+    val yValueId: Long?,
 
     /** ID линии диаграммы, к которой относятся значение */
     @ColumnInfo(name = DB.LINE_ID)

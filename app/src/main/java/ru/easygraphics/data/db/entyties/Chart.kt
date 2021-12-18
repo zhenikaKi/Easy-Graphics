@@ -9,7 +9,7 @@ data class Chart(
     /** ID диаграммы */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DB.CHART_ID)
-    val chartId: Long,
+    val chartId: Long?,
 
     /** Название диаграммы */
     @ColumnInfo(name = DB.COLUMN_NAME)

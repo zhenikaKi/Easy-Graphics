@@ -17,7 +17,7 @@ data class HorizontalValue(
     /** ID значения подписи */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DB.X_VALUE_ID)
-    val xValueId: Long,
+    val xValueId: Long?,
 
     /** ID диаграммы, к которой относятся значение подписи */
     @ColumnInfo(name = DB.CHART_ID)
