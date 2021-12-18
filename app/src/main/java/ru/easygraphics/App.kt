@@ -11,7 +11,8 @@ class App: Application() {
             androidContext(this@App)
             modules(
                 Modules.application,
-                Modules.mainWindow,
+                Modules.appActivity,
+                Modules.mainWindow
             )
         }
     }

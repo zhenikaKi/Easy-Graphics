@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.easygraphics.R
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
-import ru.easygraphics.databinding.FragmentChartsListBinding
 
 class ChartDescriptionFragment : Fragment() {
     private lateinit var binding: FragmentChartDescriptionBinding
+
+    companion object {
+        fun newInstance(): Fragment = ChartDescriptionFragment()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
