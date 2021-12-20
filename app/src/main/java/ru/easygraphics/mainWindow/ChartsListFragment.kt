@@ -2,42 +2,43 @@ package ru.easygraphics.mainWindow
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import kotlinx.coroutines.*
+import androidx.fragment.app.Fragment
+import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.R
-import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
+import ru.easygraphics.BaseFragment
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
-class ChartsListFragment : Fragment() {
-    private lateinit var binding: FragmentChartsListBinding
+import ru.easygraphics.helpers.consts.Scopes
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentChartsListBinding.inflate(inflater, container, false)
-        return binding.root
+class ChartsListFragment :
+    BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
+    private val scope = getKoin().createScope<ChartsListFragment>()
+    private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
+
+    companion object {
+        fun newInstance(): Fragment = ChartsListFragment()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
-        binding.floatingActionButton.setOnClickListener{
-             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.container,
-                 ChartDescriptionFragment()
-             ).commit()
+        binding.floatingActionButton.setOnClickListener {
+            router.navigateTo(ChartDescriptionScreen())
         }
     }
 
     //todo для теста
     private fun printDataFromDBForTest() {
         val LOG_TAG = "logApp"
-        val scope = getKoin().createScope<ChartsListFragment>()
-        val db: AppDB = scope.get()
+
+        val db: AppDB = scope.get(qualifier = named(Scopes.DB))
         val coroutineScope = CoroutineScope(
             Dispatchers.IO
                     + SupervisorJob() //дочерние корутины выполняются независимо от ошибок в других корутинах
