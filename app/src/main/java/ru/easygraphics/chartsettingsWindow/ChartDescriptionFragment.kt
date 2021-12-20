@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.terrakok.cicerone.Router
 import org.koin.core.qualifier.named
-import org.koin.java.KoinJavaComponent
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.Scopes
