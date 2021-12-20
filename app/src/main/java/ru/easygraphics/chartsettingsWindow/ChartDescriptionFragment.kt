@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import com.github.terrakok.cicerone.Router
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.R
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.Scopes
 
@@ -44,13 +45,14 @@ class ChartDescriptionFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
-        binding.colorOfThe1Chart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         list.add(Pair(binding.nameOfThe1Column,binding.colorOfThe1Chart))
         var i=1
         if (savedInstanceState!=null) {
+            binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
+            binding.colorOfThe1Chart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
             while (savedInstanceState!!.getString("name_of_the_${i}_column") != null) {
                 val llext = binding.namesOfYColumns
                 val llint = LinearLayout(context)
@@ -77,9 +79,6 @@ class ChartDescriptionFragment : Fragment() {
                 i++
             }
         }
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
             val llext =binding.namesOfYColumns
