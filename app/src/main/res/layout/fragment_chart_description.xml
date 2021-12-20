@@ -80,7 +80,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/name_of_1_column"
+                android:id="@+id/name_of_the_1_column"
                 android:layout_width="200dp"
                 android:layout_height="30dp" />
 
