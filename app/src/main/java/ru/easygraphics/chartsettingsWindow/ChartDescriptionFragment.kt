@@ -58,17 +58,17 @@ class ChartDescriptionFragment : Fragment() {
                 val llint = LinearLayout(context)
                 llint.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    30 * requireContext().resources.displayMetrics.density as Int
+                    30 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 val et = EditText(context)
                 val v = View(context)
                 et.layoutParams = LinearLayout.LayoutParams(
-                    200 * requireContext().resources.displayMetrics.density as Int,
-                    30 * requireContext().resources.displayMetrics.density as Int
+                    200 * requireContext().resources.displayMetrics.density.toInt(),
+                    30 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 v.layoutParams = LinearLayout.LayoutParams(
-                    30 * requireContext().resources.displayMetrics.density as Int,
-                    30 * requireContext().resources.displayMetrics.density as Int
+                    30 * requireContext().resources.displayMetrics.density.toInt(),
+                    30 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 llint.addView(et)
                 llint.addView(v)
@@ -86,8 +86,8 @@ class ChartDescriptionFragment : Fragment() {
             llint.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,30*requireContext().resources.displayMetrics.density as Int)
             val et = EditText(context)
             val v = View(context)
-            et.layoutParams = LinearLayout.LayoutParams(200*requireContext().resources.displayMetrics.density as Int,30*requireContext().resources.displayMetrics.density as Int)
-            v.layoutParams = LinearLayout.LayoutParams(30*requireContext().resources.displayMetrics.density as Int,30*requireContext().resources.displayMetrics.density as Int)
+            et.layoutParams = LinearLayout.LayoutParams(200*requireContext().resources.displayMetrics.density.toInt(),30*requireContext().resources.displayMetrics.density.toInt())
+            v.layoutParams = LinearLayout.LayoutParams(30*requireContext().resources.displayMetrics.density.toInt(),30*requireContext().resources.displayMetrics.density.toInt())
             llint.addView(et)
             llint.addView(v)
             v.setBackgroundColor(0)
