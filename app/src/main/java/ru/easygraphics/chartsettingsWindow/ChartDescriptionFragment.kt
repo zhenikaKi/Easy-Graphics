@@ -49,10 +49,10 @@ class ChartDescriptionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list.add(Pair(binding.nameOfThe1Column,binding.colorOfThe1Chart))
-        var i=1
         if (savedInstanceState!=null) {
             binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
             binding.colorOfThe1Chart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
+            var i=1
             while (savedInstanceState!!.getString("name_of_the_${i}_column") != null) {
                 val llext = binding.namesOfYColumns
                 val llint = LinearLayout(context)
