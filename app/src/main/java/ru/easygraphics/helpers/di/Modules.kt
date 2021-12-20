@@ -7,6 +7,7 @@ import com.github.terrakok.cicerone.Router
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.easygraphics.MainActivity
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
@@ -42,6 +43,11 @@ object Modules {
     //модуль главного окна
     val mainWindow = module {
         scope<ChartsListFragment> {
+        }
+    }
+    //модуль окна описания графика
+    val descriptionWindow = module {
+        scope<ChartDescriptionFragment>{
         }
     }
 }

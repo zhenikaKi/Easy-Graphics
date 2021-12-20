@@ -12,7 +12,8 @@ class App: Application() {
             modules(
                 Modules.application,
                 Modules.appActivity,
-                Modules.mainWindow
+                Modules.mainWindow,
+                Modules.descriptionWindow
             )
         }
     }
