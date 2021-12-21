@@ -14,6 +14,7 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
+import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 
 class ChartDescriptionFragment : Fragment() {
@@ -25,7 +26,9 @@ class ChartDescriptionFragment : Fragment() {
     companion object {
         fun newInstance(chart_id:Int): Fragment{
             val cdfragment=ChartDescriptionFragment()
-            cdfragment.arguments=Bundle().apply{putInt("chart_id",chart_id)}
+            cdfragment.arguments=Bundle().apply{
+                putInt(DB.CHART_ID,chart_id)
+            }
             return cdfragment
         }
     }
