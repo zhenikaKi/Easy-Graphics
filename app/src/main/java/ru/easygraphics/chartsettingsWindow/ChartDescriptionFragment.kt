@@ -82,7 +82,7 @@ class ChartDescriptionFragment : Fragment() {
                 llint.addView(et)
                 llint.addView(v)
                 et.setText(savedInstanceState!!.getString("name_of_the_${i}_column"))
-                v.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
+                v.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_${i}_chart"))
                 v.setOnClickListener {
                     val cp = ColorPicker(requireActivity(),255,0,0,0)
                     cp.show()
