@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.github.terrakok.cicerone.Router
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.R
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.Scopes
 
@@ -50,6 +50,14 @@ class ChartDescriptionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list.add(Pair(binding.nameOfThe1Column,binding.colorOfThe1Chart))
+        binding.colorOfThe1Chart.setOnClickListener {
+            val cp = ColorPicker(requireActivity(),255,0,0,0)
+            cp.show()
+            cp.enableAutoClose()
+            cp.setCallback {
+                binding.colorOfThe1Chart.setBackgroundColor(it)
+            }
+        }
         if (savedInstanceState!=null) {
             binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
             binding.colorOfThe1Chart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
@@ -75,6 +83,14 @@ class ChartDescriptionFragment : Fragment() {
                 llint.addView(v)
                 et.setText(savedInstanceState!!.getString("name_of_the_${i}_column"))
                 v.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
+                v.setOnClickListener {
+                    val cp = ColorPicker(requireActivity(),255,0,0,0)
+                    cp.show()
+                    cp.enableAutoClose()
+                    cp.setCallback {
+                        v.setBackgroundColor(it)
+                    }
+                }
                 llext.addView(llint)
                 list.add(Pair(et, v))
                 i++
@@ -92,6 +108,14 @@ class ChartDescriptionFragment : Fragment() {
             llint.addView(et)
             llint.addView(v)
             v.setBackgroundColor(Color.BLACK)
+            v.setOnClickListener {
+                val cp = ColorPicker(requireActivity(),255,0,0,0)
+                cp.show()
+                cp.enableAutoClose()
+                cp.setCallback {
+                    v.setBackgroundColor(it)
+                }
+            }
             llext.addView(llint)
             list.add(Pair(et,v))
         }
