@@ -51,12 +51,7 @@ class ChartDescriptionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         list.add(Pair(binding.nameOfThe1Column,binding.colorOfThe1Chart))
         binding.colorOfThe1Chart.setOnClickListener {
-            val cp = ColorPicker(requireActivity(),255,0,0,0)
-            cp.show()
-            cp.enableAutoClose()
-            cp.setCallback {
-                binding.colorOfThe1Chart.setBackgroundColor(it)
-            }
+           setColorClickListener(it)
         }
         if (savedInstanceState!=null) {
             binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
@@ -84,12 +79,7 @@ class ChartDescriptionFragment : Fragment() {
                 et.setText(savedInstanceState!!.getString("name_of_the_${i}_column"))
                 v.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_${i}_chart"))
                 v.setOnClickListener {
-                    val cp = ColorPicker(requireActivity(),255,0,0,0)
-                    cp.show()
-                    cp.enableAutoClose()
-                    cp.setCallback {
-                        v.setBackgroundColor(it)
-                    }
+                     setColorClickListener(it)
                 }
                 llext.addView(llint)
                 list.add(Pair(et, v))
@@ -109,15 +99,19 @@ class ChartDescriptionFragment : Fragment() {
             llint.addView(v)
             v.setBackgroundColor(Color.BLACK)
             v.setOnClickListener {
-                val cp = ColorPicker(requireActivity(),255,0,0,0)
-                cp.show()
-                cp.enableAutoClose()
-                cp.setCallback {
-                    v.setBackgroundColor(it)
-                }
+               setColorClickListener(it)
             }
             llext.addView(llint)
             list.add(Pair(et,v))
         }
     }
+    private fun setColorClickListener(v:View?){
+        val cp = ColorPicker(requireActivity(),255,0,0,0)
+        cp.show()
+        cp.enableAutoClose()
+        cp.setCallback {
+            v?.setBackgroundColor(it)
+        }
+    }
+
 }
