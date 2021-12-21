@@ -1,5 +1,6 @@
 package ru.easygraphics.chartsettingsWindow
 
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -58,17 +59,17 @@ class ChartDescriptionFragment : Fragment() {
                 val llint = LinearLayout(context)
                 llint.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    30 * requireContext().resources.displayMetrics.density.toInt()
+                    50 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 val et = EditText(context)
                 val v = View(context)
                 et.layoutParams = LinearLayout.LayoutParams(
-                    200 * requireContext().resources.displayMetrics.density.toInt(),
-                    30 * requireContext().resources.displayMetrics.density.toInt()
+                    250 * requireContext().resources.displayMetrics.density.toInt(),
+                    50 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 v.layoutParams = LinearLayout.LayoutParams(
-                    30 * requireContext().resources.displayMetrics.density.toInt(),
-                    30 * requireContext().resources.displayMetrics.density.toInt()
+                    50 * requireContext().resources.displayMetrics.density.toInt(),
+                    50 * requireContext().resources.displayMetrics.density.toInt()
                 )
                 llint.addView(et)
                 llint.addView(v)
@@ -83,14 +84,14 @@ class ChartDescriptionFragment : Fragment() {
         binding.buttonAddYColumn.setOnClickListener {
             val llext =binding.namesOfYColumns
             val llint = LinearLayout(context)
-            llint.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,30*requireContext().resources.displayMetrics.density as Int)
+            llint.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,40*requireContext().resources.displayMetrics.density.toInt())
             val et = EditText(context)
             val v = View(context)
-            et.layoutParams = LinearLayout.LayoutParams(200*requireContext().resources.displayMetrics.density.toInt(),30*requireContext().resources.displayMetrics.density.toInt())
-            v.layoutParams = LinearLayout.LayoutParams(30*requireContext().resources.displayMetrics.density.toInt(),30*requireContext().resources.displayMetrics.density.toInt())
+            et.layoutParams = LinearLayout.LayoutParams(250*requireContext().resources.displayMetrics.density.toInt(),50*requireContext().resources.displayMetrics.density.toInt())
+            v.layoutParams = LinearLayout.LayoutParams(50*requireContext().resources.displayMetrics.density.toInt(),50*requireContext().resources.displayMetrics.density.toInt())
             llint.addView(et)
             llint.addView(v)
-            v.setBackgroundColor(0)
+            v.setBackgroundColor(Color.BLACK)
             llext.addView(llint)
             list.add(Pair(et,v))
         }
