@@ -11,8 +11,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.github.terrakok.cicerone.Router
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
+import kotlinx.android.synthetic.main.layout_columns.view.*
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.R
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
@@ -52,33 +54,19 @@ class ChartDescriptionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list.add(Pair(binding.nameOfThe1Column,binding.colorOfThe1Chart))
-        binding.colorOfThe1Chart.setOnClickListener {
+        list.add(Pair(binding.layoutColumns.nameOfTheColumn,binding.layoutColumns.colorOfTheChart))
+        binding.layoutColumns.colorOfTheChart.setOnClickListener {
            setColorClickListener(it)
         }
         if (savedInstanceState!=null) {
-            binding.nameOfThe1Column.setText(savedInstanceState!!.getString("name_of_the_0_column"))
-            binding.colorOfThe1Chart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
+            binding.layoutColumns.nameOfTheColumn.setText(savedInstanceState!!.getString("name_of_the_0_column"))
+            binding.layoutColumns.colorOfTheChart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
             var i=1
             while (savedInstanceState!!.getString("name_of_the_${i}_column") != null) {
                 val llext = binding.namesOfYColumns
-                val llint = LinearLayout(context)
-                llint.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    50 * requireContext().resources.displayMetrics.density.toInt()
-                )
-                val et = EditText(context)
-                val v = View(context)
-                et.layoutParams = LinearLayout.LayoutParams(
-                    250 * requireContext().resources.displayMetrics.density.toInt(),
-                    50 * requireContext().resources.displayMetrics.density.toInt()
-                )
-                v.layoutParams = LinearLayout.LayoutParams(
-                    50 * requireContext().resources.displayMetrics.density.toInt(),
-                    50 * requireContext().resources.displayMetrics.density.toInt()
-                )
-                llint.addView(et)
-                llint.addView(v)
+                val llint:LinearLayout = LinearLayout.inflate(context, R.layout.layout_columns,null) as LinearLayout
+                val et = llint.name_of_the_column
+                val v = llint.color_of_the_chart
                 et.setText(savedInstanceState!!.getString("name_of_the_${i}_column"))
                 v.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_${i}_chart"))
                 v.setOnClickListener {
@@ -92,14 +80,9 @@ class ChartDescriptionFragment : Fragment() {
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
             val llext =binding.namesOfYColumns
-            val llint = LinearLayout(context)
-            llint.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,40*requireContext().resources.displayMetrics.density.toInt())
-            val et = EditText(context)
-            val v = View(context)
-            et.layoutParams = LinearLayout.LayoutParams(250*requireContext().resources.displayMetrics.density.toInt(),50*requireContext().resources.displayMetrics.density.toInt())
-            v.layoutParams = LinearLayout.LayoutParams(50*requireContext().resources.displayMetrics.density.toInt(),50*requireContext().resources.displayMetrics.density.toInt())
-            llint.addView(et)
-            llint.addView(v)
+            val llint:LinearLayout = LinearLayout.inflate(context, R.layout.layout_columns,null) as LinearLayout
+            val et = llint.name_of_the_column
+            val v = llint.color_of_the_chart
             v.setBackgroundColor(Color.BLACK)
             v.setOnClickListener {
                setColorClickListener(it)
