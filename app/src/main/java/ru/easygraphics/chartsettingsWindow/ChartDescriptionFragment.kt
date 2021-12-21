@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.github.terrakok.cicerone.Router
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
+import kotlinx.android.synthetic.main.fragment_chart_description.*
 import kotlinx.android.synthetic.main.layout_columns.view.*
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
@@ -49,6 +50,12 @@ class ChartDescriptionFragment : Fragment() {
             outState.putString("name_of_the_${i}_column",list[i].first.text.toString())
             outState.putInt("color_of_the_${i}_chart",(list[i].second.background as ColorDrawable).color)
         }
+        outState.putString("chartName",binding.chartName.text.toString())
+        outState.putString("x_axis_signature",binding.xAxisSignature.text.toString())
+        outState.putString("y_axis_signature",binding.yAxisSignature.text.toString())
+        outState.putString("number_of_digits_after_decimal_point",binding.numberOfDigitsAfterDecimalPoint.text.toString())
+        outState.putInt("values_type_Y",binding.valuesTypeY.selectedItemPosition)
+        outState.putInt("date_format",binding.dateFormat.selectedItemPosition)
     }
 
 
@@ -59,6 +66,12 @@ class ChartDescriptionFragment : Fragment() {
            setColorClickListener(it)
         }
         if (savedInstanceState!=null) {
+            binding.chartName.setText(savedInstanceState!!.getString("chartName"))
+            binding.xAxisSignature.setText(savedInstanceState!!.getString("x_axis_signature"))
+            binding.yAxisSignature.setText(savedInstanceState!!.getString("y_axis_signature"))
+            binding.numberOfDigitsAfterDecimalPoint.setText(savedInstanceState!!.getString("number_of_digits_after_decimal_point"))
+            binding.valuesTypeY.setSelection(savedInstanceState!!.getInt("values_type_Y"))
+            binding.dateFormat.setSelection(savedInstanceState!!.getInt("date_format"))
             binding.layoutColumns.nameOfTheColumn.setText(savedInstanceState!!.getString("name_of_the_0_column"))
             binding.layoutColumns.colorOfTheChart.setBackgroundColor(savedInstanceState!!.getInt("color_of_the_0_chart"))
             var i=1
