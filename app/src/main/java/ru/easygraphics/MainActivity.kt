@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        router.newRootScreen(ChartListScreen())
+        if (savedInstanceState == null)
+        {
+            router.newRootScreen(ChartListScreen())
+        }
     }
 
     override fun onResumeFragments() {
