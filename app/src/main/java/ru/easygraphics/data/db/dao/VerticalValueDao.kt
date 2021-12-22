@@ -1,7 +1,7 @@
 package ru.easygraphics.data.db.dao
 
 import androidx.room.*
-import ru.easygraphics.data.db.entyties.VerticalValue
+import ru.easygraphics.data.db.entities.VerticalValue
 import ru.easygraphics.helpers.consts.DB
 
 @Dao

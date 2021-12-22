@@ -1,4 +1,4 @@
-package ru.easygraphics.data.db.entyties
+package ru.easygraphics.data.db.entities
 
 import androidx.room.*
 import ru.easygraphics.helpers.consts.DB

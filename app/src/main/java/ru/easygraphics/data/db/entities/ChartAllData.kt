@@ -1,4 +1,4 @@
-package ru.easygraphics.data.db.entyties
+package ru.easygraphics.data.db.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
