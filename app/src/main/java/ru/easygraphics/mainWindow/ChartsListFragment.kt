@@ -2,40 +2,35 @@ package ru.easygraphics.mainWindow
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.BaseFragment
 import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
 import ru.easygraphics.helpers.consts.Scopes
 
-class ChartsListFragment : Fragment() {
+class ChartsListFragment :
+    BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
+
     private val scope = getKoin().createScope<ChartsListFragment>()
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
-    private lateinit var binding: FragmentChartsListBinding
 
     companion object {
         fun newInstance(): Fragment = ChartsListFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentChartsListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
-        binding.floatingActionButton.setOnClickListener{
+        binding.floatingActionButton.setOnClickListener {
             router.navigateTo(ChartDescriptionScreen(-1))
         }
     }
