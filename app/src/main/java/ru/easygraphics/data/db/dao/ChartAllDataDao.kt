@@ -10,5 +10,5 @@ import ru.easygraphics.helpers.consts.DB
 interface ChartAllDataDao {
     @Transaction
     @Query("select * from ${DB.TABLE_CHARTS} where ${DB.CHART_ID} = :chartId")
-    suspend fun getAllDataOnChartId(chartId: Long): List<ChartAllData>
+    suspend fun getAllDataOnChartId(chartId: Long): ChartAllData
 }
