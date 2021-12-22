@@ -1,7 +1,7 @@
 package ru.easygraphics.data.db.dao
 
 import androidx.room.*
-import ru.easygraphics.data.db.entyties.ChartLine
+import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.helpers.consts.DB
 
 @Dao

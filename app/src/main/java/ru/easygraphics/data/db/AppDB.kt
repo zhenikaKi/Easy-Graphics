@@ -2,7 +2,6 @@ package ru.easygraphics.data.db
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -10,12 +9,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import ru.easygraphics.data.db.converts.DateTypesConvert
 import ru.easygraphics.data.db.converts.ValueTypesConvert
 import ru.easygraphics.data.db.dao.DaoDB
-import ru.easygraphics.data.db.entyties.Chart
-import ru.easygraphics.data.db.entyties.ChartLine
-import ru.easygraphics.data.db.entyties.HorizontalValue
-import ru.easygraphics.data.db.entyties.VerticalValue
+import ru.easygraphics.data.db.entities.Chart
+import ru.easygraphics.data.db.entities.ChartLine
+import ru.easygraphics.data.db.entities.HorizontalValue
+import ru.easygraphics.data.db.entities.VerticalValue
 import ru.easygraphics.helpers.consts.DB
-import kotlin.random.Random
 
 @Database(
     entities = [
