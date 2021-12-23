@@ -51,6 +51,12 @@ class LocalDbRepository(private val db: AppDB): DataRepository {
                             ColorConvert.colorToHex(list_y_lines[i].second)))
                     }
                 }
+                if (list_y_lines.size < cl.size){
+                    for (i in list_y_lines.size..cl.size-1){
+                        db.chartLineDao().delete(ChartLine(cl[i].lineId, chart_id,list_y_lines[i].first,
+                            ColorConvert.colorToHex(list_y_lines[i].second)))
+                    }
+                }
         }
         return chart_id
     }
