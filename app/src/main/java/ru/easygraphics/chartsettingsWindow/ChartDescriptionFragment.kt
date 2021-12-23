@@ -17,6 +17,7 @@ import ru.easygraphics.R
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
+import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
@@ -91,9 +92,9 @@ class ChartDescriptionFragment :
             }
         }
 
-        /*binding.buttonToTable.setOnClickListener {
-            router.navigateTo(TableScreen())
-        }*/
+        binding.buttonToTable.setOnClickListener {
+            router.navigateTo(TableScreen(1, binding.chartName.text.toString())) //to test only
+        }
 
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
