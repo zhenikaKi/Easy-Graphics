@@ -14,16 +14,17 @@ import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.BaseFragment
 import ru.easygraphics.R
+import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
-import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
 
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
+    private val db: AppDB = scope.get(qualifier = named(Scopes.DB))
     private var list: ArrayList<Pair<EditText, View>> = arrayListOf()
 
     companion object {
@@ -92,10 +93,6 @@ class ChartDescriptionFragment :
             }
         }
 
-        /*binding.buttonToTable.setOnClickListener {
-            router.navigateTo(TableScreen())
-        }*/
-
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
             val llext = binding.namesOfYColumns
@@ -109,6 +106,17 @@ class ChartDescriptionFragment :
             }
             llext.addView(llint)
             list.add(Pair(et, v))
+        }
+        binding.buttonToTable.setOnClickListener {
+            val chart_id = requireArguments().getInt(DB.CHART_ID)
+            if (chart_id==-1){
+                //сохраняем новую запись в таблицу Chart
+                //chart_id = новое значение chart_id в таблице
+            }
+            else{
+                //изменяем запись в таблице Chart
+            }
+            //router.navigateTo(TableScreen(chart_id)),
         }
     }
 
