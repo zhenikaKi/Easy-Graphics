@@ -137,8 +137,8 @@ class ChartDescriptionFragment :
             if (binding.chartName.text.toString() == "") return@setOnClickListener
             model.saveDataToDB(Chart(
                 chartId,
-                binding.chartName.toString(),
-                binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
+                binding.chartName.text.toString(),
+                binding.numberOfDigitsAfterDecimalPoint.text.toString().toInt(),
                 ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
                 DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
             ),list.map{pair->Pair(pair.first.text.toString(),(pair.second.background as ColorDrawable).color)})
