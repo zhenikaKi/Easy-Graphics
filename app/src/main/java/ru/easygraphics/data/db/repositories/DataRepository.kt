@@ -11,7 +11,7 @@ interface DataRepository {
      * @param chartId идентификатор конкретного графика
      */
     suspend fun getGraphicData(chartId: Long): ChartAllDataViewed
-
+    suspend fun saveChartDescription(chart:Chart,list_y_lines:List<Pair<String,Int>>):Long
     /** Сохранить основные данные по графику */
     suspend fun saveChart(chart: Chart)
 }

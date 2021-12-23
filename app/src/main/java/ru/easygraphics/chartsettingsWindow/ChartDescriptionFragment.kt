@@ -3,10 +3,10 @@ package ru.easygraphics.chartsettingsWindow
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.annotation.InspectableProperty
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
@@ -27,14 +27,19 @@ import ru.easygraphics.data.db.converts.ValueTypesConvert
 import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
+import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.ColorConvert
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
+import ru.easygraphics.states.BaseState
+import ru.easygraphics.states.DescriptionState
+import ru.easygraphics.states.GraphicState
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
-
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
+    private val model: ChartDescriptionViewModel = scope.get(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL))
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
     private val db: AppDB = scope.get(qualifier = named(Scopes.DB))
     private var list: ArrayList<Pair<EditText, View>> = arrayListOf()
@@ -66,9 +71,21 @@ class ChartDescriptionFragment :
         outState.putInt("date_format", binding.dateFormat.selectedItemPosition)
     }
 
+    private fun renderData(state: BaseState) {
+        when (state) {
+            //начало процесса загрузки
+            is BaseState.Loading -> { }
 
+            //получен id
+            is DescriptionState.Success -> router.navigateTo(TableScreen(state.chart_id))
+
+            //какая-то ошибка
+            is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        model.getLiveData().observe(viewLifecycleOwner,{renderData(it)})
         list.add(Pair(binding.layoutColumns.nameOfTheColumn, binding.layoutColumns.colorOfTheChart))
         binding.layoutColumns.colorOfTheChart.setOnClickListener {
             setColorClickListener(it)
@@ -118,63 +135,13 @@ class ChartDescriptionFragment :
         }
         binding.buttonToTable.setOnClickListener {
             if (binding.chartName.text.toString() == "") return@setOnClickListener
-            var chart_id:Long=0
-            val coroutineScope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
-            val O=Object()
-            coroutineScope.launch {
-                if (chartId == null) {
-                    chart_id=db.chartDao().save(
-                        Chart(
-                            chartId,
-                            binding.chartName.toString(),
-                            binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
-                            ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
-                            DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
-                        )
-                    )
-                    O.notify()
-                    for (i in list.indices) {
-                        db.chartLineDao().save(ChartLine(null, chart_id,list[i].first.text.toString(),
-                            ColorConvert.colorToHex((list[i].second.background as ColorDrawable).color)))
-                    }
-                    //сохраняем новую запись в таблицы Chart и ChartLine
-                    //chart_id = новое значение chart_id в таблице
-                } else {
-                    chart_id=db.chartDao().save(
-                        Chart(
-                            chartId,
-                            binding.chartName.toString(),
-                            binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
-                            ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
-                            DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
-                        )
-                    )
-                    O.notify()
-                    val cl=db.chartLineDao().getLines(chart_id)
-                    for (i in list.indices) {
-                        if (i>=cl.size) {
-                            db.chartLineDao().save(
-                                ChartLine(
-                                    null, chart_id, list[i].first.text.toString(),
-                                    ColorConvert.colorToHex((list[i].second.background as ColorDrawable).color)
-                                )
-                            )
-                        }
-                        else{
-                            db.chartLineDao().save(
-                                ChartLine(
-                                    cl[i].lineId, chart_id, list[i].first.text.toString(),
-                                    ColorConvert.colorToHex((list[i].second.background as ColorDrawable).color)
-                                )
-                            )
-                        }
-                    }
-                    //изменяем запись в таблицах Chart и ChartLine
-                }
-            }
-            O.wait()
-            router.navigateTo(TableScreen(chart_id))
-            //router.navigateTo(TableScreen(chart_id)),
+            model.saveDataToDB(Chart(
+                chartId,
+                binding.chartName.toString(),
+                binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
+                ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
+                DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
+            ),list.map{pair->Pair(pair.first.text.toString(),(pair.second.background as ColorDrawable).color)})
         }
     }
 

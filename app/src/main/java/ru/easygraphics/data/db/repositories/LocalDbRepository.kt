@@ -1,7 +1,9 @@
 package ru.easygraphics.data.db.repositories
 
+import kotlinx.coroutines.*
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.entities.*
+import ru.easygraphics.helpers.ColorConvert
 
 class LocalDbRepository(private val db: AppDB): DataRepository {
 
@@ -26,6 +28,41 @@ class LocalDbRepository(private val db: AppDB): DataRepository {
         }
 
         return result
+    }
+
+    override suspend fun saveChartDescription(chart: Chart, list_y_lines: List<Pair<String, Int>>):Long {
+        var chart_id:Long = 0
+        val o = Object()
+        val coroutineScope =
+            CoroutineScope(
+                Dispatchers.IO
+            )
+        coroutineScope.launch{
+            if (chart.chartId == null) {
+                chart_id=db.chartDao().save(chart)
+                o.notify()
+                for (i in list_y_lines.indices) {
+                    db.chartLineDao().save(ChartLine(null, chart_id,list_y_lines[i].first,
+                        ColorConvert.colorToHex(list_y_lines[i].second)))
+                }
+            } else {
+                chart_id=db.chartDao().save(chart)
+                o.notify()
+                val cl=db.chartLineDao().getLines(chart_id)
+                for (i in list_y_lines.indices) {
+                    if (i>=cl.size) {
+                        db.chartLineDao().save(ChartLine(null, chart_id,list_y_lines[i].first,
+                            ColorConvert.colorToHex(list_y_lines[i].second)))
+                    }
+                    else{
+                        db.chartLineDao().save(ChartLine(cl[i].lineId, chart_id,list_y_lines[i].first,
+                            ColorConvert.colorToHex(list_y_lines[i].second)))
+                    }
+                }
+            }
+        }
+        o.wait()
+        return chart_id
     }
 
     override suspend fun saveChart(chart: Chart) {
