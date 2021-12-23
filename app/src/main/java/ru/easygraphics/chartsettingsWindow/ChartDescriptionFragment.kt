@@ -6,16 +6,27 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.annotation.InspectableProperty
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.layout_columns.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.R
+import ru.easygraphics.chartTableWindow.TableScreen
 import ru.easygraphics.data.db.AppDB
+import ru.easygraphics.data.db.converts.DateTypesConvert
+import ru.easygraphics.data.db.converts.ValueTypesConvert
+import ru.easygraphics.data.db.entities.Chart
+import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
+import ru.easygraphics.helpers.ColorConvert
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 
@@ -28,10 +39,10 @@ class ChartDescriptionFragment :
     private var list: ArrayList<Pair<EditText, View>> = arrayListOf()
 
     companion object {
-        fun newInstance(chart_id: Int): Fragment {
+        fun newInstance(chart_id: Long): Fragment {
             val cdfragment = ChartDescriptionFragment()
             cdfragment.arguments = Bundle().apply {
-                putInt(DB.CHART_ID, chart_id)
+                putLong(DB.CHART_ID, chart_id)
             }
             return cdfragment
         }
@@ -108,14 +119,49 @@ class ChartDescriptionFragment :
             list.add(Pair(et, v))
         }
         binding.buttonToTable.setOnClickListener {
-            val chart_id = requireArguments().getInt(DB.CHART_ID)
-            if (chart_id==-1){
-                //сохраняем новую запись в таблицу Chart
-                //chart_id = новое значение chart_id в таблице
+            if (binding.chartName.text.toString() == "") return@setOnClickListener
+            var chart_id = requireArguments().getLong(DB.CHART_ID)
+            val coroutineScope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
+            coroutineScope.launch {
+                if (chart_id == -1L) {
+                    db.chartDao().save(
+                        Chart(
+                            null,
+                            binding.chartName.toString(),
+                            binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
+                            ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
+                            DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
+                        )
+                    )
+                    chart_id=db.chartDao().getCharts()[db.chartDao().getCharts().size-1].chartId!!
+                    for (i in list.indices) {
+                        db.chartLineDao().save(ChartLine(null, chart_id,list[i].first.text.toString(),
+                            ColorConvert.colorToHex((list[i].second.background as ColorDrawable).color)))
+                    }
+                    //сохраняем новую запись в таблицы Chart и ChartLine
+                    //chart_id = новое значение chart_id в таблице
+                } else {
+                    db.chartDao().save(
+                        Chart(
+                            chart_id,
+                            binding.chartName.toString(),
+                            binding.numberOfDigitsAfterDecimalPoint.toString().toInt(),
+                            ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
+                            DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
+                        )
+                    )
+                    val cl=db.chartLineDao().getLines(chart_id)
+                    for (i in cl.indices){
+                        db.chartLineDao().delete(cl[i])
+                    }
+                    for (i in list.indices) {
+                        db.chartLineDao().save(ChartLine(null, chart_id,list[i].first.text.toString(),
+                            ColorConvert.colorToHex((list[i].second.background as ColorDrawable).color)))
+                    }
+                    //изменяем запись в таблицах Chart и ChartLine
+                }
             }
-            else{
-                //изменяем запись в таблице Chart
-            }
+            router.navigateTo(TableScreen(chart_id))
             //router.navigateTo(TableScreen(chart_id)),
         }
     }

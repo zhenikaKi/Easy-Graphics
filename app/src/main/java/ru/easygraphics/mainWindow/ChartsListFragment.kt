@@ -33,7 +33,7 @@ class ChartsListFragment :
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
         binding.floatingActionButton.setOnClickListener {
-            //router.navigateTo(ChartDescriptionScreen(-1))
+            //router.navigateTo(ChartDescriptionScreen(-1L))
             router.navigateTo(GraphicScreen(1)) //для теста
         }
     }
