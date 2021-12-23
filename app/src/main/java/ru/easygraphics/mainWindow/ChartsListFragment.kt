@@ -11,10 +11,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.BaseFragment
+import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
+import ru.easygraphics.graphicwindow.GraphicScreen
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 
 class ChartsListFragment :
@@ -31,14 +33,13 @@ class ChartsListFragment :
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
         binding.floatingActionButton.setOnClickListener {
-            router.navigateTo(ChartDescriptionScreen(-1))
+            //router.navigateTo(ChartDescriptionScreen(-1))
+            router.navigateTo(GraphicScreen(1)) //для теста
         }
     }
 
     //todo для теста
     private fun printDataFromDBForTest() {
-        val LOG_TAG = "logApp"
-
         val db: AppDB = scope.get(qualifier = named(Scopes.DB))
         val coroutineScope = CoroutineScope(
             Dispatchers.IO
@@ -47,7 +48,7 @@ class ChartsListFragment :
 
         coroutineScope.launch {
             val chartData = db.chartAllDataDao().getAllDataOnChartId(1)
-            Log.d(LOG_TAG, "$chartData")
+            Log.d(App.LOG_TAG, "$chartData")
 
 
             /*//получить график

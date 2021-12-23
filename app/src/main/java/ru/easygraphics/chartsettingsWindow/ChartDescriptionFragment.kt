@@ -12,7 +12,7 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.layout_columns.view.*
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.BaseFragment
+import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.R
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
@@ -64,28 +64,28 @@ class ChartDescriptionFragment :
         binding.layoutColumns.colorOfTheChart.setOnClickListener {
             setColorClickListener(it)
         }
-        if (savedInstanceState != null) {
+        savedInstanceState?.let {
             with(binding) {
-                chartName.setText(savedInstanceState.getString("chartName"))
-                xAxisSignature.setText(savedInstanceState.getString("x_axis_signature"))
-                yAxisSignature.setText(savedInstanceState.getString("y_axis_signature"))
-                numberOfDigitsAfterDecimalPoint.setText(savedInstanceState.getString("number_of_digits_after_decimal_point"))
-                valuesTypeY.setSelection(savedInstanceState.getInt("values_type_Y"))
-                dateFormat.setSelection(savedInstanceState.getInt("date_format"))
-                layoutColumns.nameOfTheColumn.setText(savedInstanceState.getString("name_of_the_0_column"))
-                layoutColumns.colorOfTheChart.setBackgroundColor(savedInstanceState.getInt("color_of_the_0_chart"))
+                chartName.setText(it.getString("chartName"))
+                xAxisSignature.setText(it.getString("x_axis_signature"))
+                yAxisSignature.setText(it.getString("y_axis_signature"))
+                numberOfDigitsAfterDecimalPoint.setText(it.getString("number_of_digits_after_decimal_point"))
+                valuesTypeY.setSelection(it.getInt("values_type_Y"))
+                dateFormat.setSelection(it.getInt("date_format"))
+                layoutColumns.nameOfTheColumn.setText(it.getString("name_of_the_0_column"))
+                layoutColumns.colorOfTheChart.setBackgroundColor(it.getInt("color_of_the_0_chart"))
             }
             var i = 1
-            while (savedInstanceState.getString("name_of_the_${i}_column") != null) {
+            while (it.getString("name_of_the_${i}_column") != null) {
                 val llext = binding.namesOfYColumns
                 val llint: LinearLayout =
                     LinearLayout.inflate(context, R.layout.layout_columns, null) as LinearLayout
                 val et = llint.name_of_the_column
                 val v = llint.color_of_the_chart
-                et.setText(savedInstanceState.getString("name_of_the_${i}_column"))
-                v.setBackgroundColor(savedInstanceState.getInt("color_of_the_${i}_chart"))
-                v.setOnClickListener {
-                    setColorClickListener(it)
+                et.setText(it.getString("name_of_the_${i}_column"))
+                v.setBackgroundColor(it.getInt("color_of_the_${i}_chart"))
+                v.setOnClickListener { view ->
+                    setColorClickListener(view)
                 }
                 llext.addView(llint)
                 list.add(Pair(et, v))
