@@ -13,7 +13,8 @@ class App: Application() {
                 Modules.application,
                 Modules.appActivity,
                 Modules.mainWindow,
-                Modules.descriptionWindow
+                Modules.descriptionWindow,
+                Modules.graphicWindow
             )
         }
     }

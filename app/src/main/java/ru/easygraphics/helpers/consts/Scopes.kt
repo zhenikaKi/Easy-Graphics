@@ -5,4 +5,8 @@ object Scopes {
     const val CICERONE = "Cicerone"
     const val NAVIGATOR = "NavigatorHolder"
     const val ROUTER = "Router"
+
+    const val GRAPHIC_VIEW_MODEL = "graphicViewModel"
+
+    const val DATA_REPOSITORY = "dataRepository"
 }

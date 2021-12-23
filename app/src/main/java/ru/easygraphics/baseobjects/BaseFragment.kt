@@ -1,4 +1,4 @@
-package ru.easygraphics
+package ru.easygraphics.baseobjects
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,11 +22,17 @@ abstract class BaseFragment<VB : ViewBinding>(
         savedInstanceState: Bundle?
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
+        initAfterCreate()
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    //какая-то дополнительная инициализация данных
+    open fun initAfterCreate() {
+
     }
 }
