@@ -14,17 +14,16 @@ import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.R
-import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
+import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
 
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
-    private val db: AppDB = scope.get(qualifier = named(Scopes.DB))
     private var list: ArrayList<Pair<EditText, View>> = arrayListOf()
 
     companion object {
@@ -93,6 +92,10 @@ class ChartDescriptionFragment :
             }
         }
 
+        binding.buttonToTable.setOnClickListener {
+            router.navigateTo(TableScreen(1, binding.chartName.text.toString())) //to test only
+        }
+
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
             val llext = binding.namesOfYColumns
@@ -106,9 +109,6 @@ class ChartDescriptionFragment :
             }
             llext.addView(llint)
             list.add(Pair(et, v))
-        }
-        binding.buttonToTable.setOnClickListener {
-
         }
     }
 
