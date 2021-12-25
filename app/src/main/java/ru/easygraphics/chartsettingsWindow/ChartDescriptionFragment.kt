@@ -108,15 +108,7 @@ class ChartDescriptionFragment :
             list.add(Pair(et, v))
         }
         binding.buttonToTable.setOnClickListener {
-            val chart_id = requireArguments().getInt(DB.CHART_ID)
-            if (chart_id==-1){
-                //сохраняем новую запись в таблицу Chart
-                //chart_id = новое значение chart_id в таблице
-            }
-            else{
-                //изменяем запись в таблице Chart
-            }
-            //router.navigateTo(TableScreen(chart_id)),
+            
         }
     }
 
