@@ -108,7 +108,7 @@ class ChartDescriptionFragment :
             list.add(Pair(et, v))
         }
         binding.buttonToTable.setOnClickListener {
-            
+
         }
     }
 
