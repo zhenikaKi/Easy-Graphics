@@ -17,6 +17,8 @@ object Version {
     const val CONSTRAIN = "2.1.0"
     const val APPCOMPAT = "1.3.1"
     const val RECYCLERVIEW = "1.2.1"
+    const val LIFECYCLE = "2.4.0"
+    const val LIFECYCLE_EXTENSION = "2.2.0"
 
     const val KOTLIN = "1.5.31"
     const val KOTLIN_CORE = "1.6.0"
