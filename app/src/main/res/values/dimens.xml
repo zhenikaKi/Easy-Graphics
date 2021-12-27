@@ -11,4 +11,10 @@
     <!-- размеры поля ввода названия линии в окне создания/изменения графика -->
     <dimen name="edit_line_name_width">200dp</dimen>
     <dimen name="edit_line_name_height">40dp</dimen>
+
+    <dimen name="default_card_padding">10dp</dimen>
+    <dimen name="default_card_text_size">19sp</dimen>
+    <dimen name="default_fragment_padding">7dp</dimen>
+    <dimen name="default_fragment_text_size">20sp</dimen>
+    <dimen name="zero_size">0dp</dimen>
 </resources>

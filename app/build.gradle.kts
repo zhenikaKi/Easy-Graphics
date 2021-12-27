@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation(files("./libs/scrolltableview-release.aar"))
+
     implementation("com.pes.materialcolorpicker:library:${Version.COLOR_PICKER}")
     //MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:${Version.CHART_LIBRARY}")
@@ -57,6 +59,10 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:${Version.CONSTRAIN}")
     implementation("androidx.appcompat:appcompat:${Version.APPCOMPAT}")
     implementation("androidx.recyclerview:recyclerview:${Version.RECYCLERVIEW}")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Version.LIFECYCLE}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Version.LIFECYCLE}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.LIFECYCLE}")
+    implementation("androidx.lifecycle:lifecycle-extensions:${Version.LIFECYCLE_EXTENSION}")
 
     //Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.KOTLIN}")

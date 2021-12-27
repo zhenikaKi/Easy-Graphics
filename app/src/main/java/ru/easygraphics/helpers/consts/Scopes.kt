@@ -8,6 +8,11 @@ object Scopes {
 
     const val GRAPHIC_VIEW_MODEL = "graphicViewModel"
     const val DESCRIPTION_VIEW_MODEL= "descriptionViewModel"
+    const val TABLE_TEST_VIEW_MODEL = "tableTestViewModel"
 
     const val DATA_REPOSITORY = "dataRepository"
+
+    const val TABLE_VIEW_MODEL = "tableViewModel"
+
+    const val TABLE_ROW_REPOSITORY = "tableRowRepository"
 }

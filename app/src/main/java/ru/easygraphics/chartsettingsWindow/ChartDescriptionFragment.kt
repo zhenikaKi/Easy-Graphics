@@ -35,6 +35,7 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.states.GraphicState
+import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
@@ -77,7 +78,7 @@ class ChartDescriptionFragment :
             is BaseState.Loading -> { }
 
             //получен id
-            is DescriptionState.Success -> router.navigateTo(TableScreen(state.chart_id))
+            is DescriptionState.Success -> router.navigateTo(TableScreen(1, binding.chartName.text.toString())) 
 
             //какая-то ошибка
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)

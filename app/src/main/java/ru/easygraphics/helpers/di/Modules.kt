@@ -13,11 +13,17 @@ import ru.easygraphics.chartsettingsWindow.ChartDescriptionViewModel
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.db.repositories.LocalDbRepository
+import ru.easygraphics.data.db.repositories.TableRowRepository
+import ru.easygraphics.data.db.repositories.TableRowRepositoryImp
 import ru.easygraphics.graphicwindow.GraphicFragment
 import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartsListFragment
+import ru.easygraphics.tableWindow.TableFragment
+import ru.easygraphics.tableWindow.TableViewModel
+import ru.easygraphics.tabletest.TableTestFragment
+import ru.easygraphics.tabletest.TableTestViewModel
 
 object Modules {
     //модуль, содержимое которого должно быть во всем приложении
@@ -43,6 +49,11 @@ object Modules {
         //работа с данными
         single<DataRepository>(qualifier = named(Scopes.DATA_REPOSITORY)) {
             LocalDbRepository(get(qualifier = named(Scopes.DB)))
+        }
+
+        //работа с данными таблицы
+        single<TableRowRepository>(qualifier = named(Scopes.TABLE_ROW_REPOSITORY)) {
+            TableRowRepositoryImp(get(qualifier = named(Scopes.DB)))
         }
     }
 
@@ -72,6 +83,24 @@ object Modules {
         scope<GraphicFragment> {
             viewModel(qualifier = named(Scopes.GRAPHIC_VIEW_MODEL)) {
                 GraphicViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
+        }
+    }
+
+    //модуль окна таблицы
+    val tableWindow = module {
+        scope<TableFragment> {
+            viewModel(qualifier = named(Scopes.TABLE_VIEW_MODEL)) {
+                TableViewModel(get(qualifier = named(Scopes.TABLE_ROW_REPOSITORY)))
+            }
+        }
+    }
+
+    //модуль тестового окна с таблицей
+    val tableTestWindow = module {
+        scope<TableTestFragment> {
+            viewModel(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL)) {
+                TableTestViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }
