@@ -7,21 +7,27 @@ import androidx.recyclerview.widget.ListAdapter
 import ru.easygraphics.R
 import ru.easygraphics.data.domain.TableLineData
 
-class TableAdapter() : ListAdapter<TableLineData, TableViewHolder>(TableDiffUtil) {
+class TableAdapter(
+    private val delegate: Delegate?
+) : ListAdapter<TableLineData, TableViewHolder>(TableDiffUtil) {
+
+    interface Delegate {
+        fun onRowSelected(tableLineData: TableLineData)
+    }
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolder {
-        val rootView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.table_line, parent, false)
-
         context = parent.context
+
+        val rootView = LayoutInflater.from(context)
+            .inflate(R.layout.table_line, parent, false)
 
         return TableViewHolder(rootView)
     }
 
     override fun onBindViewHolder(holder: TableViewHolder, position: Int) =
-        holder.bind(getItem(position), context = context)
+        holder.bind(getItem(position), context = context, delegate)
 
     override fun getItemId(position: Int) = position.toLong()
 
