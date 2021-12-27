@@ -9,6 +9,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.easygraphics.MainActivity
 import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionViewModel
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.db.repositories.LocalDbRepository
@@ -71,6 +72,9 @@ object Modules {
     //модуль окна описания графика
     val descriptionWindow = module {
         scope<ChartDescriptionFragment>{
+            viewModel(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL)){
+                ChartDescriptionViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
         }
     }
 

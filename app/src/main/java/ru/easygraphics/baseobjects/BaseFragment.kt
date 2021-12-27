@@ -35,4 +35,5 @@ abstract class BaseFragment<VB : ViewBinding>(
     open fun initAfterCreate() {
 
     }
+
 }
