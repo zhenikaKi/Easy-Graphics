@@ -17,6 +17,8 @@ import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartsListFragment
+import ru.easygraphics.tabletest.TableTestFragment
+import ru.easygraphics.tabletest.TableTestViewModel
 
 object Modules {
     //модуль, содержимое которого должно быть во всем приложении
@@ -68,6 +70,15 @@ object Modules {
         scope<GraphicFragment> {
             viewModel(qualifier = named(Scopes.GRAPHIC_VIEW_MODEL)) {
                 GraphicViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
+        }
+    }
+
+    //модуль тестового окна с таблицей
+    val tableTestWindow = module {
+        scope<TableTestFragment> {
+            viewModel(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL)) {
+                TableTestViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }

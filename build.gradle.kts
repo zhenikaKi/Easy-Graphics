@@ -17,6 +17,9 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
+        flatDir {
+            dirs("libs")
+        }
     }
 }
 

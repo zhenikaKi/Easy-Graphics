@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation(files("./libs/scrolltableview-release.aar"))
+
     implementation("com.pes.materialcolorpicker:library:${Version.COLOR_PICKER}")
     //MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:${Version.CHART_LIBRARY}")
