@@ -15,7 +15,8 @@ class App: Application() {
                 Modules.mainWindow,
                 Modules.descriptionWindow,
                 Modules.graphicWindow,
-                Modules.tableWindow
+                Modules.tableWindow,
+                Modules.tableTestWindow
             )
         }
     }

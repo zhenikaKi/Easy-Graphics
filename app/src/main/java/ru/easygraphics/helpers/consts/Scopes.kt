@@ -7,6 +7,7 @@ object Scopes {
     const val ROUTER = "Router"
 
     const val GRAPHIC_VIEW_MODEL = "graphicViewModel"
+    const val TABLE_TEST_VIEW_MODEL = "tableTestViewModel"
 
     const val DATA_REPOSITORY = "dataRepository"
 
