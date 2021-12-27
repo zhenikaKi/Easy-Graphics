@@ -12,29 +12,20 @@ import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.layout_columns.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.R
-import ru.easygraphics.chartTableWindow.TableScreen
+import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.converts.DateTypesConvert
 import ru.easygraphics.data.db.converts.ValueTypesConvert
 import ru.easygraphics.data.db.entities.Chart
-import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
-import ru.easygraphics.graphicwindow.GraphicViewModel
-import ru.easygraphics.helpers.ColorConvert
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
-import ru.easygraphics.states.GraphicState
 import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
