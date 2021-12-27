@@ -13,11 +13,12 @@ import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.databinding.FragmentChartsListBinding
+import ru.easygraphics.graphicwindow.GraphicScreen
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
-import ru.easygraphics.tableWindow.TableScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -32,13 +33,19 @@ class ChartsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         printDataFromDBForTest()
-        binding.floatingActionButton.setOnClickListener {
-            //router.navigateTo(ChartDescriptionScreen(null))
+
+        binding.exampleButtonGraphic.setOnClickListener {
             router.navigateTo(GraphicScreen(1)) //для теста
-            //router.navigateTo(ChartDescriptionScreen(-1))
+        }
+        binding.exampleButtonTable.setOnClickListener {
+            router.navigateTo(TableTestScreen()) //для теста
+        }
+
+
+        binding.floatingActionButton.setOnClickListener {
+            router.navigateTo(ChartDescriptionScreen(-1))
             //router.navigateTo(GraphicScreen(1)) //для теста
             //router.navigateTo(TableScreen(1, "Chart Name")) //для теста
-            router.navigateTo(TableTestScreen()) //для теста
         }
     }
 
