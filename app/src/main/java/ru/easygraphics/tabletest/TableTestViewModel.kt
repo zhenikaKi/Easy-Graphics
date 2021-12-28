@@ -1,8 +1,8 @@
 package ru.easygraphics.tabletest
 
-import com.github.ekiryushin.scrolltableview.cell.Cell
-import com.github.ekiryushin.scrolltableview.cell.CellView
-import com.github.ekiryushin.scrolltableview.cell.RowCell
+import io.github.ekiryushin.scrolltableview.cell.Cell
+import io.github.ekiryushin.scrolltableview.cell.CellView
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import kotlinx.coroutines.launch
 import ru.easygraphics.baseobjects.BaseViewModel
 import ru.easygraphics.data.db.repositories.DataRepository
@@ -19,7 +19,7 @@ class TableTestViewModel(private val repository: DataRepository): BaseViewModel<
 
             //сформируем шапку таблицы
             val columns: MutableList<Cell> = mutableListOf()
-            columns.add(Cell(id = 0, value = "Дата"))
+            columns.add(Cell(id = 0, value = graphicData.chart.xName))
             columns.addAll(graphicData.lines.map { line -> Cell(id = line.lineId, value = line.name) })
             val header = RowCell(columns)
 
@@ -35,7 +35,7 @@ class TableTestViewModel(private val repository: DataRepository): BaseViewModel<
                 RowCell(columnsData)
             }.toMutableList()
 
-            liveData.postValue(TableTestState.Success(header, data))
+            liveData.postValue(TableTestState.Success(header, data, graphicData.chart.name))
         }
     }
 }

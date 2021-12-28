@@ -3,10 +3,10 @@ package ru.easygraphics.tabletest
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.github.ekiryushin.scrolltableview.cell.Cell
-import com.github.ekiryushin.scrolltableview.cell.CellView
-import com.github.ekiryushin.scrolltableview.cell.DataStatus
-import com.github.ekiryushin.scrolltableview.cell.RowCell
+import io.github.ekiryushin.scrolltableview.cell.Cell
+import io.github.ekiryushin.scrolltableview.cell.CellView
+import io.github.ekiryushin.scrolltableview.cell.DataStatus
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment
@@ -14,14 +14,14 @@ import ru.easygraphics.databinding.FragmentTestTableBinding
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
-import ru.easygraphics.states.TableState
 import ru.easygraphics.states.TableTestState
 
 class TableTestFragment :
     BaseFragment<FragmentTestTableBinding>(FragmentTestTableBinding::inflate) {
 
     private val scope = getKoin().createScope<TableTestFragment>()
-    private val model: TableTestViewModel = scope.get(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL))
+    private val model: TableTestViewModel =
+        scope.get(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL))
 
     private var countColumns = 0
 
@@ -36,7 +36,7 @@ class TableTestFragment :
             val columns: MutableList<Cell> = mutableListOf()
             columns.add(Cell(viewed = CellView.EDIT_STRING)) //столбец значения по оси X
             //значения по оси Y
-            for (ind in 1 .. countColumns) {
+            for (ind in 1..countColumns) {
                 columns.add(Cell(viewed = CellView.EDIT_NUMBER))
             }
             binding.tableDataBlock.addRowData(RowCell(columns))
@@ -57,16 +57,20 @@ class TableTestFragment :
     private fun renderData(state: BaseState) {
         when (state) {
             //полученные данные по графику
-            is TableTestState.Success -> showTableData(state.header, state.data)
+            is TableTestState.Success -> showTableData(state.header, state.data, state.graphName)
         }
     }
 
-    private fun showTableData(header: RowCell, data: MutableList<RowCell>) {
+    private fun showTableData(header: RowCell, data: MutableList<RowCell>, graphicName: String) {
         countColumns = header.columns.size
-        binding.tableDataBlock.setHeaders(header)
-        binding.tableDataBlock.setData(data)
-        binding.tableDataBlock.setEnabledIconDelete(true)
-        binding.tableDataBlock.setCountFixColumn(1)
-        binding.tableDataBlock.showTable()
+        with(binding) {
+            graphName.text = graphicName
+            tableDataBlock.setHeaders(header)
+            tableDataBlock.setData(data)
+            tableDataBlock.setEnabledIconDelete(true)
+            tableDataBlock.setCountFixColumn(1)
+            tableDataBlock.showTable()
+        }
+
     }
 }
