@@ -43,32 +43,32 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         chart: Chart,
         listYLines: List<Pair<String, Int>>
     ): Long {
-        var chart_id: Long
+        var chartId: Long
         if (chart.chartId == null) {
-            chart_id = db.chartDao().save(chart)
+            chartId = db.chartDao().save(chart)
             for (i in listYLines.indices) {
                 db.chartLineDao().save(
                     ChartLine(
-                        null, chart_id, listYLines[i].first,
+                        null, chartId, listYLines[i].first,
                         ColorConvert.colorToHex(listYLines[i].second)
                     )
                 )
             }
         } else {
-            chart_id = db.chartDao().save(chart)
-            val cl = db.chartLineDao().getLines(chart_id)
+            chartId = db.chartDao().save(chart)
+            val cl = db.chartLineDao().getLines(chartId)
             for (i in listYLines.indices) {
                 if (i >= cl.size) {
                     db.chartLineDao().save(
                         ChartLine(
-                            null, chart_id, listYLines[i].first,
+                            null, chartId, listYLines[i].first,
                             ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 } else {
                     db.chartLineDao().save(
                         ChartLine(
-                            cl[i].lineId, chart_id, listYLines[i].first,
+                            cl[i].lineId, chartId, listYLines[i].first,
                             ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
@@ -78,14 +78,14 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
                 for (i in listYLines.size..cl.size - 1) {
                     db.chartLineDao().delete(
                         ChartLine(
-                            cl[i].lineId, chart_id, listYLines[i].first,
+                            cl[i].lineId, chartId, listYLines[i].first,
                             ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 }
             }
         }
-        return chart_id
+        return chartId
     }
 
     override suspend fun saveChart(chart: Chart) {
