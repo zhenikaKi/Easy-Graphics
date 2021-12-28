@@ -56,9 +56,9 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
             }
         } else {
             chartId = db.chartDao().save(chart)
-            val cl = db.chartLineDao().getLines(chartId)
+            val chartLines = db.chartLineDao().getLines(chartId)
             for (i in listYLines.indices) {
-                if (i >= cl.size) {
+                if (i >= chartLines.size) {
                     db.chartLineDao().save(
                         ChartLine(
                             null, chartId, listYLines[i].first,
@@ -68,17 +68,17 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
                 } else {
                     db.chartLineDao().save(
                         ChartLine(
-                            cl[i].lineId, chartId, listYLines[i].first,
+                            chartLines[i].lineId, chartId, listYLines[i].first,
                             ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 }
             }
-            if (listYLines.size < cl.size) {
-                for (i in listYLines.size..cl.size - 1) {
+            if (listYLines.size < chartLines.size) {
+                for (i in listYLines.size..chartLines.size - 1) {
                     db.chartLineDao().delete(
                         ChartLine(
-                            cl[i].lineId, chartId, listYLines[i].first,
+                            chartLines[i].lineId, chartId, listYLines[i].first,
                             ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
