@@ -16,7 +16,6 @@ class ChartsListViewModel(val repository: DataRepository) : BaseViewModel<BaseSt
     }
 
     fun deleteChart(chartId: Long) {
-        liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             repository.deleteChart(chartId)
         }
