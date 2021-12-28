@@ -19,7 +19,7 @@ class TableTestViewModel(private val repository: DataRepository): BaseViewModel<
 
             //сформируем шапку таблицы
             val columns: MutableList<Cell> = mutableListOf()
-            columns.add(Cell(id = 0, value = "Дата"))
+            columns.add(Cell(id = 0, value = graphicData.chart.xName))
             columns.addAll(graphicData.lines.map { line -> Cell(id = line.lineId, value = line.name) })
             val header = RowCell(columns)
 
@@ -35,7 +35,7 @@ class TableTestViewModel(private val repository: DataRepository): BaseViewModel<
                 RowCell(columnsData)
             }.toMutableList()
 
-            liveData.postValue(TableTestState.Success(header, data))
+            liveData.postValue(TableTestState.Success(header, data, graphicData.chart.name))
         }
     }
 }

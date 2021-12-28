@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.flow.collect
-import org.koin.java.KoinJavaComponent.getKoin
 import org.koin.core.qualifier.named
+import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.arguments
 import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.databinding.FragmentTableBinding
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.tableWindow.adapter.TableAdapter
 import ru.easygraphics.toast
 
-class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate) {
+class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
+    TableAdapter.Delegate {
 
     companion object {
         private const val ARG_CHART_ID = "argument_chart_id"
@@ -43,10 +44,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     //private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
-    private val adapter: TableAdapter = TableAdapter()
-
-    /*private val tableViewModel: TableViewModel =
-        TableViewModel(repository = TableRowRepositoryImp())*/
+    private val adapter: TableAdapter = TableAdapter(delegate = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,5 +71,9 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
                 adapter.submitList(rowData)
             }
         }
+    }
+
+    override fun onRowSelected(tableLineData: TableLineData) {
+        this.toast(tableLineData.LineName)
     }
 }
