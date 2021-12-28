@@ -36,7 +36,7 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     }
 
     override suspend fun deleteChart(chartId: Long) {
-        db.chartDao().delete(db.chartDao().getChart(chartId))
+        db.chartDao().delete(chartId)
     }
 
     override suspend fun saveChartDescription(

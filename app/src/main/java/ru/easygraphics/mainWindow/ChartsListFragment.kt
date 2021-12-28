@@ -47,7 +47,7 @@ class ChartsListFragment :
             index = pos
             chartIdItem = chartId
             registerForContextMenu(view)
-            view.showContextMenu(10f, 10f)
+            view.showContextMenu(SHIFT, SHIFT)
         }
     }
 
@@ -80,6 +80,7 @@ class ChartsListFragment :
         ChartsListAdapter(onChartClickListener, onChartLongClickListener)
 
     companion object {
+        const val SHIFT = 10f
         fun newInstance(): Fragment = ChartsListFragment()
     }
 
