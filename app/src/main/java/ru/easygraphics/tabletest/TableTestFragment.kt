@@ -3,10 +3,10 @@ package ru.easygraphics.tabletest
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.github.ekiryushin.scrolltableview.cell.Cell
-import com.github.ekiryushin.scrolltableview.cell.CellView
-import com.github.ekiryushin.scrolltableview.cell.DataStatus
-import com.github.ekiryushin.scrolltableview.cell.RowCell
+import io.github.ekiryushin.scrolltableview.cell.Cell
+import io.github.ekiryushin.scrolltableview.cell.CellView
+import io.github.ekiryushin.scrolltableview.cell.DataStatus
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment

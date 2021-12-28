@@ -1,6 +1,6 @@
 package ru.easygraphics.states
 
-import com.github.ekiryushin.scrolltableview.cell.RowCell
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 
 sealed class TableTestState : BaseState {
     data class Success(
