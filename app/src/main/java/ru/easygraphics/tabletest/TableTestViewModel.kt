@@ -1,8 +1,8 @@
 package ru.easygraphics.tabletest
 
-import com.github.ekiryushin.scrolltableview.cell.Cell
-import com.github.ekiryushin.scrolltableview.cell.CellView
-import com.github.ekiryushin.scrolltableview.cell.RowCell
+import io.github.ekiryushin.scrolltableview.cell.Cell
+import io.github.ekiryushin.scrolltableview.cell.CellView
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import kotlinx.coroutines.launch
 import ru.easygraphics.baseobjects.BaseViewModel
 import ru.easygraphics.data.db.repositories.DataRepository
