@@ -7,14 +7,15 @@ import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
 
 class ChartsListViewModel(val repository: DataRepository) : BaseViewModel<BaseState>() {
-     fun getChartsList(){
-         liveData.postValue(BaseState.Loading)
-         coroutineScope.launch {
-             val l = repository.getChartsList()
-             liveData.postValue(ChartsListState.Success(l))
-         }
-     }
-    fun deleteChart(chartId:Long){
+    fun getChartsList() {
+        liveData.postValue(BaseState.Loading)
+        coroutineScope.launch {
+            val l = repository.getChartsList()
+            liveData.postValue(ChartsListState.Success(l))
+        }
+    }
+
+    fun deleteChart(chartId: Long) {
         liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             repository.deleteChart(chartId)

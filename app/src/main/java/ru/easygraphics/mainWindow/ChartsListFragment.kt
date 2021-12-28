@@ -31,39 +31,42 @@ class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
     private val scope = getKoin().createScope<ChartsListFragment>()
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
-    private val model:ChartsListViewModel = scope.get(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL))
-    private var index:Int?=null
-    private var chartIdItem:Long?=null
-    val onChartClickListener = object: ChartsListAdapter.OnChartClickListener{
+    private val model: ChartsListViewModel =
+        scope.get(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL))
+    private var index: Int? = null
+    private var chartIdItem: Long? = null
+    val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
         override fun onChartClick(chartId: Long) {
             router.navigateTo(GraphicScreen(chartId))
         }
     }
-    val onChartLongClickListener = object: ChartsListAdapter.OnChartLongClickListener{
+    val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
         @RequiresApi(Build.VERSION_CODES.N)
-        override fun onChartLongClick(chartId: Long, pos:Int, view:View) {
-            index=pos
-            chartIdItem=chartId
+        override fun onChartLongClick(chartId: Long, pos: Int, view: View) {
+            index = pos
+            chartIdItem = chartId
             registerForContextMenu(view)
-            view.showContextMenu(10f,10f)
+            view.showContextMenu(10f, 10f)
         }
     }
+
     override fun onCreateContextMenu(
         menu: ContextMenu,
         v: View,
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        val mi=requireActivity().menuInflater
+        val mi = requireActivity().menuInflater
         mi.inflate(R.menu.context_menu_list_charts, menu)
     }
+
     override fun onContextItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
             R.id.edit -> {
                 router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
             }
-            R.id.delete ->{
+            R.id.delete -> {
                 model.deleteChart(chartIdItem!!)
                 adapter.removeItem(index!!)
             }
@@ -71,14 +74,18 @@ class ChartsListFragment :
 
         return true
     }
-    private val adapter:ChartsListAdapter = ChartsListAdapter(onChartClickListener,onChartLongClickListener)
+
+    private val adapter: ChartsListAdapter =
+        ChartsListAdapter(onChartClickListener, onChartLongClickListener)
+
     companion object {
         fun newInstance(): Fragment = ChartsListFragment()
     }
+
     private fun renderData(state: BaseState) {
         when (state) {
             //начало процесса загрузки
-            is BaseState.Loading -> { }
+            is BaseState.Loading -> {}
 
             //получены данные
             is ChartsListState.Success -> {
@@ -89,11 +96,12 @@ class ChartsListFragment :
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.chartsList.adapter = adapter
         printDataFromDBForTest()
-        model.getLiveData().observe(viewLifecycleOwner,{
+        model.getLiveData().observe(viewLifecycleOwner, {
             renderData(it)
         })
         model.getChartsList()
