@@ -41,45 +41,45 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
 
     override suspend fun saveChartDescription(
         chart: Chart,
-        list_y_lines: List<Pair<String, Int>>
+        listYLines: List<Pair<String, Int>>
     ): Long {
         var chart_id: Long
         if (chart.chartId == null) {
             chart_id = db.chartDao().save(chart)
-            for (i in list_y_lines.indices) {
+            for (i in listYLines.indices) {
                 db.chartLineDao().save(
                     ChartLine(
-                        null, chart_id, list_y_lines[i].first,
-                        ColorConvert.colorToHex(list_y_lines[i].second)
+                        null, chart_id, listYLines[i].first,
+                        ColorConvert.colorToHex(listYLines[i].second)
                     )
                 )
             }
         } else {
             chart_id = db.chartDao().save(chart)
             val cl = db.chartLineDao().getLines(chart_id)
-            for (i in list_y_lines.indices) {
+            for (i in listYLines.indices) {
                 if (i >= cl.size) {
                     db.chartLineDao().save(
                         ChartLine(
-                            null, chart_id, list_y_lines[i].first,
-                            ColorConvert.colorToHex(list_y_lines[i].second)
+                            null, chart_id, listYLines[i].first,
+                            ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 } else {
                     db.chartLineDao().save(
                         ChartLine(
-                            cl[i].lineId, chart_id, list_y_lines[i].first,
-                            ColorConvert.colorToHex(list_y_lines[i].second)
+                            cl[i].lineId, chart_id, listYLines[i].first,
+                            ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 }
             }
-            if (list_y_lines.size < cl.size) {
-                for (i in list_y_lines.size..cl.size - 1) {
+            if (listYLines.size < cl.size) {
+                for (i in listYLines.size..cl.size - 1) {
                     db.chartLineDao().delete(
                         ChartLine(
-                            cl[i].lineId, chart_id, list_y_lines[i].first,
-                            ColorConvert.colorToHex(list_y_lines[i].second)
+                            cl[i].lineId, chart_id, listYLines[i].first,
+                            ColorConvert.colorToHex(listYLines[i].second)
                         )
                     )
                 }

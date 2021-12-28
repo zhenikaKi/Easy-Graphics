@@ -23,13 +23,13 @@ class ChartsListAdapter(
         notifyItemRemoved(pos)
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        val v = LayoutInflater.from(p0.context).inflate(R.layout.item_list_charts, p0, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_list_charts, parent, false)
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        p0.bind(chartsList[p1], onChartClickListener, onChartLongClickListener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(chartsList[position], onChartClickListener, onChartLongClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -37,13 +37,13 @@ class ChartsListAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(p: Pair<Long, String>, cl: OnChartClickListener, lcl: OnChartLongClickListener) {
+        fun bind(p: Pair<Long, String>, onChartClickListener: OnChartClickListener, onChartLongClickListener: OnChartLongClickListener) {
             itemView.textView2.setText(p.second + "\n" + "id:" + p.first)
             itemView.setOnClickListener {
-                cl.onChartClick(p.first)
+                onChartClickListener.onChartClick(p.first)
             }
             itemView.setOnLongClickListener {
-                lcl.onChartLongClick(p.first, layoutPosition, it)
+                onChartLongClickListener.onChartLongClick(p.first, layoutPosition, it)
                 true
             }
         }
