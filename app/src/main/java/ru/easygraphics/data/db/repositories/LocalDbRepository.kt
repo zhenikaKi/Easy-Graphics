@@ -30,6 +30,14 @@ class LocalDbRepository(private val db: AppDB): DataRepository {
         return result
     }
 
+    override suspend fun getChartsList(): List<Pair<Long, String>> {
+        val cl=db.chartDao().getCharts()
+        return cl.map{chart->Pair(chart.chartId!!,chart.name)}
+    }
+
+    override suspend fun deleteChart(chartId:Long) {
+       db.chartDao().delete(db.chartDao().getChart(chartId))
+    }
     override suspend fun saveChartDescription(chart: Chart, list_y_lines: List<Pair<String, Int>>):Long {
         var chart_id:Long
             if (chart.chartId == null) {
