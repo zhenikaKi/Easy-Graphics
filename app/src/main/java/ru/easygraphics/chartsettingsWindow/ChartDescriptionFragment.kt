@@ -3,37 +3,44 @@ package ru.easygraphics.chartsettingsWindow
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import kotlinx.android.synthetic.main.layout_columns.view.*
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
-import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.R
+import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.data.db.AppDB
+import ru.easygraphics.data.db.converts.DateTypesConvert
+import ru.easygraphics.data.db.converts.ValueTypesConvert
+import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
+import ru.easygraphics.states.BaseState
+import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.tableWindow.TableScreen
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
-
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
+    private val model: ChartDescriptionViewModel = scope.get(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL))
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
+    private val db: AppDB = scope.get(qualifier = named(Scopes.DB))
     private var list: ArrayList<Pair<EditText, View>> = arrayListOf()
-
+    private val chartId by lazy { arguments?.getLong(DB.CHART_ID) }
     companion object {
-        fun newInstance(chart_id: Int): Fragment {
-            val cdfragment = ChartDescriptionFragment()
-            cdfragment.arguments = Bundle().apply {
-                putInt(DB.CHART_ID, chart_id)
+        fun newInstance(chartId: Long?): Fragment = ChartDescriptionFragment()
+            .also {
+                chartId?.let { id -> it.arguments = bundleOf(DB.CHART_ID to id) }
             }
-            return cdfragment
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -56,7 +63,18 @@ class ChartDescriptionFragment :
         outState.putInt("date_format", binding.dateFormat.selectedItemPosition)
     }
 
+    private fun renderData(state: BaseState) {
+        when (state) {
+            //начало процесса загрузки
+            is BaseState.Loading -> { }
 
+            //получен id
+            is DescriptionState.Success -> router.navigateTo(TableScreen(1, binding.chartName.text.toString()))
+
+            //какая-то ошибка
+            is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list.add(Pair(binding.layoutColumns.nameOfTheColumn, binding.layoutColumns.colorOfTheChart))
@@ -92,10 +110,6 @@ class ChartDescriptionFragment :
             }
         }
 
-        binding.buttonToTable.setOnClickListener {
-            router.navigateTo(TableScreen(1, binding.chartName.text.toString())) //to test only
-        }
-
         binding.buttonCancelDescription.setOnClickListener { router.exit() }
         binding.buttonAddYColumn.setOnClickListener {
             val llext = binding.namesOfYColumns
@@ -109,6 +123,16 @@ class ChartDescriptionFragment :
             }
             llext.addView(llint)
             list.add(Pair(et, v))
+        }
+        binding.buttonToTable.setOnClickListener {
+            if (binding.chartName.text.toString() == "") return@setOnClickListener
+            model.saveDataToDB(Chart(
+                chartId,
+                binding.chartName.text.toString(),
+                binding.numberOfDigitsAfterDecimalPoint.text.toString().toInt(),
+                ValueTypesConvert().valueToEnum(binding.valuesTypeY.selectedItemPosition),
+                DateTypesConvert().valueToEnum(binding.dateFormat.selectedItemPosition)
+            ),list.map{pair->Pair(pair.first.text.toString(),(pair.second.background as ColorDrawable).color)})
         }
     }
 

@@ -9,6 +9,13 @@
     <string name="to_table">К таблице значений</string>
     <string name="number_of_digits_after_decimal_point">Число цифр после запятой по оси Y</string>
     <string name="db_read_error">Невозможно прочитать из базы данных</string>
+
+    <string name="button_add">Добавить строку</string>
+    <string name="button_log">в логи</string>
+    <string name="example_title">Для теста</string>
+    <string name="example_button_table">Таблица</string>
+    <string name="example_button_graphic">График</string>
+
     <string-array name="тип_значений_по_оси_Y">
         <item>Дата</item>
         <item>Строка</item>

@@ -9,6 +9,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.easygraphics.MainActivity
 import ru.easygraphics.chartsettingsWindow.ChartDescriptionFragment
+import ru.easygraphics.chartsettingsWindow.ChartDescriptionViewModel
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.db.repositories.LocalDbRepository
@@ -21,6 +22,8 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartsListFragment
 import ru.easygraphics.tableWindow.TableFragment
 import ru.easygraphics.tableWindow.TableViewModel
+import ru.easygraphics.tabletest.TableTestFragment
+import ru.easygraphics.tabletest.TableTestViewModel
 
 object Modules {
     //модуль, содержимое которого должно быть во всем приложении
@@ -69,6 +72,9 @@ object Modules {
     //модуль окна описания графика
     val descriptionWindow = module {
         scope<ChartDescriptionFragment>{
+            viewModel(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL)){
+                ChartDescriptionViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
         }
     }
 
@@ -86,6 +92,15 @@ object Modules {
         scope<TableFragment> {
             viewModel(qualifier = named(Scopes.TABLE_VIEW_MODEL)) {
                 TableViewModel(get(qualifier = named(Scopes.TABLE_ROW_REPOSITORY)))
+            }
+        }
+    }
+
+    //модуль тестового окна с таблицей
+    val tableTestWindow = module {
+        scope<TableTestFragment> {
+            viewModel(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL)) {
+                TableTestViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }

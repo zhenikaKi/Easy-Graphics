@@ -11,8 +11,10 @@ import ru.easygraphics.databinding.ActivityMainBinding
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartListScreen
 
-private lateinit var binding: ActivityMainBinding
+
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     private val scope = getKoin().createScope<MainActivity>()
 
     private var navigatorHolder: NavigatorHolder = scope.get(qualifier = named(Scopes.NAVIGATOR))
