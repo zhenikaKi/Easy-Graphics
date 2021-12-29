@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         {
             router.newRootScreen(ChartListScreen())
         }
+
+        //статус бар
+        setSupportActionBar(binding.mailToolbar)
     }
 
     override fun onResumeFragments() {

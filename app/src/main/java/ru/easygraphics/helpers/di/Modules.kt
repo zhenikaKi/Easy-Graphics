@@ -58,6 +58,12 @@ object Modules {
         }
     }
 
+    //пустой мдуль
+    val emptyModule = module {
+        scope<EmptyModule> {
+        }
+    }
+
     //модуль основной активити
     val appActivity = module {
         scope<MainActivity> {

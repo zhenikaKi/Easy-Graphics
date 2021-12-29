@@ -3,9 +3,7 @@ package ru.easygraphics.mainWindow
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
@@ -74,6 +72,14 @@ class ChartsListFragment :
         }
 
         return true
+    }
+
+    //на главном экране меню сверху справа не нужно
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    }
+
+    override fun showButtonBack(visible: Boolean) {
+        super.showButtonBack(false)
     }
 
     private val adapter: ChartsListAdapter =

@@ -2,6 +2,8 @@ package ru.easygraphics.graphicwindow
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
@@ -88,6 +90,10 @@ class GraphicFragment :
 
         //запускаем процесс получения данных по графику
         chartId?.let { model.loadGraphicData(it) }
+    }
+
+    //на экране с графиком меню сверху справа не нужно
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     }
 
     //обработка состояний
