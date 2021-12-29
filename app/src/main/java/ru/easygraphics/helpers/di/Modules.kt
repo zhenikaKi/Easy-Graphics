@@ -20,6 +20,7 @@ import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartsListFragment
+import ru.easygraphics.mainWindow.ChartsListViewModel
 import ru.easygraphics.tableWindow.TableFragment
 import ru.easygraphics.tableWindow.TableViewModel
 import ru.easygraphics.tabletest.TableTestFragment
@@ -66,6 +67,9 @@ object Modules {
     //модуль главного окна
     val mainWindow = module {
         scope<ChartsListFragment> {
+            viewModel(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL)){
+                ChartsListViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
         }
     }
 

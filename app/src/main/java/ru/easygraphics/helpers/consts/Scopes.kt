@@ -6,6 +6,7 @@ object Scopes {
     const val NAVIGATOR = "NavigatorHolder"
     const val ROUTER = "Router"
 
+    const val CHARTS_LIST_VIEW_MODEL = "chartsListViewModel"
     const val GRAPHIC_VIEW_MODEL = "graphicViewModel"
     const val DESCRIPTION_VIEW_MODEL= "descriptionViewModel"
     const val TABLE_TEST_VIEW_MODEL = "tableTestViewModel"

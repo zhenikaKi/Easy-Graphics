@@ -69,7 +69,7 @@ class ChartDescriptionFragment :
             is BaseState.Loading -> { }
 
             //получен id
-            is DescriptionState.Success -> router.navigateTo(TableScreen(1, binding.chartName.text.toString())) 
+            is DescriptionState.Success -> router.navigateTo(TableScreen(1, binding.chartName.text.toString()))
 
             //какая-то ошибка
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
@@ -77,7 +77,6 @@ class ChartDescriptionFragment :
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.getLiveData().observe(viewLifecycleOwner,{renderData(it)})
         list.add(Pair(binding.layoutColumns.nameOfTheColumn, binding.layoutColumns.colorOfTheChart))
         binding.layoutColumns.colorOfTheChart.setOnClickListener {
             setColorClickListener(it)

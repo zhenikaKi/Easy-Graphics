@@ -15,6 +15,10 @@ interface ChartDao {
     @Delete
     suspend fun delete(chart: Chart)
 
+    //удалить график по его id
+    @Query("delete from ${DB.TABLE_CHARTS} where ${DB.CHART_ID} = :chartId")
+    suspend fun delete(chartId: Long)
+
     //получить конкретный график
     @Query("select * from ${DB.TABLE_CHARTS} where ${DB.CHART_ID} = :chartId")
     suspend fun getChart(chartId: Long): Chart
