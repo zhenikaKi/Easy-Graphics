@@ -15,4 +15,57 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- стиль заголовков -->
+    <style name="TextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">@dimen/item_padding</item>
+        <item name="android:layout_marginBottom">@dimen/item_padding</item>
+    </style>
+
+    <!-- стиль оформления родительского элемента в разметке окон -->
+    <style name="RootElementStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">@dimen/content_padding</item>
+    </style>
+
+    <!-- стиль рамки полей ввода -->
+    <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/item_padding</item>
+    </style>
+
+    <!-- стиль рамки выпадающего списка -->
+    <style name="TextInputDropdownMenuStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/item_padding</item>
+    </style>
+
+    <!-- стиль полей ввода -->
+    <style name="EditTextMatchWidthStyle" parent="@android:style/Widget.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:importantForAutofill" tools:targetApi="O">no</item>
+    </style>
+
+    <!-- стиль поля в выпадающем меню -->
+    <style name="EditDropdownMenuMatchWidthStyle" parent="@android:style/Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">none</item>
+        <item name="android:importantForAutofill" tools:targetApi="O">no</item>
+    </style>
+
+    <!-- стиль плавающей кнопки -->
+    <style name="FloatingActionButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@android:drawable/ic_input_add</item>
+        <item name="android:layout_margin">@dimen/floating_action_margin</item>
+    </style>
 </resources>

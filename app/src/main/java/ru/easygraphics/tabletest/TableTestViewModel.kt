@@ -13,7 +13,7 @@ class TableTestViewModel(private val repository: DataRepository): BaseViewModel<
 
     //сформировать данные для графика
     fun loadTableData(chartId: Long) {
-        liveData.postValue(BaseState.Loading)
+        liveData.postValue(BaseState.Loading())
         coroutineScope.launch {
             val graphicData = repository.getGraphicData(chartId = 1)
 

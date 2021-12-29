@@ -1,13 +1,22 @@
 <resources>
     <string name="app_name">Простые графики</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- окно создания/изменения график -->
+    <string name="graphic_title">Параметры графика</string>
     <string name="name_of_the_chart">Название графика</string>
     <string name="x_axis_signature">Подпись по оси X</string>
     <string name="y_axis_signature">Подпись по оси Y</string>
+    <string name="number_of_digits_after_decimal_point">Число цифр после запятой по оси Y</string>
+    <string name="x_axis_type">Тип подписи значений по оси X</string>
+    <string name="x_axis_date_format">Формат даты</string>
+    <string name="lines_title">Параметры линий</string>
+    <string name="button_table">Данные графика</string>
+    <string name="name_of_the_line">Название линии графика</string>
+
     <string name="name_of_column_Y">Название колонки по оси Y</string>
     <string name="cancel">Отмена</string>
     <string name="to_table">К таблице значений</string>
-    <string name="number_of_digits_after_decimal_point">Число цифр после запятой по оси Y</string>
     <string name="db_read_error">Невозможно прочитать из базы данных</string>
 
     <string name="button_add">Добавить строку</string>
@@ -20,6 +29,10 @@
     <string name="menu_edit">Редактировать</string>
     <string name="menu_delete">Удалить</string>
     <string name="menu_save">Сохранить</string>
+
+    <!-- заголовки окон -->
+    <string name="title_new_graphic">Добавление графика</string>
+    <string name="title_edit_graphic">Изменение графика</string>
 
     <string-array name="тип_значений_по_оси_Y">
         <item>Дата</item>

@@ -7,5 +7,5 @@ package ru.easygraphics.states
  */
 sealed interface BaseState {
     data class ErrorState(val text: String): BaseState
-    object Loading: BaseState
+    data class Loading(val status: LoadingTypes = LoadingTypes.NULL): BaseState
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="content_padding">8dp</dimen> <!-- оступ по краям на экранах -->
-    <dimen name="floating_action_margin">20dp</dimen> <!-- оступ плавающей кнопки -->
+    <dimen name="item_padding">4dp</dimen> <!-- оступ между элементами -->
+    <dimen name="floating_action_margin">10dp</dimen> <!-- оступ плавающей кнопки -->
     <dimen name="item_margin">20dp</dimen> <!-- оступ между элементами на экране -->
     <dimen name="block_line_param_height">40dp</dimen>
     <!-- размеры предпросмотра цвета линии в окне создания/изменения графика -->
@@ -17,4 +18,5 @@
     <dimen name="default_fragment_padding">7dp</dimen>
     <dimen name="default_fragment_text_size">20sp</dimen>
     <dimen name="zero_size">0dp</dimen>
+    <dimen name="icon_size">20dp</dimen>
 </resources>

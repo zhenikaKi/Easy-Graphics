@@ -8,7 +8,7 @@ import ru.easygraphics.states.ChartsListState
 
 class ChartsListViewModel(val repository: DataRepository) : BaseViewModel<BaseState>() {
     fun getChartsList() {
-        liveData.postValue(BaseState.Loading)
+        liveData.postValue(BaseState.Loading())
         coroutineScope.launch {
             val l = repository.getChartsList()
             liveData.postValue(ChartsListState.Success(l))

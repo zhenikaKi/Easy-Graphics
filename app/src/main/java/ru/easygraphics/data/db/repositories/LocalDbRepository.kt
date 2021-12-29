@@ -91,4 +91,10 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     override suspend fun saveChart(chart: Chart) {
         db.chartDao().save(chart)
     }
+
+    /** Получить конкретный график */
+    override suspend fun getChart(chartId: Long): Chart = db.chartDao().getChart(chartId)
+
+    /** Получить линии шрафика */
+    override suspend fun getLines(chartId: Long): List<ChartLine> = db.chartLineDao().getLines(chartId)
 }

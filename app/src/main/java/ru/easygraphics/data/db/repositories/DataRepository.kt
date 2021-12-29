@@ -2,6 +2,7 @@ package ru.easygraphics.data.db.repositories
 
 import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartAllDataViewed
+import ru.easygraphics.data.db.entities.ChartLine
 
 /** Интерфейс работы с данными графиков */
 interface DataRepository {
@@ -18,4 +19,10 @@ interface DataRepository {
 
     suspend fun getChartsList(): List<Pair<Long, String>>
     suspend fun deleteChart(chartId: Long)
+
+    /** Получить конкретный график */
+    suspend fun getChart(chartId: Long): Chart
+
+    /** Получить линии шрафика */
+    suspend fun getLines(chartId: Long): List<ChartLine>
 }

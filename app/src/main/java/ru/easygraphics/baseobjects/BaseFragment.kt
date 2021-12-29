@@ -2,6 +2,7 @@ package ru.easygraphics.baseobjects
 
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.github.terrakok.cicerone.Router
@@ -25,6 +26,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     private var _binding: VB? = null
     val binding get() = _binding!!
     private var menuCreated = false
+    var inflater: LayoutInflater? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        this.inflater = inflater
         _binding = inflate.invoke(inflater, container, false)
         showButtonBack(true)
 
@@ -64,7 +67,8 @@ abstract class BaseFragment<VB : ViewBinding>(
         }
     }
 
-    /** Создать меню в виде галочки справа сверху. Если не нужно, то во фрагменте переопределить
+    /**
+     * Создать меню в виде галочки справа сверху. Если не нужно, то во фрагменте переопределить
      * данный метод с пустой реализацией.
      */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -92,10 +96,27 @@ abstract class BaseFragment<VB : ViewBinding>(
     open fun saveData() {
     }
 
-    /** Реализация кнопки отмены/назад слева сверху. Если во фрагменте она не нужна,
+    /**
+     * Реализация кнопки отмены/назад слева сверху. Если во фрагменте она не нужна,
      * то переопрделить с параметром false
      */
     open fun showButtonBack(visible: Boolean) {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(visible)
+    }
+
+    /**
+     * Задать заголовок окна
+     * @param title Новое название окна
+     */
+    fun setTitle(title: String) {
+        (activity as MainActivity).supportActionBar?.title = title
+    }
+
+    /**
+     * Задать заголовок окна
+     * @param resId Ссылка на строковый ресурс
+     */
+    fun setTitle(@StringRes resId: Int) {
+        (activity as MainActivity).supportActionBar?.title = getString(resId)
     }
 }
