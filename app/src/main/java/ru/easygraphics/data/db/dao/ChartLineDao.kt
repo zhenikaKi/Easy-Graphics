@@ -11,9 +11,17 @@ interface ChartLineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(chartLine: ChartLine)
 
+    //сохранить линии графика
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun save(lines: List<ChartLine>): List<Long>
+
     //удалить линию графика
     @Delete
     suspend fun delete(chartLine: ChartLine)
+
+    //удалить линии графика
+    @Query("delete from ${DB.TABLE_CHART_LINES} where ${DB.LINE_ID} in (:chartLinesId)")
+    suspend fun delete(chartLinesId: List<Long>)
 
     //получить все линии графика
     @Query("select * from ${DB.TABLE_CHART_LINES} where ${DB.CHART_ID} = :chartId")

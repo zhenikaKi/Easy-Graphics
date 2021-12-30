@@ -28,5 +28,6 @@ abstract class BaseViewModel<S: BaseState>: ViewModel() {
 
     //обработка ошибок в корутине
     open fun handleCoroutineError(throwable: Throwable) {
+        throwable.printStackTrace()
     }
 }

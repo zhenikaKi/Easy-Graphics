@@ -3,7 +3,6 @@ package ru.easygraphics.data.db.repositories
 import kotlinx.coroutines.*
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.entities.*
-import ru.easygraphics.helpers.ColorConvert
 
 class LocalDbRepository(private val db: AppDB) : DataRepository {
 
@@ -39,62 +38,19 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         db.chartDao().delete(chartId)
     }
 
-    override suspend fun saveChartDescription(
-        chart: Chart,
-        listYLines: List<Pair<String, Int>>
-    ): Long {
-        var chartId: Long
-        if (chart.chartId == null) {
-            chartId = db.chartDao().save(chart)
-            for (i in listYLines.indices) {
-                db.chartLineDao().save(
-                    ChartLine(
-                        null, chartId, listYLines[i].first,
-                        ColorConvert.colorToHex(listYLines[i].second)
-                    )
-                )
-            }
-        } else {
-            chartId = db.chartDao().save(chart)
-            val chartLines = db.chartLineDao().getLines(chartId)
-            for (i in listYLines.indices) {
-                if (i >= chartLines.size) {
-                    db.chartLineDao().save(
-                        ChartLine(
-                            null, chartId, listYLines[i].first,
-                            ColorConvert.colorToHex(listYLines[i].second)
-                        )
-                    )
-                } else {
-                    db.chartLineDao().save(
-                        ChartLine(
-                            chartLines[i].lineId, chartId, listYLines[i].first,
-                            ColorConvert.colorToHex(listYLines[i].second)
-                        )
-                    )
-                }
-            }
-            if (listYLines.size < chartLines.size) {
-                for (i in listYLines.size..chartLines.size - 1) {
-                    db.chartLineDao().delete(
-                        ChartLine(
-                            chartLines[i].lineId, chartId, listYLines[i].first,
-                            ColorConvert.colorToHex(listYLines[i].second)
-                        )
-                    )
-                }
-            }
-        }
-        return chartId
-    }
-
-    override suspend fun saveChart(chart: Chart) {
-        db.chartDao().save(chart)
-    }
+    override suspend fun saveChart(chart: Chart): Long = db.chartDao().save(chart)
 
     /** Получить конкретный график */
     override suspend fun getChart(chartId: Long): Chart = db.chartDao().getChart(chartId)
 
     /** Получить линии шрафика */
     override suspend fun getLines(chartId: Long): List<ChartLine> = db.chartLineDao().getLines(chartId)
+
+    /** Удалить линии графика */
+    override suspend fun deleteLines(chartLinesId: List<Long>) {
+        db.chartLineDao().delete(chartLinesId)
+    }
+
+    /** Сохранить линии графику */
+    override suspend fun saveLines(lines: List<ChartLine>): List<Long> = db.chartLineDao().save(lines)
 }

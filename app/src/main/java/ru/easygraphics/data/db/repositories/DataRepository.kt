@@ -12,10 +12,9 @@ interface DataRepository {
      * @param chartId идентификатор конкретного графика
      */
     suspend fun getGraphicData(chartId: Long): ChartAllDataViewed
-    suspend fun saveChartDescription(chart: Chart, listYLines: List<Pair<String, Int>>): Long
 
     /** Сохранить основные данные по графику */
-    suspend fun saveChart(chart: Chart)
+    suspend fun saveChart(chart: Chart): Long
 
     suspend fun getChartsList(): List<Pair<Long, String>>
     suspend fun deleteChart(chartId: Long)
@@ -23,6 +22,12 @@ interface DataRepository {
     /** Получить конкретный график */
     suspend fun getChart(chartId: Long): Chart
 
-    /** Получить линии шрафика */
+    /** Получить линии графика */
     suspend fun getLines(chartId: Long): List<ChartLine>
+
+    /** Удалить линии графика */
+    suspend fun deleteLines(chartLinesId: List<Long>)
+
+    /** Сохранить линии графику */
+    suspend fun saveLines(lines: List<ChartLine>): List<Long>
 }

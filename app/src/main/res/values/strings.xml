@@ -13,6 +13,8 @@
     <string name="lines_title">Параметры линий</string>
     <string name="button_table">Данные графика</string>
     <string name="name_of_the_line">Название линии графика</string>
+    <string name="field_null">Пустое поле</string>
+    <string name="invalid_number">Некорректное число</string>
 
     <string name="name_of_column_Y">Название колонки по оси Y</string>
     <string name="cancel">Отмена</string>

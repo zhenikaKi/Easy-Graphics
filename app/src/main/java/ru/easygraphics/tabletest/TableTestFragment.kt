@@ -3,6 +3,8 @@ package ru.easygraphics.tabletest
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import io.github.ekiryushin.scrolltableview.cell.Cell
 import io.github.ekiryushin.scrolltableview.cell.CellView
 import io.github.ekiryushin.scrolltableview.cell.DataStatus
@@ -12,6 +14,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.databinding.FragmentTestTableBinding
 import ru.easygraphics.helpers.consts.App
+import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableTestState
@@ -25,10 +28,21 @@ class TableTestFragment :
 
     private var countColumns = 0
 
+    //id графика для отображения
+    private val chartId by lazy { arguments?.getLong(DB.CHART_ID) }
+
+    companion object {
+        fun newInstance(chartId: Long): Fragment = TableTestFragment()
+            //передаем во фрагмент id графика
+            .also {
+                it.arguments = bundleOf(DB.CHART_ID to chartId)
+            }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         model.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        model.loadTableData(chartId = 1)
+        chartId?.let { model.loadTableData(chartId = it) }
 
         //добавление новой строки
         binding.buttonAdd.setOnClickListener {

@@ -6,7 +6,7 @@ import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
 
-class ChartsListViewModel(val repository: DataRepository) : BaseViewModel<BaseState>() {
+class ChartsListViewModel(private val repository: DataRepository) : BaseViewModel<BaseState>() {
     fun getChartsList() {
         liveData.postValue(BaseState.Loading())
         coroutineScope.launch {

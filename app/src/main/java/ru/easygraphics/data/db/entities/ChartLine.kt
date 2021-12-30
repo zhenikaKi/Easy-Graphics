@@ -21,7 +21,7 @@ data class ChartLine(
 
     /** ID диаграммы, к которой относятся линия */
     @ColumnInfo(name = DB.CHART_ID)
-    val chartId: Long,
+    var chartId: Long,
 
     /** Название линии */
     @ColumnInfo(name = DB.COLUMN_NAME)

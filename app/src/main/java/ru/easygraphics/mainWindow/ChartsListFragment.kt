@@ -24,7 +24,6 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
-import ru.easygraphics.tableWindow.TableScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -117,7 +116,7 @@ class ChartsListFragment :
             router.navigateTo(GraphicScreen(1)) //для теста
         }
         binding.exampleButtonTable.setOnClickListener {
-            router.navigateTo(TableTestScreen()) //для теста
+            router.navigateTo(TableTestScreen(1)) //для теста
         }
 
 
