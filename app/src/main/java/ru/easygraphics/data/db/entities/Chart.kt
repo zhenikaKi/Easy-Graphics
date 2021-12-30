@@ -34,4 +34,13 @@ data class Chart(
     /** Название оси Y */
     @ColumnInfo(name = DB.Y_NAME)
     val yName: String = "Y"
-)
+) {
+    constructor(chartId: Long, chart: Chart): this(
+        chartId,
+        chart.name,
+        chart.countDecimal,
+        chart.xValueType,
+        chart.xValueDateFormat,
+        chart.xName,
+        chart.yName)
+}

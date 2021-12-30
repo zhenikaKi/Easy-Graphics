@@ -27,16 +27,34 @@ object DB {
     const val VALUE = "value"
 
     //типы подписи по оси X
-    enum class ValueTypes(val value: Int) {
-        STRING(1), //строка
-        NUMBER(2), //число
-        DATE(3) //дата
+    enum class ValueTypes(val value: Int, val title: String) {
+        STRING(1, "Строка"),
+        NUMBER(2, "Число"),
+        DATE(3, "Дата");
+
+        companion object {
+            //получить значение из заголовка
+            fun titleToValueTypes(title: String) =
+                values().firstOrNull { item -> item.title == title }
+
+            //получить список заголовков
+            fun titles() = values().map { valueTypes -> valueTypes.title }
+        }
     }
 
     //вариант отображения даты для ValueTypes.DATE
-    enum class DateTypes(val value: Int) {
-        DD_MM_YYYY(1), //дд.мм.гггг
-        DD_MM(2), //дд.мм
-        YYYY_MM_DD(3) //гггг.мм.дд
+    enum class DateTypes(val value: Int, val title: String) {
+        DD_MM_YYYY(1, "дд.мм.гггг"),
+        DD_MM(2, "дд.мм"),
+        YYYY_MM_DD(3, "гггг.мм.дд");
+
+        companion object {
+            //получить значение из заголовка
+            fun titleToDateTypes(title: String) =
+                values().firstOrNull { item -> item.title == title }
+
+            //получить список заголовков
+            fun titles() = values().map { valueTypes -> valueTypes.title }
+        }
     }
 }

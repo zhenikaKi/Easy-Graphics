@@ -3,9 +3,7 @@ package ru.easygraphics.mainWindow
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
@@ -26,7 +24,6 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
-import ru.easygraphics.tableWindow.TableScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -76,6 +73,14 @@ class ChartsListFragment :
         return true
     }
 
+    //на главном экране меню сверху справа не нужно
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    }
+
+    override fun showButtonBack(visible: Boolean) {
+        super.showButtonBack(false)
+    }
+
     private val adapter: ChartsListAdapter =
         ChartsListAdapter(onChartClickListener, onChartLongClickListener)
 
@@ -111,15 +116,15 @@ class ChartsListFragment :
             router.navigateTo(GraphicScreen(1)) //для теста
         }
         binding.exampleButtonTable.setOnClickListener {
-            router.navigateTo(TableTestScreen()) //для теста
+            router.navigateTo(TableTestScreen(1)) //для теста
         }
 
 
         binding.floatingActionButton.setOnClickListener {
-            //router.navigateTo(ChartDescriptionScreen(null))
+            router.navigateTo(ChartDescriptionScreen(null))
             //router.navigateTo(ChartDescriptionScreen(-1))
             //router.navigateTo(GraphicScreen(1)) //для теста
-            router.navigateTo(TableScreen(1, "Chart Name")) //для теста
+            //router.navigateTo(TableScreen(1, "Chart Name")) //для теста
         }
     }
 

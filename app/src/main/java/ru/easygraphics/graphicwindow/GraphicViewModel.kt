@@ -10,7 +10,7 @@ class GraphicViewModel(private val repository: DataRepository): BaseViewModel<Ba
 
     //получить все данные по графику
     fun loadGraphicData(chartId: Long) {
-        liveData.postValue(BaseState.Loading)
+        liveData.postValue(BaseState.Loading())
         coroutineScope.launch {
             //получаем все данные по графику из базы
             val graphicData = repository.getGraphicData(chartId)
