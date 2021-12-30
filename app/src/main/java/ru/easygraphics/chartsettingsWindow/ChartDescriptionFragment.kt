@@ -120,7 +120,7 @@ class ChartDescriptionFragment :
             addParamLine(line = null, hideIconDelete = false)
         }
 
-        //кнопка перехода кданным графика
+        //кнопка перехода к данным графика
         binding.buttonTable.setOnClickListener {
             saveData(true)
         }

@@ -35,15 +35,4 @@
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
-
-    <string-array name="тип_значений_по_оси_Y">
-        <item>Дата</item>
-        <item>Строка</item>
-        <item>Число</item>
-    </string-array>
-    <string-array name="формат_даты">
-        <item>ДД.ММ.ГГГГ</item>
-        <item>ДД.ММ</item>
-        <item>ГГГГ.ММ.ДД</item>
-    </string-array>
 </resources>

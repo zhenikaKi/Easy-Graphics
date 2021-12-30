@@ -54,7 +54,6 @@ class ChartDescriptionViewModel(private val repository: DataRepository):BaseView
 
     //очистка состояния
     fun clearState() {
-        //liveData.value = null
         liveData.postValue(null)
     }
 
