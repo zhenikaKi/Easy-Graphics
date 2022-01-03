@@ -14,29 +14,39 @@
         android:textSize="@dimen/default_fragment_text_size"
         android:textColor="@android:color/black"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/table_scroll"
-        tools:text="Graph name" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="Graph name"
+        tools:ignore="MissingConstraints" />
 
     <HorizontalScrollView
         android:id="@+id/table_scroll"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/graphName"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintBottom_toTopOf="@id/addLineButton"
+        app:layout_constraintLeft_toLeftOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/table"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="@dimen/default_fragment_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/graphName"
             tools:ignore="MissingConstraints" />
 
     </HorizontalScrollView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addLineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        tools:ignore="ContentDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/floating_action_margin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
