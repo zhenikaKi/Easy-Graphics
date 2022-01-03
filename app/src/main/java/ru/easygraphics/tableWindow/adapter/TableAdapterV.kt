@@ -33,8 +33,8 @@ class TableAdapterV(
     fun removeItem(position: Int) {
         dataLines.removeAt(position)
         Log.d(LOG_TAG, "Position: $position")
-        notifyItemChanged(position - 1)
-        notifyItemChanged(position + 1)
+        //notifyItemChanged(position - 1)
+        //notifyItemChanged(position + 1)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, itemCount)
     }
@@ -64,8 +64,4 @@ class TableAdapterV(
     override fun getItemId(position: Int) = position.toLong()
 
     override fun getItemViewType(position: Int) = position
-
-    interface OnDeleteIconClickListener {
-        fun onItemClick()
-    }
 }

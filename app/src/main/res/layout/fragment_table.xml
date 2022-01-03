@@ -6,24 +6,12 @@
     style="@style/RootElementStyle"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/graphName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/default_fragment_padding"
-        android:textSize="@dimen/default_fragment_text_size"
-        android:textColor="@android:color/black"
-        android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        tools:text="Graph name"
-        tools:ignore="MissingConstraints" />
-
     <HorizontalScrollView
         android:id="@+id/table_scroll"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/graphName"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/addLineButton"
         app:layout_constraintLeft_toLeftOf="parent">
 

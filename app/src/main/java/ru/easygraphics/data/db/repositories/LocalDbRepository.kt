@@ -29,6 +29,9 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         return result
     }
 
+    override suspend fun getAllDataOnChartId(chartId: Long): ChartAllData =
+        db.chartAllDataDao().getAllDataOnChartId(chartId = chartId)
+
     override suspend fun getChartsList(): List<Pair<Long, String>> {
         val cl = db.chartDao().getCharts()
         return cl.map { chart -> Pair(chart.chartId!!, chart.name) }
@@ -44,7 +47,8 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     override suspend fun getChart(chartId: Long): Chart = db.chartDao().getChart(chartId)
 
     /** Получить линии графика */
-    override suspend fun getLines(chartId: Long): List<ChartLine> = db.chartLineDao().getLines(chartId)
+    override suspend fun getLines(chartId: Long): List<ChartLine> =
+        db.chartLineDao().getLines(chartId)
 
     /** Удалить линии графика */
     override suspend fun deleteLines(chartLinesId: List<Long>) {
@@ -52,5 +56,6 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     }
 
     /** Сохранить линии графику */
-    override suspend fun saveLines(lines: List<ChartLine>): List<Long> = db.chartLineDao().save(lines)
+    override suspend fun saveLines(lines: List<ChartLine>): List<Long> =
+        db.chartLineDao().save(lines)
 }

@@ -13,8 +13,6 @@ import ru.easygraphics.chartsettingsWindow.ChartDescriptionViewModel
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.db.repositories.LocalDbRepository
-import ru.easygraphics.data.db.repositories.TableRowRepository
-import ru.easygraphics.data.db.repositories.TableRowRepositoryImp
 import ru.easygraphics.graphicwindow.GraphicFragment
 import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.consts.DB
@@ -50,11 +48,6 @@ object Modules {
         //работа с данными
         single<DataRepository>(qualifier = named(Scopes.DATA_REPOSITORY)) {
             LocalDbRepository(get(qualifier = named(Scopes.DB)))
-        }
-
-        //работа с данными таблицы
-        single<TableRowRepository>(qualifier = named(Scopes.TABLE_ROW_REPOSITORY)) {
-            TableRowRepositoryImp(get(qualifier = named(Scopes.DB)))
         }
     }
 
@@ -101,7 +94,7 @@ object Modules {
     val tableWindow = module {
         scope<TableFragment> {
             viewModel(qualifier = named(Scopes.TABLE_VIEW_MODEL)) {
-                TableViewModel(get(qualifier = named(Scopes.TABLE_ROW_REPOSITORY)))
+                TableViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }
