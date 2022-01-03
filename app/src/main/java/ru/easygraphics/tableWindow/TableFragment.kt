@@ -9,14 +9,17 @@ import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.arguments
 import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.data.domain.LineDetails
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.databinding.FragmentTableBinding
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.tableWindow.adapter.TableAdapter
+import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
+import java.text.FieldPosition
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
-    TableAdapter.Delegate {
+    TableAdapterV.Delegate {
 
     companion object {
         private const val ARG_CHART_ID = "argument_chart_id"
@@ -44,7 +47,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     //private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
-    private val adapter: TableAdapter = TableAdapter(delegate = this)
+    private val adapter: TableAdapterV = TableAdapterV(delegate = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,12 +71,17 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             tableViewModel.rowData.collect { rowData ->
-                adapter.submitList(rowData)
+                adapter.setData(rowData)
             }
         }
     }
 
     override fun onRowSelected(tableLineData: TableLineData) {
         this.toast(tableLineData.LineName)
+    }
+
+    override fun onDeleteSelected(position: Int) {
+        this.toast("$position to delete")
+        adapter.removeItem(position)
     }
 }
