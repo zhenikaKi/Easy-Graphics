@@ -1,22 +1,23 @@
 package ru.easygraphics.tableWindow
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collect
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.arguments
 import ru.easygraphics.baseobjects.BaseFragment
-import ru.easygraphics.data.domain.LineDetails
+import ru.easygraphics.data.db.entities.ChartAllData
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.databinding.FragmentTableBinding
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
-import ru.easygraphics.tableWindow.adapter.TableAdapter
+import ru.easygraphics.parseToListOfTableLineData
+import ru.easygraphics.states.BaseState
+import ru.easygraphics.states.TableState
 import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
-import java.text.FieldPosition
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
     TableAdapterV.Delegate {
@@ -42,6 +43,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     }
 
     private val scope = getKoin().createScope<TableFragment>()
+
     private val tableViewModel: TableViewModel =
         scope.get(qualifier = named(Scopes.TABLE_VIEW_MODEL))
 
@@ -49,21 +51,29 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     private val adapter: TableAdapterV = TableAdapterV(delegate = this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
             chartId?.let { tableViewModel.fetchTableRows(chartId = it) }
         }
-    }
+    }*/
+
+    /*override fun initAfterCreate() {
+        //super.initAfterCreate()
+        chartId?.let { model.fetchTableRows(chartId = it) }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.graphName.text = chartName
         binding.table.adapter = adapter
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        tableViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+
+        chartId?.let { tableViewModel.fetchTableRows(it) }
+
+        /*viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             tableViewModel.error.collect {
                 this@TableFragment.toast(it)
             }
@@ -73,7 +83,25 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
             tableViewModel.rowData.collect { rowData ->
                 adapter.setData(rowData)
             }
+        }*/
+    }
+
+    private fun renderData(state: BaseState) {
+        when (state) {
+            //начало процесса загрузки
+            is BaseState.Loading -> {
+            }
+
+            //полученные данные по графику
+            is TableState.Success -> showTable(state.data)
+
+            //какая-то ошибка
+            is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
+    }
+
+    private fun showTable(data: ChartAllData) {
+        adapter.setData(data.parseToListOfTableLineData())
     }
 
     override fun onRowSelected(tableLineData: TableLineData) {
