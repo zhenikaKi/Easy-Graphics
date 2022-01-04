@@ -16,11 +16,12 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.parseToListOfTableLineData
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableState
+import ru.easygraphics.tableWindow.adapter.TableAdapter
 import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
-    TableAdapterV.Delegate {
+    TableAdapter.Delegate {
 
     companion object {
         private const val ARG_CHART_ID = "argument_chart_id"
@@ -49,7 +50,11 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     //private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
-    private val adapter: TableAdapterV = TableAdapterV(delegate = this)
+    //private val tableAdapterV: TableAdapterV = TableAdapterV(delegate = this)
+    private val tableAdapter: TableAdapter = TableAdapter(delegate = this)
+
+    private var tableLineList = ArrayList<TableLineData>()
+
 
     /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +72,9 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.table.adapter = adapter
+        binding.table.adapter = tableAdapter
 
+        binding.graphName.text = "tfht"
         tableViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
 
         chartId?.let { tableViewModel.fetchTableRows(it) }
@@ -88,20 +94,19 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     private fun renderData(state: BaseState) {
         when (state) {
-            //начало процесса загрузки
             is BaseState.Loading -> {
             }
-
-            //полученные данные по графику
             is TableState.Success -> showTable(state.data)
 
-            //какая-то ошибка
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }
 
     private fun showTable(data: ChartAllData) {
-        adapter.setData(data.parseToListOfTableLineData())
+        //tableAdapter.setData(data.parseToListOfTableLineData())
+        //tableAdapter.submitList(data.parseToListOfTableLineData())
+        tableLineList = data.parseToListOfTableLineData() as ArrayList<TableLineData>
+        tableAdapter.setData(tableLineList)
     }
 
     override fun onRowSelected(tableLineData: TableLineData) {
@@ -110,6 +115,10 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     override fun onDeleteSelected(position: Int) {
         this.toast("$position to delete")
-        adapter.removeItem(position)
+        val item = tableLineList[position]
+        val list = ArrayList<TableLineData>(tableLineList)
+        list.remove(item)
+        tableLineList = list
+        tableAdapter.setData(list)
     }
 }

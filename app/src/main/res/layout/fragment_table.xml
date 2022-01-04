@@ -7,14 +7,27 @@
     tools:context=".tableWindow.TableFragment"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/graphName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_fragment_padding"
+        android:textSize="@dimen/default_fragment_text_size"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/table_scroll"
+        tools:text="Graph name" />
+
     <HorizontalScrollView
         android:id="@+id/table_scroll"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/graphName"
         app:layout_constraintBottom_toTopOf="@id/addLineButton"
-        app:layout_constraintLeft_toLeftOf="parent">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/table"
@@ -22,6 +35,7 @@
             android:layout_height="match_parent"
             android:padding="@dimen/default_fragment_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/graphName"
             tools:ignore="MissingConstraints" />
 
     </HorizontalScrollView>

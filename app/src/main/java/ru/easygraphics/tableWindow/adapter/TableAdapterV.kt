@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.easygraphics.R
-import ru.easygraphics.click
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.helpers.consts.App.LOG_TAG
 
 class TableAdapterV(
     private val delegate: Delegate?
-) : RecyclerView.Adapter<TableViewHolder>() {
+) : RecyclerView.Adapter<TableViewHolderV>() {
 
     interface Delegate {
-        fun onRowSelected(tableLineData: TableLineData)
-        fun onDeleteSelected(position: Int)
+        fun onRowSelectedV(tableLineData: TableLineData)
+        fun onDeleteSelectedV(position: Int)
     }
 
     private lateinit var context: Context
@@ -39,7 +38,7 @@ class TableAdapterV(
         notifyItemRangeChanged(position, itemCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolderV {
         val rootView = LayoutInflater.from(parent.context)
             .inflate(R.layout.table_line, parent, false)
 
@@ -53,11 +52,12 @@ class TableAdapterV(
             //delegate?.onRowSelected(lineData)
         }*/
 
-        return TableViewHolder(rootView)
+        return TableViewHolderV(rootView)
     }
 
-    override fun onBindViewHolder(holder: TableViewHolder, position: Int) =
-        holder.bind(dataLines[position], context = context, delegate)
+    override fun onBindViewHolder(holderV: TableViewHolderV, position: Int) {
+        holderV.bind(dataLines[position], context = context, delegate)
+    }
 
     override fun getItemCount(): Int = dataLines.size
 
