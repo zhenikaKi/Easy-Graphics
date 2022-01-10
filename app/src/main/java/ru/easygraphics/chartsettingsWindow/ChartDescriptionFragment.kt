@@ -11,8 +11,6 @@ import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.textfield.TextInputLayout
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
@@ -108,7 +106,7 @@ class ChartDescriptionFragment :
         //сохраняем данные
         chart?.let { chartToSave ->
             lines?.let { linesToSave ->
-                model.saveDataToDB(chartToSave, linesToSave, linesDelete, openTableAfterSave)
+                model.saveGraphicData(chartToSave, linesToSave, linesDelete, openTableAfterSave)
             }
         }
     }

@@ -7,13 +7,13 @@ import ru.easygraphics.helpers.consts.DB
 @Dao
 interface ChartLineDao {
 
-    //сохранить линию графика
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(chartLine: ChartLine)
-
     //сохранить линии графика
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(lines: List<ChartLine>): List<Long>
+    suspend fun insert(lines: List<ChartLine>): List<Long>
+
+    //обновить линии графика
+    @Update
+    suspend fun update(lines: List<ChartLine>)
 
     //удалить линию графика
     @Delete
