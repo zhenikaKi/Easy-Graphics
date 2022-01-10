@@ -1,5 +1,6 @@
 package ru.easygraphics.tableWindow.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,10 +23,12 @@ class TableAdapterV(
 
     private val dataLines = mutableListOf<TableLineData>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(dataToSet: List<TableLineData>) {
         dataLines.apply {
             clear()
             addAll(dataToSet)
+            notifyDataSetChanged()
         }
     }
 
@@ -35,7 +38,7 @@ class TableAdapterV(
         notifyItemChanged(position - 1)
         notifyItemChanged(position + 1)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, itemCount)
+        //notifyItemRangeChanged(position, itemCount)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TableViewHolderV {

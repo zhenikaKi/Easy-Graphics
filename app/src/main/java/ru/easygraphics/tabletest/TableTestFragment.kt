@@ -2,6 +2,8 @@ package ru.easygraphics.tabletest
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextMenu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import io.github.ekiryushin.scrolltableview.cell.DataStatus
 import io.github.ekiryushin.scrolltableview.cell.RowCell
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.R
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.databinding.FragmentTestTableBinding
 import ru.easygraphics.helpers.consts.App
@@ -18,12 +21,13 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableTestState
+import ru.easygraphics.toast
 
 class TableTestFragment :
     BaseFragment<FragmentTestTableBinding>(FragmentTestTableBinding::inflate) {
 
     private val scope = getKoin().createScope<TableTestFragment>()
-    private val model: TableTestViewModel =
+    private val viewModel: TableTestViewModel =
         scope.get(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL))
 
     private var countColumns = 0
@@ -41,8 +45,8 @@ class TableTestFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        chartId?.let { model.loadTableData(chartId = it) }
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+        loadTableDataById()
 
         //добавление новой строки
         binding.buttonAdd.setOnClickListener {
@@ -70,8 +74,9 @@ class TableTestFragment :
 
     private fun renderData(state: BaseState) {
         when (state) {
-            //полученные данные по графику
+            is BaseState.Loading -> { }
             is TableTestState.Success -> showTableData(state.header, state.data, state.graphName)
+            is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }
 
@@ -87,4 +92,32 @@ class TableTestFragment :
         }
 
     }
+
+    override fun saveData() {
+        view?.let { view ->
+            registerForContextMenu(view)
+            view.showContextMenu()
+        }
+    }
+
+    override fun onCreateContextMenu(
+        contextMenu: ContextMenu,
+        view: View,
+        contextMenuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(contextMenu, view, contextMenuInfo)
+        requireActivity().menuInflater.inflate(R.menu.menu_save_confirmation, contextMenu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_save -> {
+                this@TableTestFragment.toast("Save")
+                loadTableDataById()
+            }
+        }
+        return true
+    }
+
+    private fun loadTableDataById() = chartId?.let { viewModel.loadTableData(chartId = it) }
 }
