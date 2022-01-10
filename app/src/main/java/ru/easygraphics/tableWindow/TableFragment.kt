@@ -21,7 +21,7 @@ import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
-    TableAdapter.Delegate {
+    TableAdapterV.Delegate {
 
     companion object {
         private const val ARG_CHART_ID = "argument_chart_id"
@@ -50,8 +50,8 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     //private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
-    //private val tableAdapterV: TableAdapterV = TableAdapterV(delegate = this)
-    private val tableAdapter: TableAdapter = TableAdapter(delegate = this)
+    private val tableAdapterV: TableAdapterV = TableAdapterV(delegate = this)
+    //private val tableAdapter: TableAdapter = TableAdapter(delegate = this)
 
     private var tableLineList = ArrayList<TableLineData>()
 
@@ -72,9 +72,9 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.table.adapter = tableAdapter
+        binding.table.adapter = tableAdapterV
 
-        binding.graphName.text = "tfht"
+        binding.graphName.text = "Graph name"
         tableViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
 
         chartId?.let { tableViewModel.fetchTableRows(it) }
@@ -106,19 +106,25 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
         //tableAdapter.setData(data.parseToListOfTableLineData())
         //tableAdapter.submitList(data.parseToListOfTableLineData())
         tableLineList = data.parseToListOfTableLineData() as ArrayList<TableLineData>
-        tableAdapter.setData(tableLineList)
+        tableAdapterV.setData(tableLineList)
     }
 
-    override fun onRowSelected(tableLineData: TableLineData) {
+    override fun onRowSelectedV(tableLineData: TableLineData) {
         this.toast(tableLineData.LineName)
+        //tableAdapterV.removeItem()
     }
 
-    override fun onDeleteSelected(position: Int) {
+    /*override fun onDeleteSelected(position: Int) {
         this.toast("$position to delete")
         val item = tableLineList[position]
         val list = ArrayList<TableLineData>(tableLineList)
         list.remove(item)
         tableLineList = list
-        tableAdapter.setData(list)
+        tableAdapterV.setData(list)
+    }*/
+
+    override fun onDeleteSelectedV(position: Int) {
+        this.toast("$position to delete")
+        tableAdapterV.removeItem(position = position)
     }
 }

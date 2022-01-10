@@ -119,6 +119,9 @@ class ChartsListFragment :
         binding.exampleButtonTable.setOnClickListener {
             router.navigateTo(TableScreen(1, "Temp name")) //для теста
         }
+        binding.exampleButtonTestTable.setOnClickListener {
+            router.navigateTo(TableTestScreen(1))
+        }
 
 
         binding.floatingActionButton.setOnClickListener {
