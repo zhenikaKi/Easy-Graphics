@@ -1,7 +1,7 @@
 package ru.easygraphics.states
 
-sealed class TableState<T>
+import ru.easygraphics.data.db.entities.ChartAllData
 
-data class Success<T>(val value: T) : TableState<T>()
-
-data class Error<T>(val value: Throwable) : TableState<T>()
+sealed class TableState: BaseState {
+    data class Success(val data: ChartAllData): TableState()
+}
