@@ -5,4 +5,8 @@
         android:icon="@drawable/icon_save"
         app:showAsAction="ifRoom"
         android:title="@string/menu_save"/>
+    <item android:id="@+id/home"
+        android:icon="@drawable/icon_home"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_home"/>
 </menu>

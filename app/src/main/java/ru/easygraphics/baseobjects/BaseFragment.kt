@@ -13,6 +13,7 @@ import ru.easygraphics.R
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.helpers.di.EmptyModule
+import ru.easygraphics.mainWindow.ChartListScreen
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -73,7 +74,7 @@ abstract class BaseFragment<VB : ViewBinding>(
      */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_fragment_save, menu)
+        inflater.inflate(R.menu.actionbar_menu_fragment, menu)
     }
 
     //обработка меню
@@ -81,7 +82,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         when (item.itemId) {
             //кнопка сохранения
             R.id.menu_value_save -> saveData()
-
+            R.id.home -> router.newRootScreen(ChartListScreen())
             //кнопка отмены или назад
             android.R.id.home -> router.exit()
         }
