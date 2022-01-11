@@ -16,7 +16,6 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.parseToListOfTableLineData
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableState
-import ru.easygraphics.tableWindow.adapter.TableAdapter
 import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
 
@@ -110,7 +109,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     }
 
     override fun onRowSelectedV(tableLineData: TableLineData) {
-        this.toast(tableLineData.LineName)
+        this.toast(tableLineData.lineName)
         //tableAdapterV.removeItem()
     }
 

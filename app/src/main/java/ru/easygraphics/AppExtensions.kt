@@ -20,6 +20,7 @@ import ru.easygraphics.data.db.entities.ChartLineData
 import ru.easygraphics.data.domain.LineDetails
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.helpers.consts.App.LOG_TAG
+import kotlin.math.max
 
 fun View.click(click: () -> Unit) = setOnClickListener {
     click()
@@ -48,13 +49,11 @@ fun TextView.addBottomBorder(width: Int) {
 }
 
 fun TextView.addRightBorder(width: Int) {
-    val bottomBorder: LayerDrawable = getBorders(Color.GRAY, 0, 0, width, 0)
-    background = bottomBorder
+    background = getBorders(Color.GRAY, 0, 0, width, 0)
 }
 
 fun TextView.addRightBottomBorder(width: Int) {
-    val bottomBorder: LayerDrawable = getBorders(Color.GRAY, 0, 0, width, width)
-    background = bottomBorder
+    background = getBorders(Color.GRAY, 0, 0, width, width)
 }
 
 private fun getBorders(
@@ -118,8 +117,7 @@ fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
 
     var firstRowWidth = this.chart.xName.length
     this.values.forEach {
-        firstRowWidth =
-            if (firstRowWidth < it.horizontalValue.value.length) it.horizontalValue.value.length else firstRowWidth
+        firstRowWidth = max(firstRowWidth, it.horizontalValue.value.length)
     }
 
     firstRow.add(Pair(this.chart.xName, firstRowWidth))
@@ -133,9 +131,7 @@ fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
                 verticalValue?.lineId == chartLine.lineId
             }?.value.toString().length
 
-            if (maxLength < verticalMaxLength) {
-                maxLength = verticalMaxLength
-            }
+            maxLength = max(maxLength, verticalMaxLength)
         }
 
         firstRow.add(Pair(chartLine.name, maxLength))
@@ -182,11 +178,10 @@ private fun columnWidthCalculation(chartLineData: ChartLineData): Int {
     var maxLength = chartLineData.chartLine.name.length
 
     chartLineData.yValues.forEach { verticalValue ->
-        maxLength =
-            if (maxLength < verticalValue.value.toString().length) verticalValue.value.toString().length else maxLength
+        maxLength = max(maxLength, verticalValue.value.toString().length)
     }
 
-    maxLength = if (maxLength < ExtConst.MinColumnWidth) ExtConst.MinColumnWidth else maxLength
+    maxLength = max(maxLength, ExtConst.MinColumnWidth)
 
     return maxLength
 }
@@ -203,10 +198,10 @@ fun ChartAllData.parseToListOfTableLineData(): List<TableLineData> {
     }
 
     val firstRowData = TableLineData(
-        DbId = -1,
-        LineId = -1,
-        LineName = this.chart.xName,
-        LineValue = firstRow
+        dbId = -1,
+        lineId = -1,
+        lineName = this.chart.xName,
+        lineValue = firstRow
     )
 
     Log.d(LOG_TAG, "$firstRowData")
@@ -214,20 +209,20 @@ fun ChartAllData.parseToListOfTableLineData(): List<TableLineData> {
 
     for ((lineId, i) in this.xValues.indices.withIndex()) {
         val newRowData = TableLineData(
-            DbId = this.xValues[i].xValueId,
-            LineId = lineId,
-            LineName = this.xValues[i].value,
-            LineValue = mutableListOf<LineDetails>()
+            dbId = this.xValues[i].xValueId,
+            lineId = lineId,
+            lineName = this.xValues[i].value,
+            lineValue = mutableListOf<LineDetails>()
         )
-        newRowData.addLineValue(newRowData.LineName, firstRowData.LineValue[0].Width, false)
+        newRowData.addLineValue(newRowData.lineName, firstRowData.lineValue[0].width, false)
 
         for (l in this.lines.indices) {
             val yValue = this.lines[l].yValues[i].value.toString()
-            newRowData.addLineValue(yValue, firstRowData.LineValue[l + 1].Width, false)
+            newRowData.addLineValue(yValue, firstRowData.lineValue[l + 1].width, false)
         }
 
         Log.d(LOG_TAG, "$newRowData")
-        if (newRowData.LineValue.size > 0) {
+        if (newRowData.lineValue.size > 0) {
             result.add(newRowData)
         }
     }
