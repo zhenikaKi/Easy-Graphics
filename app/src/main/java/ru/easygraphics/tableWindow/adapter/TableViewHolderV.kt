@@ -17,12 +17,12 @@ import ru.easygraphics.data.domain.LineDetails
 import ru.easygraphics.data.domain.TableLineData
 
 
-class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TableViewHolderV(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var holderContext: Context
-    private var holderDelegate: TableAdapter.Delegate? = null
+    private var holderDelegate: TableAdapterV.Delegate? = null
 
-    fun bind(lineData: TableLineData, context: Context, delegate: TableAdapter.Delegate?) {
+    fun bind(lineData: TableLineData, context: Context, delegate: TableAdapterV.Delegate?) {
         holderContext = context
         holderDelegate = delegate
         val layout: LinearLayout = itemView.findViewById(R.id.table_line)
@@ -33,7 +33,7 @@ class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 val newImageView = createImageView(lineDetails.isHead)
                 layout.addView(newImageView)
                 newImageView.click {
-                    holderDelegate?.onDeleteSelected(layoutPosition)
+                    holderDelegate?.onDeleteSelectedV(layoutPosition)
                 }
             }
             layout.addView(createTextView(lineDetails))
@@ -41,7 +41,7 @@ class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         layout.click {
-            delegate?.onRowSelected(lineData)
+            delegate?.onRowSelectedV(lineData)
         }
     }
 
