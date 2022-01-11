@@ -1,22 +1,26 @@
 package ru.easygraphics.tableWindow
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collect
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.arguments
 import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.data.db.entities.ChartAllData
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.databinding.FragmentTableBinding
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
-import ru.easygraphics.tableWindow.adapter.TableAdapter
+import ru.easygraphics.parseToListOfTableLineData
+import ru.easygraphics.states.BaseState
+import ru.easygraphics.states.TableState
+import ru.easygraphics.tableWindow.adapter.TableAdapterV
 import ru.easygraphics.toast
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
-    TableAdapter.Delegate {
+    TableAdapterV.Delegate {
 
     companion object {
         private const val ARG_CHART_ID = "argument_chart_id"
@@ -39,28 +43,42 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     }
 
     private val scope = getKoin().createScope<TableFragment>()
+
     private val tableViewModel: TableViewModel =
         scope.get(qualifier = named(Scopes.TABLE_VIEW_MODEL))
 
     //private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
-    private val adapter: TableAdapter = TableAdapter(delegate = this)
+    private val tableAdapterV: TableAdapterV = TableAdapterV(delegate = this)
+    //private val tableAdapter: TableAdapter = TableAdapter(delegate = this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private var tableLineList = ArrayList<TableLineData>()
+
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
             chartId?.let { tableViewModel.fetchTableRows(chartId = it) }
         }
-    }
+    }*/
+
+    /*override fun initAfterCreate() {
+        //super.initAfterCreate()
+        chartId?.let { model.fetchTableRows(chartId = it) }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.graphName.text = chartName
-        binding.table.adapter = adapter
+        binding.table.adapter = tableAdapterV
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        binding.graphName.text = "Graph name"
+        tableViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+
+        chartId?.let { tableViewModel.fetchTableRows(it) }
+
+        /*viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             tableViewModel.error.collect {
                 this@TableFragment.toast(it)
             }
@@ -68,12 +86,44 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             tableViewModel.rowData.collect { rowData ->
-                adapter.submitList(rowData)
+                adapter.setData(rowData)
             }
+        }*/
+    }
+
+    private fun renderData(state: BaseState) {
+        when (state) {
+            is BaseState.Loading -> {
+            }
+            is TableState.Success -> showTable(state.data)
+
+            is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }
 
-    override fun onRowSelected(tableLineData: TableLineData) {
-        this.toast(tableLineData.LineName)
+    private fun showTable(data: ChartAllData) {
+        //tableAdapter.setData(data.parseToListOfTableLineData())
+        //tableAdapter.submitList(data.parseToListOfTableLineData())
+        tableLineList = data.parseToListOfTableLineData() as ArrayList<TableLineData>
+        tableAdapterV.setData(tableLineList)
+    }
+
+    override fun onRowSelectedV(tableLineData: TableLineData) {
+        this.toast(tableLineData.lineName)
+        //tableAdapterV.removeItem()
+    }
+
+    /*override fun onDeleteSelected(position: Int) {
+        this.toast("$position to delete")
+        val item = tableLineList[position]
+        val list = ArrayList<TableLineData>(tableLineList)
+        list.remove(item)
+        tableLineList = list
+        tableAdapterV.setData(list)
+    }*/
+
+    override fun onDeleteSelectedV(position: Int) {
+        this.toast("$position to delete")
+        tableAdapterV.removeItem(position = position)
     }
 }
