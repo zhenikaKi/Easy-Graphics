@@ -36,9 +36,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.mailToolbar)
     }
 
-
-
-
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(navigator)
