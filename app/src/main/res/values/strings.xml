@@ -31,9 +31,9 @@
     <string name="menu_edit">Редактировать</string>
     <string name="menu_delete">Удалить</string>
     <string name="menu_save">Сохранить</string>
+    <string name="menu_home">Домой</string>
 
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
-    <string name="home">Домой</string>
 </resources>

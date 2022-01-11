@@ -36,18 +36,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.mailToolbar)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_home,menu)
-        return true
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId)
-        {
-            R.id.home -> router.navigateTo(ChartListScreen())
-        }
-        return true
-    }
+
+
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(navigator)
