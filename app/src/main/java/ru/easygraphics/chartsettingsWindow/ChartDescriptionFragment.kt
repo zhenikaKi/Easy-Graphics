@@ -27,7 +27,6 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
-import ru.easygraphics.states.LoadingTypes
 import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.toast
 import ru.easygraphics.visibleOrGone
@@ -159,20 +158,17 @@ class ChartDescriptionFragment :
      */
     private fun renderData(state: BaseState?) {
         when (state) {
-            //начало процесса загрузки
-            is BaseState.Loading -> {
-                when (state.status) {
-                    //загрузка основной информации
-                    LoadingTypes.ROOT_DATA -> {
-                        binding.progressBar.visibleOrGone(true)
-                    }
-                    LoadingTypes.SAVED -> {
-                        binding.progressBar.visibleOrGone(true)
-                    }
-                    LoadingTypes.SAVED_WITH_TABLE_OPENING -> {
-                        binding.progressBarOnBottom.visibleOrGone(true)
-                    }
-                }
+            //загрузка основной информации
+            BaseState.LoadingRoot -> {
+                binding.progressBar.visibleOrGone(true)
+            }
+
+            BaseState.LoadingSaved -> {
+                binding.progressBar.visibleOrGone(true)
+            }
+
+            BaseState.SavedWithTableOpening -> {
+                binding.progressBarOnBottom.visibleOrGone(true)
             }
 
             //получены данные по редактируемому графику

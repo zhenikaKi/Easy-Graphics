@@ -1,8 +1,6 @@
 package ru.easygraphics.data.db.repositories
 
-import io.github.ekiryushin.scrolltableview.cell.RowCell
 import ru.easygraphics.data.db.entities.*
-import ru.easygraphics.states.TableState
 
 /** Интерфейс работы с данными графиков */
 interface DataRepository {
@@ -18,7 +16,7 @@ interface DataRepository {
     /** Сохранить основные данные по графику */
     suspend fun saveChart(chart: Chart): Long
 
-    suspend fun getChartsList(): List<Pair<Long, String>>
+    suspend fun getChartsList(): List<ChartAndLines>
     suspend fun deleteChart(chartId: Long)
 
     /** Получить конкретный график */
@@ -30,7 +28,10 @@ interface DataRepository {
     /** Удалить линии графика */
     suspend fun deleteLines(chartLinesId: List<Long>)
 
-    /** Сохранить линии графику */
+    /** Сохранить линию графика */
+    suspend fun saveLine(line: ChartLine): Long
+
+    /** Сохранить линии графика */
     suspend fun saveLines(lines: List<ChartLine>)
 
     /** Удалить значения строки в таблице */
@@ -44,4 +45,10 @@ interface DataRepository {
 
     /** Сохранить изменения значения строки в таблице */
     suspend fun insertVerticalValues(verticalValues: List<VerticalValue>)
+
+    /** Добавить значения по оси X */
+    suspend fun insertHorizontalValues(horizontalValues: List<HorizontalValue>)
+
+    /** Получить значения по оси X на конкретном графике */
+    suspend fun getHorizontalValues(chartId: Long): List<HorizontalValue>
 }

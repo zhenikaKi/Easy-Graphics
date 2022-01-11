@@ -20,6 +20,9 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.mainWindow.ChartsListFragment
 import ru.easygraphics.mainWindow.ChartsListViewModel
+import ru.easygraphics.settingwindow.SettingFragment
+import ru.easygraphics.settingwindow.SettingService
+import ru.easygraphics.settingwindow.SettingViewModel
 import ru.easygraphics.tableWindow.TableFragment
 import ru.easygraphics.tableWindow.TableViewModel
 import ru.easygraphics.tabletest.TableTestFragment
@@ -84,7 +87,6 @@ object Modules {
                 ChartDescriptionService(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
-
     }
 
     //модуль окна с графиком
@@ -110,6 +112,19 @@ object Modules {
         scope<TableTestFragment> {
             viewModel(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL)) {
                 TableTestViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+            }
+        }
+    }
+
+    //модуль окна настроек
+    val settingWindow = module {
+        scope<SettingFragment> {
+            viewModel(qualifier = named(Scopes.SETTING_VIEW_MODEL)) {
+                SettingViewModel(get(qualifier = named(Scopes.SETTING_SERVICE)))
+            }
+
+            scoped<SettingService>(qualifier = named(Scopes.SETTING_SERVICE)) {
+                SettingService(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }

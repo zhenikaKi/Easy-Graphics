@@ -9,7 +9,7 @@ import ru.easygraphics.states.TableState
 class TableViewModel(private val repository: DataRepository) : BaseViewModel<BaseState>() {
 
     fun fetchTableRows(chartId: Long) {
-        liveData.postValue(BaseState.Loading())
+        liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             val tableData = repository.getAllDataOnChartId(chartId)
             liveData.postValue(TableState.Success(tableData))

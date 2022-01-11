@@ -93,8 +93,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     private fun renderData(state: BaseState) {
         when (state) {
-            is BaseState.Loading -> {
-            }
+            is BaseState.Loading -> { }
             is TableState.Success -> showTable(state.data)
 
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)

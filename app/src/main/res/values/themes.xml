@@ -23,6 +23,15 @@
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginTop">@dimen/item_padding</item>
         <item name="android:layout_marginBottom">@dimen/item_padding</item>
+        <item name="android:textSize">@dimen/item_title_text_size</item>
+    </style>
+
+    <!-- стиль текста с описанием в списках -->
+    <style name="DescriptionTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginBottom">@dimen/item_padding</item>
+        <item name="android:textSize">@dimen/item_description_text_size</item>
     </style>
 
     <!-- стиль оформления родительского элемента в разметке окон -->
@@ -67,5 +76,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:src">@android:drawable/ic_input_add</item>
         <item name="android:layout_margin">@dimen/floating_action_margin</item>
+    </style>
+
+    <!-- стиль крутилки, которая посередине экрана -->
+    <style name="CenterProgressBarStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">visible</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
     </style>
 </resources>

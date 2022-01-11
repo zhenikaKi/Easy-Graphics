@@ -12,12 +12,19 @@ interface HorizontalValueDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(horizontalValue: HorizontalValue): Long
 
+    //сохранить значения по оси X
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(horizontalValues: List<HorizontalValue>)
+
     //удалить значение по оси X
     @Delete
     suspend fun delete(horizontalValue: HorizontalValue)
 
     //получить все значения по оси X на конкретном графике
-    @Query("select * from ${DB.TABLE_HORIZONTAL_VALUE} where ${DB.CHART_ID} = :chartId")
+    @Query("select * " +
+            "from ${DB.TABLE_HORIZONTAL_VALUE} " +
+            "where ${DB.CHART_ID} = :chartId " +
+            "order by ${DB.X_VALUE_ID}")
     suspend fun getValues(chartId: Long): List<HorizontalValue>
 
     //удалить значение Х в таблицы

@@ -72,6 +72,8 @@ dependencies {
     implementation("androidx.room:room-ktx:${Version.ROOM}")
     implementation("androidx.room:room-runtime:${Version.ROOM}")
     kapt("androidx.room:room-compiler:${Version.ROOM}")
+    //Gson
+    implementation("com.google.code.gson:gson:${Version.GSON}")
 
     //Cicerone
     implementation("com.github.terrakok:cicerone:${Version.CICERONE}")

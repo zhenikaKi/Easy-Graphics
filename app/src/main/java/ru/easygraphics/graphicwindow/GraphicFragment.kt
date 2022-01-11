@@ -84,12 +84,14 @@ class GraphicFragment :
             //настройка легенды
             with(legend) {
                 verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-                horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-                orientation = Legend.LegendOrientation.HORIZONTAL
+                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                orientation = Legend.LegendOrientation.VERTICAL
                 setDrawInside(false) //отключить расположение легенды внутри графика
                 form = Legend.LegendForm.CIRCLE //задать форму цветовых меток
                 formSize = 9f //размер цветовой метки
                 textSize = 12f //размер текста легенды
+                setScaleEnabled(true)
+
             }
 
             val zeroLimitLine = LimitLine(0f)
@@ -107,10 +109,6 @@ class GraphicFragment :
 
         //запускаем процесс получения данных по графику
         chartId?.let { model.loadGraphicData(it) }
-    }
-
-    //на экране с графиком меню сверху справа не нужно
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     }
 
     //обработка состояний
