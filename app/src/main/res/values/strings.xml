@@ -26,6 +26,7 @@
     <string name="example_title">Для теста</string>
     <string name="example_button_table">Таблица</string>
     <string name="example_button_graphic">График</string>
+    <string name="example_button_test_table">Тест Таблица</string>
 
     <!-- меню -->
     <string name="menu_edit">Редактировать</string>

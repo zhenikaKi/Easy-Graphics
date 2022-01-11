@@ -82,7 +82,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         when (item.itemId) {
             //кнопка сохранения
             R.id.menu_value_save -> saveData()
-            R.id.home -> router.navigateTo(ChartListScreen())
+            R.id.home -> router.newRootScreen(ChartListScreen())
             //кнопка отмены или назад
             android.R.id.home -> router.exit()
         }
