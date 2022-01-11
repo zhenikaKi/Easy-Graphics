@@ -38,7 +38,15 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         db.chartDao().delete(chartId)
     }
 
-    override suspend fun saveChart(chart: Chart): Long = db.chartDao().save(chart)
+    override suspend fun saveChart(chart: Chart): Long {
+        chart.chartId?.let {
+            db.chartDao().update(chart)
+            return it
+        } ?:let {
+            return db.chartDao().insert(chart)
+        }
+    }
+
 
     /** Получить конкретный график */
     override suspend fun getChart(chartId: Long): Chart = db.chartDao().getChart(chartId)
@@ -51,6 +59,18 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         db.chartLineDao().delete(chartLinesId)
     }
 
-    /** Сохранить линии графику */
-    override suspend fun saveLines(lines: List<ChartLine>): List<Long> = db.chartLineDao().save(lines)
+    /** Сохранить линии графика */
+    override suspend fun saveLines(lines: List<ChartLine>) {
+        //отдельно сохраняем новые линии
+        val newLines = lines.filter { line -> line.lineId == null }
+        if (newLines.isNotEmpty()) {
+            db.chartLineDao().insert(newLines)
+        }
+
+        //и отдельно - обновленные линии
+        val updateLines = lines.filter { line -> line.lineId != null }
+        if (updateLines.isNotEmpty()) {
+            db.chartLineDao().update(updateLines)
+        }
+    }
 }

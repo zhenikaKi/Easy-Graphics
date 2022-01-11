@@ -29,5 +29,5 @@ interface DataRepository {
     suspend fun deleteLines(chartLinesId: List<Long>)
 
     /** Сохранить линии графику */
-    suspend fun saveLines(lines: List<ChartLine>): List<Long>
+    suspend fun saveLines(lines: List<ChartLine>)
 }

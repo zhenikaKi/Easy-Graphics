@@ -9,7 +9,11 @@ interface ChartDao {
 
     //сохранить график
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(chart: Chart):Long
+    suspend fun insert(chart: Chart): Long
+
+    //обновить график
+    @Update
+    suspend fun update(chart: Chart)
 
     //удалить график
     @Delete

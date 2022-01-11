@@ -9,6 +9,7 @@ object Scopes {
     const val CHARTS_LIST_VIEW_MODEL = "chartsListViewModel"
     const val GRAPHIC_VIEW_MODEL = "graphicViewModel"
     const val DESCRIPTION_VIEW_MODEL= "descriptionViewModel"
+    const val DESCRIPTION_SERVICE = "descriptionService"
     const val TABLE_TEST_VIEW_MODEL = "tableTestViewModel"
 
     const val DATA_REPOSITORY = "dataRepository"
