@@ -35,4 +35,5 @@
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
+    <string name="home">Домой</string>
 </resources>
