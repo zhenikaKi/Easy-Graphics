@@ -28,9 +28,9 @@ class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val layout: LinearLayout = itemView.findViewById(R.id.table_line)
 
         var isFirstItem = true
-        lineData.LineValue.forEach { lineDetails ->
+        lineData.lineValue.forEach { lineDetails ->
             if (isFirstItem) {
-                val newImageView = createImageView(lineDetails.IsHead)
+                val newImageView = createImageView(lineDetails.isHead)
                 layout.addView(newImageView)
                 newImageView.click {
                     holderDelegate?.onDeleteSelected(layoutPosition)
@@ -60,13 +60,13 @@ class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val defaultCardTextSize =
             holderContext.resources.getDimension(R.dimen.default_card_text_size)
 
-        newTextView.text = lineDetails.Value
+        newTextView.text = lineDetails.value
         newTextView.setTextSize(
             TypedValue.COMPLEX_UNIT_PX,
             defaultCardTextSize
         )
         newTextView.addRightBorder(5)
-        if (lineDetails.IsHead) {
+        if (lineDetails.isHead) {
             newTextView.addRightBottomBorder(6)
             newTextView.typeface = Typeface.DEFAULT_BOLD
         }
@@ -74,7 +74,7 @@ class TableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         newTextView.gravity = Gravity.CENTER
         newTextView.setTextColor(holderContext.resources.getColor(R.color.black))
         newTextView.height = defaultCardTextSize.toInt() * 2
-        newTextView.width = defaultCardTextSize.toInt() * lineDetails.Width
+        newTextView.width = defaultCardTextSize.toInt() * lineDetails.width
 
         return newTextView
     }

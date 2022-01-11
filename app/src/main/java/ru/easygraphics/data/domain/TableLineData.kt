@@ -1,13 +1,13 @@
 package ru.easygraphics.data.domain
 
 data class TableLineData(
-    val DbId: Long? = 0,
-    val LineId: Int = 0,
-    val LineName: String = "",
-    val LineValue: MutableList<LineDetails> = mutableListOf()
+    val dbId: Long? = 0,
+    val lineId: Int = 0,
+    val lineName: String = "",
+    val lineValue: MutableList<LineDetails> = mutableListOf()
 ){
 
     fun addLineValue(lineValue: String, columnWidth: Int, isHead: Boolean) {
-        this.LineValue.add(LineDetails(lineValue, columnWidth, isHead))
+        this.lineValue.add(LineDetails(lineValue, columnWidth, isHead))
     }
 }

@@ -112,7 +112,7 @@ class TableTestFragment :
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_save -> {
-                this@TableTestFragment.toast("Save")
+                this@TableTestFragment.toast("Сохранил")
                 loadTableDataById()
             }
         }
