@@ -35,8 +35,8 @@ class TableAdapterV(
     fun removeItem(position: Int) {
         dataLines.removeAt(position)
         Log.d(LOG_TAG, "Position: $position")
-        notifyItemChanged(position - 1)
-        notifyItemChanged(position + 1)
+        //notifyItemChanged(position - 1)
+        //notifyItemChanged(position + 1)
         notifyItemRemoved(position)
         //notifyItemRangeChanged(position, itemCount)
     }
