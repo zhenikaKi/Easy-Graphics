@@ -43,10 +43,10 @@ object DB {
     }
 
     //вариант отображения даты для ValueTypes.DATE
-    enum class DateTypes(val value: Int, val title: String) {
-        DD_MM_YYYY(1, "дд.мм.гггг"),
-        DD_MM(2, "дд.мм"),
-        YYYY_MM_DD(3, "гггг.мм.дд");
+    enum class DateTypes(val value: Int, val title: String, val dateFormat: String) {
+        DD_MM_YYYY(1, "дд.мм.гггг", "dd.MM.yyyy"),
+        DD_MM(2, "дд.мм", "dd.MM"),
+        YYYY_MM_DD(3, "гггг.мм.дд", "yyyy-MM-dd");
 
         companion object {
             //получить значение из заголовка

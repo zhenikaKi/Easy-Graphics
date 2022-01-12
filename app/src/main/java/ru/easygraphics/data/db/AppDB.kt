@@ -14,6 +14,8 @@ import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.data.db.entities.HorizontalValue
 import ru.easygraphics.data.db.entities.VerticalValue
 import ru.easygraphics.helpers.consts.DB
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Database(
     entities = [
@@ -66,10 +68,12 @@ abstract class AppDB: RoomDatabase(), DaoDB {
 
         private fun createXValues(db: SupportSQLiteDatabase, chartId: Long): List<Long> {
             val result: MutableList<Long> = mutableListOf()
-            for (day in 10..30) {
+            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val firstDate = System.currentTimeMillis()
+            for (day in 50 downTo 0) {
                 val cV = ContentValues()
                 cV.put(DB.CHART_ID, chartId)
-                cV.put(DB.VALUE, "${day}.10")
+                cV.put(DB.VALUE, simpleDateFormat.format(Date(firstDate-(day * 1000L * 60 * 60 * 24))))
                 result.add(db.insert(DB.TABLE_HORIZONTAL_VALUE, SQLiteDatabase.CONFLICT_REPLACE, cV))
             }
             return result
@@ -80,7 +84,7 @@ abstract class AppDB: RoomDatabase(), DaoDB {
                 val cV = ContentValues()
                 cV.put(DB.LINE_ID, lineId)
                 cV.put(DB.X_VALUE_ID, xValueId)
-                cV.put(DB.VALUE, (10..25).random()) //случайная температура от +10 до +25
+                cV.put(DB.VALUE, (-5..25).random()) //случайная температура от -5 до +25
                 db.insert(DB.TABLE_VERTICAL_VALUE, SQLiteDatabase.CONFLICT_REPLACE, cV)
             }
         }
