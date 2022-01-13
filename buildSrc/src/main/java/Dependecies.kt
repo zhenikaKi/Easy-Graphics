@@ -26,7 +26,7 @@ object Version {
 
     const val ROOM = "2.3.0"
 
-    const val SCROLL_TABLE_VIEW = "1.0.3"
+    const val SCROLL_TABLE_VIEW = "1.0.4"
     const val COLOR_PICKER = "1.2.5"
     const val CHART_LIBRARY = "v3.1.0"
     const val CICERONE = "7.1"

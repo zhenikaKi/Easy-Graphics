@@ -73,7 +73,9 @@ class TableTestFragment :
                 ?.forEach { row ->
                     row.columns = row.columns.filter { column -> column.status == DataStatus.EDIT }
                 }
-            Log.d(App.LOG_TAG, editedDate.toString())
+
+            Log.d(App.LOG_TAG, "Шапка: ${binding.tableDataBlock.getHeader().toString()}")
+            Log.d(App.LOG_TAG, "Данные: ${editedDate.toString()}")
         }
     }
 
