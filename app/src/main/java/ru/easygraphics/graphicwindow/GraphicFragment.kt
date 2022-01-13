@@ -1,5 +1,6 @@
 package ru.easygraphics.graphicwindow
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -16,6 +18,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.baseobjects.BaseFragment
+import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartAllDataViewed
 import ru.easygraphics.databinding.FragmentGraphicBinding
 import ru.easygraphics.helpers.ColorConvert
@@ -25,6 +28,10 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.GraphicState
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class GraphicFragment :
     BaseFragment<FragmentGraphicBinding>(FragmentGraphicBinding::inflate)
@@ -55,6 +62,7 @@ class GraphicFragment :
             axisLeft.setDrawAxisLine(true) //показывать линию оси Y слева
             axisLeft.setDrawGridLines(true) //показывать горизонтальны линии по значениям оси Y слева
             axisLeft.textSize = 10f //размер текста
+            axisLeft.isGranularityEnabled = true //отключить промежуточные значения по оси Y
 
             axisRight.isEnabled = false //отключить подпись справа
             axisRight.setDrawAxisLine(false) //отключить линию оси Y справа
@@ -64,11 +72,13 @@ class GraphicFragment :
             xAxis.setDrawGridLines(false) //отключить вертикальные линии по значениям оси X
             xAxis.position = XAxis.XAxisPosition.BOTTOM //подпись по оси X расположить снизу
             xAxis.textSize = 10f //размер текста
+            xAxis.isGranularityEnabled = true //отключить промежуточные значения по оси X
 
             setTouchEnabled(true) //включить обработку нажатий пальцами (масштабирование, перемещение)
             isDragEnabled = true //включить перемещение по диаграмме (смещение графиков пальцем)
             setScaleEnabled(true) //включить масштабирование двумя пальцами
-            setPinchZoom(true) //включить одновременное изменение масштаба по X и Y
+            //setPinchZoom(true) //включить одновременное изменение масштаба по X и Y
+            setMaxVisibleValueCount(100) //максимальное количество значений, которое показывается у каждой точки линий
 
             //настройка легенды
             with(legend) {
@@ -80,6 +90,12 @@ class GraphicFragment :
                 formSize = 9f //размер цветовой метки
                 textSize = 12f //размер текста легенды
             }
+
+            val zeroLimitLine = LimitLine(0f)
+            zeroLimitLine.lineColor = Color.BLUE
+            zeroLimitLine.lineWidth = 2f
+            zeroLimitLine.enableDashedLine(30f, 30f, 0f)
+            axisLeft.addLimitLine(zeroLimitLine)
         }
     }
 
@@ -115,12 +131,19 @@ class GraphicFragment :
         binding.lineChart.resetTracking()
 
         //сформируем список подписей для оси X
+        var dateFormat: String? = null
+        if (data.chart.xValueType == DB.ValueTypes.DATE) {
+            data.chart.xValueDateFormat?.let { dateFormat = it.dateFormat }
+        }
         //todo по хорошему бы весь код ниже вынести в GraphicViewModel
-        binding.lineChart.xAxis.valueFormatter = XValueFormatter(data.values.map { hV -> hV.horizontalValue.value })
+        binding.lineChart.xAxis.valueFormatter =
+            XValueFormatter(data.values.map { hV ->
+                convertXAxisValue(dateFormat, hV.horizontalValue.value)
+            })
 
         //начинаем формировать данные для графика
         val dataSets: ArrayList<ILineDataSet> = ArrayList()
-        val lineValues: MutableMap<Int, ArrayList<Entry>> = HashMap() //список значений для каждойлинии
+        val lineValues: MutableMap<Int, ArrayList<Entry>> = HashMap() //список значений для каждой линии
         //заполняем значения для линий
         for (ind in data.values.indices) {
             val hV = data.values[ind]
@@ -139,25 +162,16 @@ class GraphicFragment :
                     arrayList = ArrayList()
                 }
 
-                /*todo библиотека вроде не умеет обрабатывать пустые значения, поэтому 0.
-                Но надо еще покопать в сторону ValueFormatter.
-                 */
+                val yValue: Float? = hV.verticalValues[lineInd]?.value?.toFloat()
+                yValue?.let { arrayList.add(Entry(ind.toFloat(), it)) }
 
-                val yValue: Float = if (hV.verticalValues[lineInd] == null || hV.verticalValues[lineInd]?.value == null) {
-                    0f
-                }
-                else {
-                    hV.verticalValues[lineInd]?.value?.toFloat()?: 0f
-                }
-
-                arrayList.add(Entry(ind.toFloat(), yValue))
                 lineValues[lineInd] = arrayList
             }
         }
 
         //настраиваем линии
         for (lineInd in data.lines.indices) {
-            val lineDataSet: LineDataSet = LineDataSet(lineValues[lineInd], data.lines[lineInd].name)
+            val lineDataSet = LineDataSet(lineValues[lineInd], data.lines[lineInd].name)
             lineDataSet.lineWidth = 2.5f //толщина линии
             lineDataSet.circleRadius = 4f //размер точки значения на линии
             lineDataSet.valueTextSize = 10f //рамер значения на самой линии
@@ -169,5 +183,26 @@ class GraphicFragment :
         val lineData = LineData(dataSets)
         binding.lineChart.data = lineData
         binding.lineChart.invalidate()
+    }
+
+    /**
+     * Преобразовать подпись по оси X к нужному виду с учетом формата отображения даты.
+     * @param dateFormat формат отображения даты при [Chart.xValueType] = [DB.ValueTypes.DATE].
+     * @param value исходнаяподпись значения.
+     * @return значение в виде преобразованной даты, либо исходное значение.
+     */
+    private fun convertXAxisValue(dateFormat: String?, value: String): String {
+        dateFormat?.let { pattern ->
+            try {
+                val mainDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                val newDateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+                val date = mainDateFormat.parse(value)
+                date?.let { return newDateFormat.format(it) }
+            } catch (e: Exception) {
+                return value
+            }
+        }
+
+        return value
     }
 }

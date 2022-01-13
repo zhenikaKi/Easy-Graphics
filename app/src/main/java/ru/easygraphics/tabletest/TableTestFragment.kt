@@ -52,9 +52,9 @@ class TableTestFragment :
         binding.buttonAdd.setOnClickListener {
             //сформируем пустую строку
             val columns: MutableList<Cell> = mutableListOf()
-            columns.add(Cell(viewed = CellView.EDIT_STRING)) //столбец значения по оси X
+            columns.add(Cell(viewed = viewModel.getXAxisViewed())) //столбец значения по оси X
             //значения по оси Y
-            for (ind in 1..countColumns) {
+            for (ind in 1 until countColumns) {
                 columns.add(Cell(viewed = CellView.EDIT_NUMBER))
             }
             binding.tableDataBlock.addRowData(RowCell(columns))
@@ -68,6 +68,11 @@ class TableTestFragment :
                 row.status == DataStatus.ADD || row.status == DataStatus.DELETE
                         || row.columns.any { column -> column.status == DataStatus.EDIT }
             }
+            //в строках, где поменялись значения, оставим только измененные значения
+            editedDate?.filter { row -> row.status == DataStatus.NORMAL }
+                ?.forEach { row ->
+                    row.columns = row.columns.filter { column -> column.status == DataStatus.EDIT }
+                }
             Log.d(App.LOG_TAG, editedDate.toString())
         }
     }
@@ -84,7 +89,7 @@ class TableTestFragment :
         countColumns = header.columns.size
         with(binding) {
             graphName.text = graphicName
-            tableDataBlock.setHeaders(header)
+            tableDataBlock.setHeader(header)
             tableDataBlock.setData(data)
             tableDataBlock.setEnabledIconDelete(true)
             tableDataBlock.setCountFixColumn(1)
