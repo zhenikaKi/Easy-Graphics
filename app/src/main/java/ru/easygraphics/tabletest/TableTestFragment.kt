@@ -49,7 +49,7 @@ class TableTestFragment :
         loadTableDataById()
 
         //добавление новой строки
-        binding.buttonAdd.setOnClickListener {
+        binding.addLineButton.setOnClickListener {
             //сформируем пустую строку
             val columns: MutableList<Cell> = mutableListOf()
             columns.add(Cell(viewed = viewModel.getXAxisViewed())) //столбец значения по оси X
@@ -58,24 +58,6 @@ class TableTestFragment :
                 columns.add(Cell(viewed = CellView.EDIT_NUMBER))
             }
             binding.tableDataBlock.addRowData(RowCell(columns))
-        }
-
-        //вывод в лог данных по таблице
-        binding.buttonLog.setOnClickListener {
-            val data = binding.tableDataBlock.getData()
-            //выведем новые, удаленные строки или строки, где поменялись значения
-            val editedDate = data?.filter { row ->
-                row.status == DataStatus.ADD || row.status == DataStatus.DELETE
-                        || row.columns.any { column -> column.status == DataStatus.EDIT }
-            }
-            //в строках, где поменялись значения, оставим только измененные значения
-            editedDate?.filter { row -> row.status == DataStatus.NORMAL }
-                ?.forEach { row ->
-                    row.columns = row.columns.filter { column -> column.status == DataStatus.EDIT }
-                }
-
-            Log.d(App.LOG_TAG, "Шапка: ${binding.tableDataBlock.getHeader().toString()}")
-            Log.d(App.LOG_TAG, "Данные: ${editedDate.toString()}")
         }
     }
 
@@ -101,29 +83,12 @@ class TableTestFragment :
     }
 
     override fun saveData() {
-        view?.let { view ->
-            registerForContextMenu(view)
-            view.showContextMenu()
+        val data = binding.tableDataBlock.getData()
+        chartId?.let {
+            viewModel.updateTableData(chartId, data)
         }
-    }
-
-    override fun onCreateContextMenu(
-        contextMenu: ContextMenu,
-        view: View,
-        contextMenuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(contextMenu, view, contextMenuInfo)
-        requireActivity().menuInflater.inflate(R.menu.menu_save_confirmation, contextMenu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_save -> {
-                this@TableTestFragment.toast("Сохранил")
-                loadTableDataById()
-            }
-        }
-        return true
+        this@TableTestFragment.toast("Сохранил")
+        loadTableDataById()
     }
 
     private fun loadTableDataById() = chartId?.let { viewModel.loadTableData(chartId = it) }

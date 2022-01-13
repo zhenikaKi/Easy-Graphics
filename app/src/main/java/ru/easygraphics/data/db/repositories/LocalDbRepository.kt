@@ -45,7 +45,7 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         chart.chartId?.let {
             db.chartDao().update(chart)
             return it
-        } ?:let {
+        } ?: let {
             return db.chartDao().insert(chart)
         }
     }
@@ -77,4 +77,37 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
             db.chartLineDao().update(updateLines)
         }
     }
+
+    override suspend fun updateVerticalValue(verticalValue: VerticalValue) {
+        db.verticalValueDao().updateValue(
+            verticalValue.lineId,
+            verticalValue.xValueId,
+            verticalValue.yValueId,
+            verticalValue.value
+        )
+    }
+
+    override suspend fun updateVerticalValues(verticalValues: List<VerticalValue>) {
+        db.verticalValueDao().update(verticalValues)
+    }
+
+    override suspend fun insertVerticalValues(verticalValues: List<VerticalValue>) {
+        db.verticalValueDao().insert(verticalValues)
+    }
+
+    override suspend fun updateHorizontalValue(horizontalValue: HorizontalValue) {
+        db.horizontalValueDao()
+            .updateValue(horizontalValue.chartId, horizontalValue.xValueId, horizontalValue.value)
+    }
+
+    override suspend fun updateHorizontalValues(horizontalValues: List<HorizontalValue>) {
+        db.horizontalValueDao().update(horizontalValues)
+    }
+
+    override suspend fun deleteHorizontalValue(xValuesId: List<Long>) {
+        db.horizontalValueDao().deleteById(xValuesId)
+    }
+
+    override suspend fun insertHorizontalValue(horizontalValue: HorizontalValue) =
+        db.horizontalValueDao().insert(horizontalValue)
 }

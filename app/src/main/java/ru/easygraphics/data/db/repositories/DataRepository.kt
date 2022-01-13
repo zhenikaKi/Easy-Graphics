@@ -1,9 +1,6 @@
 package ru.easygraphics.data.db.repositories
 
-import ru.easygraphics.data.db.entities.Chart
-import ru.easygraphics.data.db.entities.ChartAllData
-import ru.easygraphics.data.db.entities.ChartAllDataViewed
-import ru.easygraphics.data.db.entities.ChartLine
+import ru.easygraphics.data.db.entities.*
 import ru.easygraphics.states.TableState
 
 /** Интерфейс работы с данными графиков */
@@ -34,4 +31,25 @@ interface DataRepository {
 
     /** Сохранить линии графику */
     suspend fun saveLines(lines: List<ChartLine>)
+
+    /** Обновить значения линии в таблице*/
+    suspend fun updateVerticalValue(verticalValue: VerticalValue)
+
+    /** Обновить значения линии в таблице*/
+    suspend fun updateVerticalValues(verticalValues: List<VerticalValue>)
+
+    /** Вставить значения линии в таблице */
+    suspend fun insertVerticalValues(verticalValues: List<VerticalValue>)
+
+    /** Обновить значения X в таблице*/
+    suspend fun updateHorizontalValue(horizontalValue: HorizontalValue)
+
+    /** Обновить значения X в таблице*/
+    suspend fun updateHorizontalValues(horizontalValues: List<HorizontalValue>)
+
+    /** Удалить значения X в таблице */
+    suspend fun deleteHorizontalValue(xValuesId: List<Long>)
+
+    /** Вставить значения X в таблице */
+    suspend fun insertHorizontalValue(horizontalValue: HorizontalValue): Long
 }

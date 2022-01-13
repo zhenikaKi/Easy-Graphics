@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -14,9 +15,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import ru.easygraphics.data.db.entities.ChartAllData
-import ru.easygraphics.data.db.entities.ChartAllDataViewed
-import ru.easygraphics.data.db.entities.ChartLineData
+import io.github.ekiryushin.scrolltableview.cell.CellView
+import io.github.ekiryushin.scrolltableview.cell.DataStatus
+import io.github.ekiryushin.scrolltableview.cell.RowCell
+import ru.easygraphics.data.db.entities.*
 import ru.easygraphics.data.domain.LineDetails
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.helpers.consts.App.LOG_TAG
@@ -29,6 +31,52 @@ fun View.click(click: () -> Unit) = setOnClickListener {
 fun View.longClick(click: () -> Unit) = setOnLongClickListener {
     click()
     true
+}
+
+fun RowCell.toHorizontalValue(chartId: Long): List<HorizontalValue> {
+    val result = mutableListOf<HorizontalValue>()
+
+    val xValues = this.columns.filter { cell ->
+        cell.viewed != CellView.EDIT_NUMBER && cell.status == DataStatus.EDIT
+    }
+
+    xValues.forEach { cell ->
+        result.add(
+            HorizontalValue(
+                xValueId = cell.id,
+                chartId = chartId,
+                value = cell.value as String
+            )
+        )
+    }
+
+    return result
+}
+
+fun RowCell.toVerticalValue(): List<VerticalValue> {
+    val result = mutableListOf<VerticalValue>()
+    val xValueId = this.columns.firstOrNull { cell ->
+        cell.viewed != CellView.EDIT_NUMBER
+    }?.id
+
+    val yValues = this.columns.filter { cell ->
+        cell.viewed == CellView.EDIT_NUMBER
+    }
+
+    for (i in yValues.indices) {
+        if (yValues[i].status == DataStatus.EDIT) {
+            result.add(
+                VerticalValue(
+                    yValueId = yValues[i].id,
+                    lineId = i + 1.toLong(),
+                    xValueId = xValueId as Long,
+                    value = yValues[i].value?.toDouble()
+                )
+            )
+        }
+    }
+
+    return result
 }
 
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
