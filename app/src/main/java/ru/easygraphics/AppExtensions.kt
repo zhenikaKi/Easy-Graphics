@@ -53,7 +53,7 @@ fun RowCell.toHorizontalValue(chartId: Long): List<HorizontalValue> {
     return result
 }
 
-fun RowCell.toVerticalValue(): List<VerticalValue> {
+fun RowCell.toVerticalValue(dataStatus: DataStatus): List<VerticalValue> {
     val result = mutableListOf<VerticalValue>()
     val xValueId = this.columns.firstOrNull { cell ->
         cell.viewed != CellView.EDIT_NUMBER
@@ -64,7 +64,7 @@ fun RowCell.toVerticalValue(): List<VerticalValue> {
     }
 
     for (i in yValues.indices) {
-        if (yValues[i].status == DataStatus.EDIT) {
+        if (yValues[i].status == dataStatus) {
             result.add(
                 VerticalValue(
                     yValueId = yValues[i].id,

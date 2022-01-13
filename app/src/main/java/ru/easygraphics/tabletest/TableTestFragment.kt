@@ -64,7 +64,8 @@ class TableTestFragment :
     private fun renderData(state: BaseState) {
         when (state) {
             is BaseState.Loading -> { }
-            is TableTestState.Success -> showTableData(state.header, state.data, state.graphName)
+            is TableTestState.LoadData -> showTableData(state.header, state.data, state.graphName)
+            is TableTestState.SavedData -> loadTableDataById()
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }
@@ -79,7 +80,6 @@ class TableTestFragment :
             tableDataBlock.setCountFixColumn(1)
             tableDataBlock.showTable()
         }
-
     }
 
     override fun saveData() {
@@ -87,8 +87,7 @@ class TableTestFragment :
         chartId?.let {
             viewModel.updateTableData(chartId, data)
         }
-        this@TableTestFragment.toast("Сохранил")
-        loadTableDataById()
+        this@TableTestFragment.toast(resources.getString(R.string.message_on_table_save))
     }
 
     private fun loadTableDataById() = chartId?.let { viewModel.loadTableData(chartId = it) }

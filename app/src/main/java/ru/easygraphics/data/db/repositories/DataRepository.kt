@@ -1,5 +1,6 @@
 package ru.easygraphics.data.db.repositories
 
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import ru.easygraphics.data.db.entities.*
 import ru.easygraphics.states.TableState
 
@@ -32,24 +33,12 @@ interface DataRepository {
     /** Сохранить линии графику */
     suspend fun saveLines(lines: List<ChartLine>)
 
-    /** Обновить значения линии в таблице*/
-    suspend fun updateVerticalValue(verticalValue: VerticalValue)
+    /** Удалить значения строки в таблице */
+    suspend fun deleteRows(xValuesId: List<Long>)
 
-    /** Обновить значения линии в таблице*/
-    suspend fun updateVerticalValues(verticalValues: List<VerticalValue>)
+    /** Сохранить изменения значения строки в таблице */
+    suspend fun saveRowCells(chartId: Long, rowCell: RowCell)
 
-    /** Вставить значения линии в таблице */
-    suspend fun insertVerticalValues(verticalValues: List<VerticalValue>)
-
-    /** Обновить значения X в таблице*/
-    suspend fun updateHorizontalValue(horizontalValue: HorizontalValue)
-
-    /** Обновить значения X в таблице*/
-    suspend fun updateHorizontalValues(horizontalValues: List<HorizontalValue>)
-
-    /** Удалить значения X в таблице */
-    suspend fun deleteHorizontalValue(xValuesId: List<Long>)
-
-    /** Вставить значения X в таблице */
-    suspend fun insertHorizontalValue(horizontalValue: HorizontalValue): Long
+    /** Обновить значения строки в таблице */
+    suspend fun updateRowCells(chartId: Long, rowCell: RowCell)
 }

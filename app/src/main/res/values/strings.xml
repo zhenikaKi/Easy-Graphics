@@ -39,6 +39,9 @@
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
 
+    <!-- всплывающее сообщение -->
+    <string name="message_on_table_save">Сохранил</string>
+
     <!-- Диалоговые окна -->
     <string name="dialog_title">Предупреждение</string>
     <string name="dialog_message">Вы действительно хотите удалить этот график?</string>
