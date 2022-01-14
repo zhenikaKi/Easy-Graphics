@@ -38,4 +38,10 @@
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
+
+    <!-- Диалоговые окна -->
+    <string name="dialog_title">Предупреждение</string>
+    <string name="dialog_message">Вы действительно хотите удалить этот график?</string>
+    <string name="dialog_negative_button">Отмена</string>
+    <string name="dialog_positive_button">Да</string>
 </resources>

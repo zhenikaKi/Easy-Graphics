@@ -32,10 +32,6 @@ class ChartsListFragment :
 
     companion object {
         const val SHIFT = 10f
-        const val TITLE = "Предупреждение"
-        const val MESSAGE = "Вы действительно хотите удалить этот график?"
-        const val NEGATIVE_BUTTON = "Отмена"
-        const val POSITIVE_BUTTON = "Да"
         fun newInstance(): Fragment = ChartsListFragment()
     }
 
@@ -77,9 +73,9 @@ class ChartsListFragment :
                 router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
             }
             R.id.delete -> {
-                AlertDialog.Builder(requireContext()).setTitle(TITLE).setMessage(MESSAGE).setCancelable(false).setNegativeButton(
-                    NEGATIVE_BUTTON,{ dialogInterface: DialogInterface, i: Int -> }).setPositiveButton(
-                    POSITIVE_BUTTON,
+                AlertDialog.Builder(requireContext()).setTitle(getString(R.string.dialog_title)).setMessage(getString(R.string.dialog_message)).setCancelable(false).setNegativeButton(
+                    getString(R.string.dialog_negative_button),{ dialog,_ -> dialog.cancel()}).setPositiveButton(
+                    getString(R.string.dialog_positive_button),
                  { dialogInterface: DialogInterface, i: Int ->
                         model.deleteChart(chartIdItem!!)
                         adapter.removeItem(index!!)
