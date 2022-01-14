@@ -1,10 +1,13 @@
 package ru.easygraphics.mainWindow
 
+
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +17,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
 import ru.easygraphics.R
-import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.chartsettingsWindow.ChartDescriptionScreen
 import ru.easygraphics.data.db.AppDB
@@ -24,10 +26,15 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
-import ru.easygraphics.tableWindow.TableScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
+
+    companion object {
+        const val SHIFT = 10f
+        fun newInstance(): Fragment = ChartsListFragment()
+    }
+
     private val scope = getKoin().createScope<ChartsListFragment>()
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
     private val model: ChartsListViewModel =
@@ -66,8 +73,18 @@ class ChartsListFragment :
                 router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
             }
             R.id.delete -> {
-                model.deleteChart(chartIdItem!!)
-                adapter.removeItem(index!!)
+                AlertDialog.Builder(requireContext()).
+                setTitle(getString(R.string.dialog_title)).
+                setMessage(getString(R.string.dialog_message)).
+                setCancelable(false).
+                setNegativeButton(getString(R.string.dialog_negative_button),{ dialog,_ -> dialog.cancel()}).
+                setPositiveButton(getString(R.string.dialog_positive_button), { dialogInterface: DialogInterface, i: Int ->
+                        model.deleteChart(chartIdItem!!)
+                        adapter.removeItem(index!!)
+                })
+                .create()
+                .show()
+
             }
         }
 
@@ -85,10 +102,7 @@ class ChartsListFragment :
     private val adapter: ChartsListAdapter =
         ChartsListAdapter(onChartClickListener, onChartLongClickListener)
 
-    companion object {
-        const val SHIFT = 10f
-        fun newInstance(): Fragment = ChartsListFragment()
-    }
+
 
     private fun renderData(state: BaseState) {
         when (state) {
@@ -113,16 +127,6 @@ class ChartsListFragment :
             renderData(it)
         })
         model.getChartsList()
-        binding.exampleButtonGraphic.setOnClickListener {
-            router.navigateTo(GraphicScreen(1)) //для теста
-        }
-        binding.exampleButtonTable.setOnClickListener {
-            router.navigateTo(TableScreen(1, "Temp name")) //для теста
-        }
-        binding.exampleButtonTestTable.setOnClickListener {
-            router.navigateTo(TableTestScreen(1))
-        }
-
 
         binding.floatingActionButton.setOnClickListener {
             router.navigateTo(ChartDescriptionScreen(null))
