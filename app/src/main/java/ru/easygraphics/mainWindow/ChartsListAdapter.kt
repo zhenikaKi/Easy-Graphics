@@ -38,7 +38,7 @@ class ChartsListAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(p: Pair<Long, String>, onChartClickListener: OnChartClickListener, onChartLongClickListener: OnChartLongClickListener) {
-            itemView.textView2.setText(p.second + "\n" + "id:" + p.first)
+            itemView.textView2.setText(p.second)
             itemView.setOnClickListener {
                 onChartClickListener.onChartClick(p.first)
             }
