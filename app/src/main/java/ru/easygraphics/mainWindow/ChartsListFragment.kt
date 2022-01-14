@@ -73,13 +73,17 @@ class ChartsListFragment :
                 router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
             }
             R.id.delete -> {
-                AlertDialog.Builder(requireContext()).setTitle(getString(R.string.dialog_title)).setMessage(getString(R.string.dialog_message)).setCancelable(false).setNegativeButton(
-                    getString(R.string.dialog_negative_button),{ dialog,_ -> dialog.cancel()}).setPositiveButton(
-                    getString(R.string.dialog_positive_button),
-                 { dialogInterface: DialogInterface, i: Int ->
+                AlertDialog.Builder(requireContext()).
+                setTitle(getString(R.string.dialog_title)).
+                setMessage(getString(R.string.dialog_message)).
+                setCancelable(false).
+                setNegativeButton(getString(R.string.dialog_negative_button),{ dialog,_ -> dialog.cancel()}).
+                setPositiveButton(getString(R.string.dialog_positive_button), { dialogInterface: DialogInterface, i: Int ->
                         model.deleteChart(chartIdItem!!)
                         adapter.removeItem(index!!)
-                }).create().show()
+                })
+                .create()
+                .show()
 
             }
         }
