@@ -13,49 +13,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        android:id="@+id/example_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/example_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/example_button_table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/example_button_table"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/example_title"
-        app:layout_constraintBottom_toTopOf="@id/example_button_graphic"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/example_button_test_table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/example_button_test_table"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/example_button_table"
-        app:layout_constraintBottom_toTopOf="@id/example_button_graphic"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/example_button_graphic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/example_button_graphic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/example_button_test_table"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chartsList"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

@@ -10,8 +10,8 @@ class ChartDescriptionService(private val repository: DataRepository) {
 
     /**
      * Сохранить данные по графику в базу.
-     * @param chart [Chart] данны по графику
-     * @param lines [List]<[ChartLine]> данны по линиям графика
+     * @param chart [Chart] данные по графику
+     * @param lines [List]<[ChartLine]> данные по линиям графика
      * @param linesDelete [List]<[Long]> Список идентификаторов линий, которые необходимо удалить
      * @return пара, на первом месте которой сохраненный график,
      * а на втором - список сохраненных линий на графике
