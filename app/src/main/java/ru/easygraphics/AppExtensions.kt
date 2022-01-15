@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -15,10 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import io.github.ekiryushin.scrolltableview.cell.CellView
-import io.github.ekiryushin.scrolltableview.cell.DataStatus
-import io.github.ekiryushin.scrolltableview.cell.RowCell
-import ru.easygraphics.data.db.entities.*
+import ru.easygraphics.data.db.entities.ChartAllData
+import ru.easygraphics.data.db.entities.ChartAllDataViewed
+import ru.easygraphics.data.db.entities.ChartLineData
 import ru.easygraphics.data.domain.LineDetails
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.helpers.consts.App.LOG_TAG
@@ -31,52 +29,6 @@ fun View.click(click: () -> Unit) = setOnClickListener {
 fun View.longClick(click: () -> Unit) = setOnLongClickListener {
     click()
     true
-}
-
-fun RowCell.toHorizontalValue(chartId: Long): List<HorizontalValue> {
-    val result = mutableListOf<HorizontalValue>()
-
-    val xValues = this.columns.filter { cell ->
-        cell.viewed != CellView.EDIT_NUMBER && cell.status == DataStatus.EDIT
-    }
-
-    xValues.forEach { cell ->
-        result.add(
-            HorizontalValue(
-                xValueId = cell.id,
-                chartId = chartId,
-                value = cell.value as String
-            )
-        )
-    }
-
-    return result
-}
-
-fun RowCell.toVerticalValue(dataStatus: DataStatus): List<VerticalValue> {
-    val result = mutableListOf<VerticalValue>()
-    val xValueId = this.columns.firstOrNull { cell ->
-        cell.viewed != CellView.EDIT_NUMBER
-    }?.id
-
-    val yValues = this.columns.filter { cell ->
-        cell.viewed == CellView.EDIT_NUMBER
-    }
-
-    for (i in yValues.indices) {
-        if (yValues[i].status == dataStatus) {
-            result.add(
-                VerticalValue(
-                    yValueId = yValues[i].id,
-                    lineId = i + 1.toLong(),
-                    xValueId = xValueId as Long,
-                    value = yValues[i].value?.toDouble()
-                )
-            )
-        }
-    }
-
-    return result
 }
 
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
@@ -141,24 +93,6 @@ fun TextView.addBorders(
 }
 
 fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
-
-    /*val columns: MutableList<Cell> = mutableListOf()
-    columns.add(Cell(id = 0, value = graphicData.chart.xName))
-    columns.addAll(graphicData.lines.map { line -> Cell(id = line.lineId, value = line.name) })
-    val header = RowCell(columns)
-
-    //сформируем основные данные для отображения
-    val data: MutableList<RowCell> = graphicData.values.map { hV ->
-        val columnsData: MutableList<Cell> = mutableListOf()
-        //добавляем колонку со значением по X
-        columnsData.add(Cell(id = hV.horizontalValue.xValueId, value = hV.horizontalValue.value, viewed = CellView.EDIT_STRING))
-        //добавляем колонки со значениями по Y на каждой линии
-        columnsData.addAll(hV.verticalValues.map { vV ->
-            Cell(id = vV?.yValueId, value = vV?.value.toString(), viewed = CellView.EDIT_NUMBER)
-        })
-        RowCell(columnsData)
-    }.toMutableList()*/
-
     val result = mutableListOf<TableLineData>()
 
     val firstRow = mutableListOf<Pair<String, Int>>()
@@ -184,40 +118,6 @@ fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
 
         firstRow.add(Pair(chartLine.name, maxLength))
     }
-
-    /*val firstRowData = TableLineData(
-        DbId = -1,
-        LineId = -1,
-        LineName = this.chart.xName,
-        LineValue = firstRow
-    )
-
-    Log.d(LOG_TAG, "$firstRowData")
-    result.add(firstRowData)
-
-    this.values.forEach { horizontalValue ->
-        val newRowData = horizontalValue.horizontalValue.xValueId?.let { xValueId ->
-            TableLineData(
-                DbId = -1,
-                LineId = xValueId.toInt(),
-                LineName = horizontalValue.horizontalValue.value,
-                LineValue = mutableListOf<Pair<String, Int>>()
-            )
-        }
-
-        newRowData?.let { tableLineData ->
-
-            tableLineData.addLineValue(horizontalValue.horizontalValue.value, firstRowWidth)
-
-            horizontalValue.verticalValues.forEach { verticalValue ->
-                tableLineData.addLineValue(verticalValue?.value.toString(), 5)
-            }
-
-            Log.d(LOG_TAG, "$newRowData")
-            result.add(newRowData)
-        }
-    }*/
-
     return result
 }
 

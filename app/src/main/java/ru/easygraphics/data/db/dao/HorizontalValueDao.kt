@@ -26,5 +26,5 @@ interface HorizontalValueDao {
 
     //обновить значение Х в таблице
     @Update
-    suspend fun update(horizontalValue: List<HorizontalValue>)
+    suspend fun update(horizontalValue: HorizontalValue)
 }

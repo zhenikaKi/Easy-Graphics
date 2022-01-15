@@ -26,6 +26,7 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
+import ru.easygraphics.tabletest.TableTestScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -43,7 +44,8 @@ class ChartsListFragment :
     private var chartIdItem: Long? = null
     val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
         override fun onChartClick(chartId: Long) {
-            router.navigateTo(GraphicScreen(chartId))
+            //router.navigateTo(GraphicScreen(chartId))
+            router.navigateTo(TableTestScreen(chartId))
         }
     }
     val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
@@ -122,7 +124,7 @@ class ChartsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.chartsList.adapter = adapter
-        printDataFromDBForTest()
+        //printDataFromDBForTest()
         model.getLiveData().observe(viewLifecycleOwner, {
             renderData(it)
         })

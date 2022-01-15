@@ -36,9 +36,12 @@ interface DataRepository {
     /** Удалить значения строки в таблице */
     suspend fun deleteRows(xValuesId: List<Long>)
 
-    /** Сохранить изменения значения строки в таблице */
-    suspend fun saveRowCells(chartId: Long, rowCell: RowCell)
-
     /** Обновить значения строки в таблице */
-    suspend fun updateRowCells(chartId: Long, rowCell: RowCell)
+    suspend fun updateRowCells(horizontalValue: HorizontalValue?, verticalValues: List<VerticalValue>?)
+
+    /** Сохранить изменения значения строки в таблице */
+    suspend fun insertHorizontalValue(horizontalValue: HorizontalValue?): Long?
+
+    /** Сохранить изменения значения строки в таблице */
+    suspend fun insertVerticalValues(verticalValues: List<VerticalValue>)
 }

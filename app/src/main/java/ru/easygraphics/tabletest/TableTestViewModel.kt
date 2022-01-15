@@ -1,5 +1,6 @@
 package ru.easygraphics.tabletest
 
+import android.util.Log
 import androidx.room.Transaction
 import io.github.ekiryushin.scrolltableview.cell.Cell
 import io.github.ekiryushin.scrolltableview.cell.CellView
@@ -8,7 +9,10 @@ import io.github.ekiryushin.scrolltableview.cell.RowCell
 import kotlinx.coroutines.launch
 import ru.easygraphics.baseobjects.BaseViewModel
 import ru.easygraphics.data.db.entities.ChartAllDataViewed
+import ru.easygraphics.data.db.entities.HorizontalValue
+import ru.easygraphics.data.db.entities.VerticalValue
 import ru.easygraphics.data.db.repositories.DataRepository
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableTestState
@@ -17,12 +21,17 @@ class TableTestViewModel(private val repository: DataRepository) : BaseViewModel
 
     private lateinit var graphicData: ChartAllDataViewed
     private var xAxisViewed = CellView.EDIT_STRING
+    private var dataStatus = DataStatus.EDIT
 
     //сформировать данные для графика
     fun loadTableData(chartId: Long) {
+
+        Log.d(App.LOG_TAG, "Log id $chartId")
+
         liveData.postValue(BaseState.Loading())
         coroutineScope.launch {
             graphicData = repository.getGraphicData(chartId = chartId)
+            Log.d(App.LOG_TAG, "$graphicData")
             //сформируем формат для значений по оси X
             xAxisViewed = getXAxisViewed(graphicData.chart.xValueType)
 
@@ -47,49 +56,119 @@ class TableTestViewModel(private val repository: DataRepository) : BaseViewModel
         }
     }
 
-    fun updateTableData(chartId: Long?, data: List<RowCell>?) {
+    fun updateTableData(chartId: Long?, data: List<RowCell>?, linesId: List<Long?>?) {
         liveData.postValue(BaseState.Loading())
         coroutineScope.launch {
-            updateTable(chartId, data)
+            updateTable(chartId, data, linesId)
             liveData.postValue(TableTestState.SavedData(chartId))
         }
     }
 
     @Transaction
-    private suspend fun updateTable(chartId: Long?, data: List<RowCell>?) {
-        data?.let { it ->
-            val editedData = it.filter { row ->
-                row.status == DataStatus.ADD || row.status == DataStatus.DELETE
-                        || row.columns.any { column -> column.status == DataStatus.EDIT }
-            }
+    private suspend fun updateTable(chartId: Long?, data: List<RowCell>?, linesId: List<Long?>?) {
 
-            chartId?.let {
-                deleteTableLines(editedData.filter { rowCell ->
-                    rowCell.status == DataStatus.DELETE
-                })
+        insertRecords(chartId, data, linesId)
 
-                insertTableLines(chartId, editedData.filter { rowCell ->
-                    rowCell.status == DataStatus.ADD
-                })
+        updateRecords(chartId, data, linesId)
 
-                editedData.forEach { rowCell ->
-                    repository.updateRowCells(chartId, rowCell)
+        deleteRecords(data)
+    }
+
+    private suspend fun deleteRecords(data: List<RowCell>?) {
+        val deletedRows = data
+            ?.filter { row -> row.status == DataStatus.DELETE }
+            ?.mapNotNull { row -> row.columns[0].id }
+
+        deletedRows?.let {
+            Log.d(App.LOG_TAG, "Rows to delete $it")
+            repository.deleteRows(it)
+        }
+    }
+
+    private suspend fun insertRecords(chartId: Long?, data: List<RowCell>?, linesId: List<Long?>?) {
+        dataStatus = DataStatus.ADD
+        val addedRows = data?.filter { row -> row.status == dataStatus }
+
+        Log.d(App.LOG_TAG, "Rows to insert $addedRows")
+
+        linesId?.let { linId ->
+            addedRows?.forEach { row ->
+                val horizontalValue = getHorizontalValue(row.columns[0], chartId)
+                val xValueId = repository.insertHorizontalValue(horizontalValue)
+
+                xValueId?.let {
+                    val verticalValues = getVerticalValues(row.columns, it, linId)
+                    Log.d(App.LOG_TAG, "Insert horizontalValue: $horizontalValue")
+                    Log.d(App.LOG_TAG, "Insert verticalValues: $verticalValues")
+                    repository.insertVerticalValues(verticalValues)
                 }
             }
         }
     }
 
-    private suspend fun insertTableLines(chartId: Long, insertData: List<RowCell>) {
-        insertData.forEach { rowCell ->
-            repository.saveRowCells(chartId, rowCell)
+    private suspend fun updateRecords(chartId: Long?, data: List<RowCell>?, linesId: List<Long?>?) {
+        dataStatus = DataStatus.EDIT
+        val updatedRows =
+            data?.filter { row -> row.columns.any { column -> column.status == dataStatus } }
+
+        linesId?.let { linId ->
+            updatedRows?.forEach { row ->
+                row.columns[0].id?.let {
+                    val horizontalValue =
+                        getHorizontalValue(row.columns[0], chartId)
+                    val verticalValues = getVerticalValues(row.columns, it, linId)
+                    Log.d(App.LOG_TAG, "Update horizontalValue: $horizontalValue")
+                    Log.d(App.LOG_TAG, "Update verticalValues: $verticalValues")
+                    repository.updateRowCells(horizontalValue, verticalValues)
+                }
+            }
         }
     }
 
-    private suspend fun deleteTableLines(deleteData: List<RowCell>) {
-        val rows = deleteData.map { rowCell ->
-            rowCell.columns[0].id as Long
+    private fun getVerticalValues(
+        cells: List<Cell>,
+        xValueId: Long,
+        linId: List<Long?>
+    ): List<VerticalValue> {
+        val verticalValues: MutableList<VerticalValue> = mutableListOf()
+
+        for (ind in 1 until cells.size) {
+            linId[ind]?.let { lineId ->
+                if (isNeeToUpdateCell(cells[ind])) {
+                    verticalValues.add(
+                        VerticalValue(
+                            yValueId = cells[ind].id,
+                            lineId = lineId,
+                            xValueId = xValueId,
+                            value = cells[ind].value?.toDouble()
+                        )
+                    )
+                }
+            }
         }
-        repository.deleteRows(rows)
+        return verticalValues
+    }
+
+    private fun getHorizontalValue(cell: Cell, chartId: Long?): HorizontalValue? {
+        var horizontalValue: HorizontalValue? = null
+        if (isNeeToUpdateCell(cell)) {
+            cell.value?.let {
+                horizontalValue = HorizontalValue(
+                    xValueId = cell.id,
+                    chartId = chartId as Long,
+                    value = it
+                )
+            }
+        }
+        return horizontalValue
+    }
+
+    private fun isNeeToUpdateCell(cell: Cell): Boolean {
+        return if (dataStatus == DataStatus.ADD) {
+            true
+        } else {
+            (cell.status == dataStatus && cell.id != null)
+        }
     }
 
     private fun getTableColumns(): MutableList<Cell> {

@@ -40,7 +40,7 @@
     <string name="title_edit_graphic">Изменение графика</string>
 
     <!-- всплывающее сообщение -->
-    <string name="message_on_table_save">Сохранил</string>
+    <string name="message_on_table_save">Сохранено</string>
   
     <!-- Диалоговые окна -->  
     <string name="dialog_title">Предупреждение</string>

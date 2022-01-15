@@ -2,14 +2,11 @@ package ru.easygraphics.tabletest
 
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
-import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import io.github.ekiryushin.scrolltableview.cell.Cell
 import io.github.ekiryushin.scrolltableview.cell.CellView
-import io.github.ekiryushin.scrolltableview.cell.DataStatus
 import io.github.ekiryushin.scrolltableview.cell.RowCell
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
@@ -63,7 +60,8 @@ class TableTestFragment :
 
     private fun renderData(state: BaseState) {
         when (state) {
-            is BaseState.Loading -> { }
+            is BaseState.Loading -> {
+            }
             is TableTestState.LoadData -> showTableData(state.header, state.data, state.graphName)
             is TableTestState.SavedData -> loadTableDataById()
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
@@ -84,8 +82,12 @@ class TableTestFragment :
 
     override fun saveData() {
         val data = binding.tableDataBlock.getData()
+        val linesId: List<Long?>? = binding.tableDataBlock.getHeader()
+            ?.columns
+            ?.map { column -> column.id }
+
         chartId?.let {
-            viewModel.updateTableData(chartId, data)
+            viewModel.updateTableData(chartId, data, linesId)
         }
         this@TableTestFragment.toast(resources.getString(R.string.message_on_table_save))
     }
