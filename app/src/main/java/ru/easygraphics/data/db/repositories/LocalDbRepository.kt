@@ -90,17 +90,17 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     /** Обновить значения строки в таблице */
     override suspend fun updateRowCells(horizontalValue: HorizontalValue?, verticalValues: List<VerticalValue>?) {
         horizontalValue?.let {
-            db.horizontalValueDao().update(horizontalValue)
+            db.horizontalValueDao().update(it)
         }
         verticalValues?.let {
-            db.verticalValueDao().update(verticalValues)
+            db.verticalValueDao().update(it)
         }
     }
 
     /** Сохранить изменения значения строки в таблице */
     override suspend fun insertHorizontalValue(horizontalValue: HorizontalValue?) =
         horizontalValue?.let {
-            db.horizontalValueDao().insert(horizontalValue)
+            db.horizontalValueDao().insert(it)
         }
 
     /** Сохранить изменения значения строки в таблице */

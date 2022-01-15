@@ -44,8 +44,7 @@ class ChartsListFragment :
     private var chartIdItem: Long? = null
     val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
         override fun onChartClick(chartId: Long) {
-            //router.navigateTo(GraphicScreen(chartId))
-            router.navigateTo(TableTestScreen(chartId))
+            router.navigateTo(GraphicScreen(chartId))
         }
     }
     val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
