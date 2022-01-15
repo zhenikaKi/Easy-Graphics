@@ -9,7 +9,7 @@ interface VerticalValueDao {
 
     //сохранить значение по оси Y
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(verticalValue: VerticalValue)
+    suspend fun insert(verticalValue: List<VerticalValue>): List<Long>
 
     //удалить значение по оси Y
     @Delete
@@ -18,4 +18,8 @@ interface VerticalValueDao {
     //получить все значения по оси Y для конкретной линии
     @Query("select * from ${DB.TABLE_VERTICAL_VALUE} where ${DB.LINE_ID} = :lineId")
     suspend fun getValues(lineId: Long): List<VerticalValue>
+
+    //обновить значения Y в таблицы
+    @Update
+    suspend fun update(verticalValue: List<VerticalValue>)
 }

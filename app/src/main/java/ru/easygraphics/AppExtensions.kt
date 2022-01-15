@@ -93,24 +93,6 @@ fun TextView.addBorders(
 }
 
 fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
-
-    /*val columns: MutableList<Cell> = mutableListOf()
-    columns.add(Cell(id = 0, value = graphicData.chart.xName))
-    columns.addAll(graphicData.lines.map { line -> Cell(id = line.lineId, value = line.name) })
-    val header = RowCell(columns)
-
-    //сформируем основные данные для отображения
-    val data: MutableList<RowCell> = graphicData.values.map { hV ->
-        val columnsData: MutableList<Cell> = mutableListOf()
-        //добавляем колонку со значением по X
-        columnsData.add(Cell(id = hV.horizontalValue.xValueId, value = hV.horizontalValue.value, viewed = CellView.EDIT_STRING))
-        //добавляем колонки со значениями по Y на каждой линии
-        columnsData.addAll(hV.verticalValues.map { vV ->
-            Cell(id = vV?.yValueId, value = vV?.value.toString(), viewed = CellView.EDIT_NUMBER)
-        })
-        RowCell(columnsData)
-    }.toMutableList()*/
-
     val result = mutableListOf<TableLineData>()
 
     val firstRow = mutableListOf<Pair<String, Int>>()
@@ -136,40 +118,6 @@ fun ChartAllDataViewed.parseToListOfTableLineData(): List<TableLineData> {
 
         firstRow.add(Pair(chartLine.name, maxLength))
     }
-
-    /*val firstRowData = TableLineData(
-        DbId = -1,
-        LineId = -1,
-        LineName = this.chart.xName,
-        LineValue = firstRow
-    )
-
-    Log.d(LOG_TAG, "$firstRowData")
-    result.add(firstRowData)
-
-    this.values.forEach { horizontalValue ->
-        val newRowData = horizontalValue.horizontalValue.xValueId?.let { xValueId ->
-            TableLineData(
-                DbId = -1,
-                LineId = xValueId.toInt(),
-                LineName = horizontalValue.horizontalValue.value,
-                LineValue = mutableListOf<Pair<String, Int>>()
-            )
-        }
-
-        newRowData?.let { tableLineData ->
-
-            tableLineData.addLineValue(horizontalValue.horizontalValue.value, firstRowWidth)
-
-            horizontalValue.verticalValues.forEach { verticalValue ->
-                tableLineData.addLineValue(verticalValue?.value.toString(), 5)
-            }
-
-            Log.d(LOG_TAG, "$newRowData")
-            result.add(newRowData)
-        }
-    }*/
-
     return result
 }
 

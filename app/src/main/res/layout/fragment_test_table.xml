@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".tabletest.TableTestFragment"
     style="@style/RootElementStyle"
     android:orientation="vertical">
 
@@ -24,26 +26,18 @@
         app:layout_constraintTop_toBottomOf="@id/graph_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_add"/>
+        app:layout_constraintBottom_toTopOf="@id/add_line_button"/>
 
-    <!-- кнопка добавления новой строки -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_add"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_line_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_log"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <!-- кнопка вывода в логи -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_log"
-        app:layout_constraintStart_toEndOf="@id/button_add"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:drawable/ic_input_add"
+        tools:ignore="ContentDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/floating_action_margin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

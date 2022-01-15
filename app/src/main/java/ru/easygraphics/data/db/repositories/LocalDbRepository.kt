@@ -1,8 +1,11 @@
 package ru.easygraphics.data.db.repositories
 
+import android.util.Log
+import io.github.ekiryushin.scrolltableview.cell.RowCell
 import kotlinx.coroutines.*
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.entities.*
+import ru.easygraphics.helpers.consts.App
 
 class LocalDbRepository(private val db: AppDB) : DataRepository {
 
@@ -12,6 +15,7 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
 
         //преобразовываем данные к нужному виду
         val result = ChartAllDataViewed(chart = dataInDB.chart)
+        Log.d(App.LOG_TAG, "Chart all data view $result")
         result.lines = dataInDB.lines.map { el -> el.chartLine }
         result.values = dataInDB.xValues.map { horizontalValue ->
             //получаем конкретное значение по X
@@ -45,7 +49,7 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         chart.chartId?.let {
             db.chartDao().update(chart)
             return it
-        } ?:let {
+        } ?: let {
             return db.chartDao().insert(chart)
         }
     }
@@ -76,5 +80,31 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
         if (updateLines.isNotEmpty()) {
             db.chartLineDao().update(updateLines)
         }
+    }
+
+    /** Удалить значения строки в таблице */
+    override suspend fun deleteRows(xValuesId: List<Long>) {
+        db.horizontalValueDao().deleteById(xValuesId)
+    }
+
+    /** Обновить значения строки в таблице */
+    override suspend fun updateRowCells(horizontalValue: HorizontalValue?, verticalValues: List<VerticalValue>?) {
+        horizontalValue?.let {
+            db.horizontalValueDao().update(it)
+        }
+        verticalValues?.let {
+            db.verticalValueDao().update(it)
+        }
+    }
+
+    /** Сохранить изменения значения строки в таблице */
+    override suspend fun insertHorizontalValue(horizontalValue: HorizontalValue?) =
+        horizontalValue?.let {
+            db.horizontalValueDao().insert(it)
+        }
+
+    /** Сохранить изменения значения строки в таблице */
+    override suspend fun insertVerticalValues(verticalValues: List<VerticalValue>) {
+        db.verticalValueDao().insert(verticalValues)
     }
 }

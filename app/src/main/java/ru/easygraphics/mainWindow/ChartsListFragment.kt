@@ -26,6 +26,7 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
+import ru.easygraphics.tabletest.TableTestScreen
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -122,7 +123,7 @@ class ChartsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.chartsList.adapter = adapter
-        printDataFromDBForTest()
+        //printDataFromDBForTest()
         model.getLiveData().observe(viewLifecycleOwner, {
             renderData(it)
         })
