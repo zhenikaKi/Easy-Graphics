@@ -28,6 +28,7 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.GraphicState
+import ru.easygraphics.visibleOrGone
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -116,10 +117,15 @@ class GraphicFragment :
     private fun renderData(state: BaseState) {
         when (state) {
             //начало процесса загрузки
-            is BaseState.Loading -> { }
+            is BaseState.Loading -> {
+                binding.progressBar.visibleOrGone(true)
+            }
 
             //полученные данные по графику
-            is GraphicState.Success -> showGraphic(state.data)
+            is GraphicState.Success -> {
+                showGraphic(state.data)
+                binding.progressBar.visibleOrGone(false)
+            }
 
             //какая-то ошибка
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)

@@ -29,12 +29,14 @@ import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.states.LoadingTypes
 import ru.easygraphics.tabletest.TableTestScreen
+import ru.easygraphics.visibleOrGone
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
 
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
-    private val model: ChartDescriptionViewModel = scope.get(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL))
+    private val model: ChartDescriptionViewModel =
+        scope.get(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL))
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
     private var chartId: Long? = null
@@ -157,23 +159,34 @@ class ChartDescriptionFragment :
         when (state) {
             //начало процесса загрузки
             is BaseState.Loading -> {
-                when  (state.status) {
+                when (state.status) {
                     //загрузка основной информации
                     LoadingTypes.ROOT_DATA -> {
-                        //todo тут можно будет показать крутилку
+                        binding.progressBar.visibleOrGone(true)
+                    }
+                    LoadingTypes.SAVED -> {
+                        binding.progressBar.visibleOrGone(true)
+                    }
+                    LoadingTypes.SAVED_WITH_TABLE_OPENING -> {
+                        binding.progressBarOnBottom.visibleOrGone(true)
                     }
                 }
             }
 
             //получены данные по редактируемому графику
-            is DescriptionState.LoadData -> showLoadedData(state.chart, state.lines)
+            is DescriptionState.LoadData -> {
+                showLoadedData(state.chart, state.lines)
+                binding.progressBar.visibleOrGone(false)
+            }
 
             //сохраненные данные
             is DescriptionState.Saved -> {
                 showLoadedData(state.chart, state.lines)
+                binding.progressBar.visibleOrGone(false)
             }
             is DescriptionState.SavedForOpenTable -> {
                 showLoadedData(state.chart, state.lines)
+                binding.progressBarOnBottom.visibleOrGone(false)
                 state.chart.chartId?.let { router.navigateTo(TableTestScreen(it)) }
             }
 
@@ -236,7 +249,7 @@ class ChartDescriptionFragment :
             if (hideIconDelete) {
                 iconDelete.visibility = View.GONE
             }
-            iconDelete.setOnClickListener {  binding.linesBlock.removeView(lineView) }
+            iconDelete.setOnClickListener { binding.linesBlock.removeView(lineView) }
             //задаем имя линии
             line?.let {
                 editName.setText(it.name)
@@ -271,16 +284,20 @@ class ChartDescriptionFragment :
                 fields.add(Pair(editXType, inputXType))
                 val xType = editXType.text.toString()
                 if (xType.isNotEmpty()
-                    && DB.ValueTypes.titleToValueTypes(xType) == DB.ValueTypes.DATE) {
+                    && DB.ValueTypes.titleToValueTypes(xType) == DB.ValueTypes.DATE
+                ) {
                     fields.add(Pair(editXDateFormat, inputXDateFormat))
                 }
             }
             //добавляем название линий
             for (ind in 0 until linesBlock.childCount) {
                 val lineView = linesBlock.getChildAt(ind)
-                fields.add(Pair(
-                    lineView.findViewById(R.id.edit_line_name),
-                    lineView.findViewById(R.id.input_line_name)))
+                fields.add(
+                    Pair(
+                        lineView.findViewById(R.id.edit_line_name),
+                        lineView.findViewById(R.id.input_line_name)
+                    )
+                )
             }
 
             //проверяем все поля
@@ -288,8 +305,7 @@ class ChartDescriptionFragment :
                 if (field.first.text.toString().isEmpty()) {
                     result = false
                     field.second.error = fieldNull
-                }
-                else {
+                } else {
                     field.second.error = null
                 }
             }
@@ -298,8 +314,7 @@ class ChartDescriptionFragment :
             try {
                 editCountNumberAfterDecimal.text.toString().toInt()
                 inputCountNumberAfterDecimal.error = null
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 inputCountNumberAfterDecimal.error = getString(R.string.invalid_number)
             }
         }
@@ -314,8 +329,12 @@ class ChartDescriptionFragment :
                 chartId = chartId,
                 name = editGraphicName.text.toString(),
                 countDecimal = editCountNumberAfterDecimal.text.toString().toInt(),
-                xValueType = chart?.xValueType ?: DB.ValueTypes.titleToValueTypes(editXType.text.toString()) ?: DB.ValueTypes.STRING,
-                xValueDateFormat = chart?.xValueDateFormat ?: DB.DateTypes.titleToDateTypes(editXType.text.toString()),
+                xValueType = chart?.xValueType
+                    ?: DB.ValueTypes.titleToValueTypes(editXType.text.toString())
+                    ?: DB.ValueTypes.STRING,
+                xValueDateFormat = chart?.xValueDateFormat ?: DB.DateTypes.titleToDateTypes(
+                    editXType.text.toString()
+                ),
                 xName = editXName.text.toString(),
                 yName = editYName.text.toString()
             )
@@ -331,13 +350,15 @@ class ChartDescriptionFragment :
                 val editLineName = lineView.findViewById<EditText>(R.id.edit_line_name)
                 val colorLineName = lineView.findViewById<View>(R.id.color_of_the_chart)
                 val lineId = editLineName.getTag(R.id.tag_line_id)?.toString()?.toLong()
-                linesTmp.add(ChartLine(
-                    lineId = lineId,
-                    //после сохранения chart нужно обязательно обновлять этот id
-                    chartId = chart?.chartId ?: -1,
-                    name = editLineName.text.toString(),
-                    color = ColorConvert.colorToHex((colorLineName.background as ColorDrawable).color)
-                ))
+                linesTmp.add(
+                    ChartLine(
+                        lineId = lineId,
+                        //после сохранения chart нужно обязательно обновлять этот id
+                        chartId = chart?.chartId ?: -1,
+                        name = editLineName.text.toString(),
+                        color = ColorConvert.colorToHex((colorLineName.background as ColorDrawable).color)
+                    )
+                )
             }
         }
         //дополнительно формируем список линий, которые удалили
