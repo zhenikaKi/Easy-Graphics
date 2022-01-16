@@ -19,6 +19,7 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableTestState
 import ru.easygraphics.toast
+import ru.easygraphics.visibleOrGone
 
 class TableTestFragment :
     BaseFragment<FragmentTestTableBinding>(FragmentTestTableBinding::inflate) {
@@ -60,10 +61,16 @@ class TableTestFragment :
 
     private fun renderData(state: BaseState) {
         when (state) {
-            is BaseState.Loading -> {
+            is BaseState.Loading ->  binding.progressBar.visibleOrGone(true)
+
+            is TableTestState.LoadData -> {
+                showTableData(state.header, state.data, state.graphName)
+                binding.progressBar.visibleOrGone(false)
+
             }
-            is TableTestState.LoadData -> showTableData(state.header, state.data, state.graphName)
-            is TableTestState.SavedData -> loadTableDataById()
+            is TableTestState.SavedData -> {
+                loadTableDataById()
+            }
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
         }
     }

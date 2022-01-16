@@ -22,6 +22,11 @@ import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.helpers.consts.App.LOG_TAG
 import kotlin.math.max
 
+fun View.visibleOrGone(isVisible: Boolean): View {
+    visibility = if (isVisible) View.VISIBLE else View.GONE
+    return this
+}
+
 fun View.click(click: () -> Unit) = setOnClickListener {
     click()
 }

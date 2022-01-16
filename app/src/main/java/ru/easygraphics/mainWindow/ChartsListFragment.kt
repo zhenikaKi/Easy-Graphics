@@ -27,6 +27,7 @@ import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
 import ru.easygraphics.tabletest.TableTestScreen
+import ru.easygraphics.visibleOrGone
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
@@ -108,11 +109,14 @@ class ChartsListFragment :
     private fun renderData(state: BaseState) {
         when (state) {
             //начало процесса загрузки
-            is BaseState.Loading -> {}
+            is BaseState.Loading -> {
+                binding.progressBar.visibleOrGone(true)
+            }
 
             //получены данные
             is ChartsListState.Success -> {
                 adapter.setData(state.chartsList)
+                binding.progressBar.visibleOrGone(false)
             }
 
             //какая-то ошибка
@@ -131,9 +135,6 @@ class ChartsListFragment :
 
         binding.floatingActionButton.setOnClickListener {
             router.navigateTo(ChartDescriptionScreen(null))
-            //router.navigateTo(ChartDescriptionScreen(-1))
-            //router.navigateTo(GraphicScreen(1)) //для теста
-            //router.navigateTo(TableScreen(1, "Chart Name")) //для теста
         }
     }
 
