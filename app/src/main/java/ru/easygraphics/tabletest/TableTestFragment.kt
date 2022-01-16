@@ -96,7 +96,7 @@ class TableTestFragment :
         chartId?.let {
             viewModel.updateTableData(chartId, data, linesId)
         }
-        this@TableTestFragment.toast(resources.getString(R.string.message_on_table_save))
+        this@TableTestFragment.toast(resources.getString(R.string.message_save))
     }
 
     private fun loadTableDataById() = chartId?.let { viewModel.loadTableData(chartId = it) }

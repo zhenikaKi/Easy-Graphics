@@ -29,6 +29,7 @@ import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.states.LoadingTypes
 import ru.easygraphics.tabletest.TableTestScreen
+import ru.easygraphics.toast
 import ru.easygraphics.visibleOrGone
 
 class ChartDescriptionFragment :
@@ -111,6 +112,7 @@ class ChartDescriptionFragment :
                 model.saveGraphicData(chartToSave, linesToSave, linesDelete, openTableAfterSave)
             }
         }
+        this@ChartDescriptionFragment.toast(resources.getString(R.string.message_save))
     }
 
     /** Навешать обработчики на кнопки */
