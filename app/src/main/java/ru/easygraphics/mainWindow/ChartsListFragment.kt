@@ -109,7 +109,9 @@ class ChartsListFragment :
     private fun renderData(state: BaseState) {
         when (state) {
             //начало процесса загрузки
-            is BaseState.Loading -> { binding.progressBar.visibleOrGone(true) }
+            is BaseState.Loading -> {
+                binding.progressBar.visibleOrGone(true)
+            }
 
             //получены данные
             is ChartsListState.Success -> {
@@ -133,9 +135,6 @@ class ChartsListFragment :
 
         binding.floatingActionButton.setOnClickListener {
             router.navigateTo(ChartDescriptionScreen(null))
-            //router.navigateTo(ChartDescriptionScreen(-1))
-            //router.navigateTo(GraphicScreen(1)) //для теста
-            //router.navigateTo(TableScreen(1, "Chart Name")) //для теста
         }
     }
 
