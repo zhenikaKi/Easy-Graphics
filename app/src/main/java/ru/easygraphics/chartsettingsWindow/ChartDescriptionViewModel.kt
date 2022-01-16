@@ -15,7 +15,13 @@ class ChartDescriptionViewModel(private val service: ChartDescriptionService):Ba
         lines: List<ChartLine>,
         linesDelete: List<Long>?,
         openTableAfterSave: Boolean){
-        liveData.postValue(BaseState.Loading(LoadingTypes.SAVED))
+
+        if (openTableAfterSave) {
+            liveData.postValue(BaseState.Loading(LoadingTypes.SAVED_WITH_TABLE_OPENING))
+        }
+        else {
+            liveData.postValue(BaseState.Loading(LoadingTypes.SAVED))
+        }
         coroutineScope.launch {
             val saved = service.saveDataToDB(chart, lines, linesDelete)
 

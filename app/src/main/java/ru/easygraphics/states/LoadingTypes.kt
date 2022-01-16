@@ -9,5 +9,8 @@ enum class LoadingTypes {
     ROOT_DATA,
 
     /** Процесс сохранения данных */
-    SAVED
+    SAVED,
+
+    /** Процесс сохранения данных с открытием таблицы*/
+    SAVED_WITH_TABLE_OPENING
 }

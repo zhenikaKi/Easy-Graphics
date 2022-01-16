@@ -29,6 +29,7 @@ import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.states.LoadingTypes
 import ru.easygraphics.tabletest.TableTestScreen
+import ru.easygraphics.visibleOrGone
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
@@ -160,20 +161,31 @@ class ChartDescriptionFragment :
                 when  (state.status) {
                     //загрузка основной информации
                     LoadingTypes.ROOT_DATA -> {
-                        //todo тут можно будет показать крутилку
+                        binding.progressBar.visibleOrGone(true)
+                    }
+                    LoadingTypes.SAVED -> {
+                        binding.progressBar.visibleOrGone(true)
+                    }
+                    LoadingTypes.SAVED_WITH_TABLE_OPENING -> {
+                        binding.progressBarOnButton.visibleOrGone(true)
                     }
                 }
             }
 
             //получены данные по редактируемому графику
-            is DescriptionState.LoadData -> showLoadedData(state.chart, state.lines)
+            is DescriptionState.LoadData -> {
+                showLoadedData(state.chart, state.lines)
+                binding.progressBar.visibleOrGone(false)
+            }
 
             //сохраненные данные
             is DescriptionState.Saved -> {
                 showLoadedData(state.chart, state.lines)
+                binding.progressBar.visibleOrGone(false)
             }
             is DescriptionState.SavedForOpenTable -> {
                 showLoadedData(state.chart, state.lines)
+                binding.progressBarOnButton.visibleOrGone(false)
                 state.chart.chartId?.let { router.navigateTo(TableTestScreen(it)) }
             }
 
