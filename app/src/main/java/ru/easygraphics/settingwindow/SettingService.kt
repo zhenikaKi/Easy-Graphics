@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Transaction
 import com.google.gson.GsonBuilder
-import org.json.JSONArray
-import org.json.JSONObject
 import ru.easygraphics.R
 import ru.easygraphics.data.db.converts.DateTypesConvert
 import ru.easygraphics.data.db.converts.ValueTypesConvert
@@ -17,13 +15,10 @@ import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.dto.ChartDto
 import ru.easygraphics.data.dto.FileDto
 import ru.easygraphics.helpers.consts.App
-import ru.easygraphics.helpers.consts.DB
 import java.io.File
 import java.io.FileReader
-import java.lang.Exception
 import java.lang.RuntimeException
 import java.lang.StringBuilder
-import kotlin.math.log
 
 /** Сервис для обработки данных в настройках перед использованием репозитория */
 class SettingService(private val repository: DataRepository) {
@@ -55,8 +50,6 @@ class SettingService(private val repository: DataRepository) {
      */
     suspend fun importGraphics(context: Context){
         val data = getFileData(context)
-        //val jsonData = getJsonObject(data)
-        //importProcess(jsonData)
         importProcess(data)
     }
 

@@ -142,13 +142,10 @@
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
+        style="@style/CenterProgressBarStyle"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:visibility="visible"/>
 
     <ProgressBar
         android:id="@+id/progress_bar_on_bottom"
