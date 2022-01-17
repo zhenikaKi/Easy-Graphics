@@ -27,8 +27,7 @@ class TableTestViewModel(private val repository: DataRepository) : BaseViewModel
     fun loadTableData(chartId: Long) {
 
         Log.d(App.LOG_TAG, "Log id $chartId")
-
-        liveData.postValue(BaseState.Loading())
+        liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             graphicData = repository.getGraphicData(chartId = chartId)
             Log.d(App.LOG_TAG, "$graphicData")
@@ -57,7 +56,7 @@ class TableTestViewModel(private val repository: DataRepository) : BaseViewModel
     }
 
     fun updateTableData(chartId: Long?, data: List<RowCell>?, linesId: List<Long?>?) {
-        liveData.postValue(BaseState.Loading())
+        liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             updateTable(chartId, data, linesId)
             liveData.postValue(TableTestState.SavedData(chartId))

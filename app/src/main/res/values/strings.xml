@@ -34,17 +34,28 @@
     <string name="menu_save">Сохранить</string>
     <string name="menu_cancel">Отменить</string>
     <string name="menu_home">Домой</string>
+    <string name="menu_setting">Настройки</string>
 
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
+    <string name="title_setting">Настройки</string>
 
     <!-- всплывающее сообщение -->
     <string name="message_save">Сохранено</string>
   
     <!-- Диалоговые окна -->  
     <string name="dialog_title">Предупреждение</string>
+    <string name="dialog_title_info">Информация</string>
     <string name="dialog_message">Вы действительно хотите удалить этот график?</string>
     <string name="dialog_negative_button">Отмена</string>
     <string name="dialog_positive_button">Да</string>
+    <string name="dialog_close_button">Закрыть</string>
+
+    <!-- Настройки -->
+    <string name="setting_export_title">Экспорт графиков</string>
+    <string name="setting_export_description">Сохранить все графики в json-формате</string>
+    <string name="setting_import_title">Импорт графиков</string>
+    <string name="setting_import_description">Загрузить графики из json-файла. Файл должен быть расположен по адресу:\n%1$s</string>
+    <string name="import_success">Импорт графиков завершен</string>
 </resources>

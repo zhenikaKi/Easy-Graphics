@@ -1,7 +1,6 @@
 package ru.easygraphics.data.db.repositories
 
 import android.util.Log
-import io.github.ekiryushin.scrolltableview.cell.RowCell
 import kotlinx.coroutines.*
 import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.entities.*
@@ -36,9 +35,8 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     override suspend fun getAllDataOnChartId(chartId: Long): ChartAllData =
         db.chartAllDataDao().getAllDataOnChartId(chartId = chartId)
 
-    override suspend fun getChartsList(): List<Pair<Long, String>> {
-        val cl = db.chartDao().getCharts()
-        return cl.map { chart -> Pair(chart.chartId!!, chart.name) }
+    override suspend fun getChartsList(): List<ChartAndLines> {
+        return db.chartAllDataDao().getAllDChartsWithLines()
     }
 
     override suspend fun deleteChart(chartId: Long) {
@@ -65,6 +63,16 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     /** Удалить линии графика */
     override suspend fun deleteLines(chartLinesId: List<Long>) {
         db.chartLineDao().delete(chartLinesId)
+    }
+
+    /** Сохранить линию графика */
+    override suspend fun saveLine(line: ChartLine): Long {
+        line.lineId?.let {
+            db.chartLineDao().update(line)
+            return it
+        } ?: let {
+            return db.chartLineDao().insert(line)
+        }
     }
 
     /** Сохранить линии графика */
@@ -107,4 +115,13 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     override suspend fun insertVerticalValues(verticalValues: List<VerticalValue>) {
         db.verticalValueDao().insert(verticalValues)
     }
+
+    /** Добавить значения по оси X */
+    override suspend fun insertHorizontalValues(horizontalValues: List<HorizontalValue>) {
+        db.horizontalValueDao().insert(horizontalValues)
+    }
+
+    /** Получить значения по оси X на конкретном графике */
+    override suspend fun getHorizontalValues(chartId: Long) =
+        db.horizontalValueDao().getValues(chartId)
 }

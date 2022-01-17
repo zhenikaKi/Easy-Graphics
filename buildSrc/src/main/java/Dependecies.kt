@@ -25,6 +25,7 @@ object Version {
     const val BUILD_GRADLE = "7.0.2"
 
     const val ROOM = "2.3.0"
+    const val GSON = "2.8.2"
 
     const val SCROLL_TABLE_VIEW = "1.0.4"
     const val COLOR_PICKER = "1.2.5"

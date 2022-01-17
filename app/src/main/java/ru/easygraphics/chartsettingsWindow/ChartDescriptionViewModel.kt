@@ -6,7 +6,6 @@ import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
-import ru.easygraphics.states.LoadingTypes
 
 class ChartDescriptionViewModel(private val service: ChartDescriptionService):BaseViewModel<BaseState>() {
 
@@ -15,12 +14,11 @@ class ChartDescriptionViewModel(private val service: ChartDescriptionService):Ba
         lines: List<ChartLine>,
         linesDelete: List<Long>?,
         openTableAfterSave: Boolean){
-
         if (openTableAfterSave) {
-            liveData.postValue(BaseState.Loading(LoadingTypes.SAVED_WITH_TABLE_OPENING))
+            liveData.postValue(BaseState.SavedWithTableOpening)
         }
         else {
-            liveData.postValue(BaseState.Loading(LoadingTypes.SAVED))
+            liveData.postValue(BaseState.LoadingSaved)
         }
         coroutineScope.launch {
             val saved = service.saveDataToDB(chart, lines, linesDelete)
@@ -36,7 +34,7 @@ class ChartDescriptionViewModel(private val service: ChartDescriptionService):Ba
 
     //получить данные по графику для редактиования
     fun loadGraphicData(chartId: Long) {
-        liveData.postValue(BaseState.Loading(LoadingTypes.ROOT_DATA))
+        liveData.postValue(BaseState.LoadingRoot)
         coroutineScope.launch {
             val loaded = service.getData(chartId = chartId)
             liveData.postValue(DescriptionState.LoadData(loaded.first, loaded.second))

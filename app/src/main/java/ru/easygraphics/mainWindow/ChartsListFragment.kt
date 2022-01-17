@@ -1,14 +1,17 @@
 package ru.easygraphics.mainWindow
 
-
-import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +29,6 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
-import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.visibleOrGone
 
 class ChartsListFragment :
@@ -43,12 +45,12 @@ class ChartsListFragment :
         scope.get(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL))
     private var index: Int? = null
     private var chartIdItem: Long? = null
-    val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
+    private val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
         override fun onChartClick(chartId: Long) {
             router.navigateTo(GraphicScreen(chartId))
         }
     }
-    val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
+    private val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onChartLongClick(chartId: Long, pos: Int, view: View) {
             index = pos
@@ -75,26 +77,23 @@ class ChartsListFragment :
                 router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
             }
             R.id.delete -> {
-                AlertDialog.Builder(requireContext()).
-                setTitle(getString(R.string.dialog_title)).
-                setMessage(getString(R.string.dialog_message)).
-                setCancelable(false).
-                setNegativeButton(getString(R.string.dialog_negative_button),{ dialog,_ -> dialog.cancel()}).
-                setPositiveButton(getString(R.string.dialog_positive_button), { dialogInterface: DialogInterface, i: Int ->
+                AlertDialog.Builder(requireContext())
+                    .setTitle(getString(R.string.dialog_title))
+                    .setMessage(getString(R.string.dialog_message))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_negative_button)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton(getString(R.string.dialog_positive_button)) { _, _ ->
                         model.deleteChart(chartIdItem!!)
                         adapter.removeItem(index!!)
-                })
-                .create()
-                .show()
-
+                    }
+                    .create()
+                    .show()
             }
         }
 
         return true
-    }
-
-    //на главном экране меню сверху справа не нужно
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     }
 
     override fun showButtonBack(visible: Boolean) {
@@ -127,6 +126,10 @@ class ChartsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.chartsList.adapter = adapter
+        with(binding.chartsList) {
+            itemAnimator = DefaultItemAnimator()
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        }
         //printDataFromDBForTest()
         model.getLiveData().observe(viewLifecycleOwner, {
             renderData(it)

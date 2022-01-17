@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_list_charts.view.*
+import kotlinx.android.synthetic.main.item_main_setting.view.*
 import ru.easygraphics.R
+import ru.easygraphics.data.db.entities.ChartAndLines
 
 class ChartsListAdapter(
-    val onChartClickListener: OnChartClickListener,
-    val onChartLongClickListener: OnChartLongClickListener
+    private val onChartClickListener: OnChartClickListener,
+    private val onChartLongClickListener: OnChartLongClickListener
 ) : RecyclerView.Adapter<ChartsListAdapter.ViewHolder>() {
-    private var chartsList: ArrayList<Pair<Long, String>> = arrayListOf()
-    fun setData(l: List<Pair<Long, String>>) {
+    private var chartsList: ArrayList<ChartAndLines> = arrayListOf()
+    fun setData(l: List<ChartAndLines>) {
         chartsList.clear()
         chartsList.addAll(l)
         notifyDataSetChanged()
@@ -24,7 +25,7 @@ class ChartsListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_charts, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_main_setting, parent, false)
         return ViewHolder(view)
     }
 
@@ -37,13 +38,14 @@ class ChartsListAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(p: Pair<Long, String>, onChartClickListener: OnChartClickListener, onChartLongClickListener: OnChartLongClickListener) {
-            itemView.textView2.setText(p.second)
+        fun bind(data: ChartAndLines, onChartClickListener: OnChartClickListener, onChartLongClickListener: OnChartLongClickListener) {
+            itemView.item_title.text = data.chart.name
+            itemView.item_description.text = data.lines.map { line -> line.chartLine.name }.toString()
             itemView.setOnClickListener {
-                onChartClickListener.onChartClick(p.first)
+                onChartClickListener.onChartClick(data.chart.chartId!!)
             }
             itemView.setOnLongClickListener {
-                onChartLongClickListener.onChartLongClick(p.first, layoutPosition, it)
+                onChartLongClickListener.onChartLongClick(data.chart.chartId!!, layoutPosition, it)
                 true
             }
         }
