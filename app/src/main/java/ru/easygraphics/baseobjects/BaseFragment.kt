@@ -49,6 +49,9 @@ abstract class BaseFragment<VB : ViewBinding>(
         _binding = inflate.invoke(inflater, container, false)
         showButtonBack(true)
 
+        //заголовок окна по умолчанию
+        setTitle(R.string.app_name)
+
         initAfterCreate()
         return binding.root
     }
@@ -119,14 +122,6 @@ abstract class BaseFragment<VB : ViewBinding>(
      */
     open fun showButtonBack(visible: Boolean) {
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(visible)
-    }
-
-    /**
-     * Задать заголовок окна
-     * @param title Новое название окна
-     */
-    fun setTitle(title: String) {
-        (activity as MainActivity).supportActionBar?.title = title
     }
 
     /**

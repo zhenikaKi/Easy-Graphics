@@ -39,6 +39,8 @@
     <!-- заголовки окон -->
     <string name="title_new_graphic">Добавление графика</string>
     <string name="title_edit_graphic">Изменение графика</string>
+    <string name="title_graphic">График</string>
+    <string name="title_table">Данные графика</string>
     <string name="title_setting">Настройки</string>
 
     <!-- всплывающее сообщение -->
