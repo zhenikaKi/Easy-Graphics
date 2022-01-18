@@ -34,6 +34,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.max
+import kotlin.math.min
 
 class GraphicFragment :
     BaseFragment<FragmentGraphicBinding>(FragmentGraphicBinding::inflate)
@@ -50,6 +51,29 @@ class GraphicFragment :
         private const val APPROXIMATE_QUANTITY_POINT = 25
         //размер масштаба графика по умолчанию
         private const val DEFAULT_ZOOM_SCALE = 1f
+        //размер текста значений по осям
+        private const val AXIS_FONT_SIZE = 10f
+        //максимальное количество точек на графике, при котором показывается само значение над точкой
+        private const val MAX_VISIBLE_VALUE = 100
+        //размер текста в легенде
+        private const val LEGEND_FONT_SIZE = 12f
+        //размер индикатора в легенде
+        private const val LEGEND_INDICATOR_SIZE = 9f
+        //размер в процентах, который занимает легенда относительно графика
+        private const val MAX_SIZE_PERCENT = 0.9f
+        //толщина нулевой линии на графике
+        private const val ZERO_LINE_WIDTH = 2f
+        //значение нулевой линии
+        private const val ZERO_VALUE = 0f
+        //размер пунктира нулевой линии
+        private const val ZERO_LINE_LENGTH = 30f
+        private const val ZERO_LINE_PHASE = 0f
+        //толщина линии на графике
+        private const val LINE_WIDTH = 2.5f
+        //размер точки линии на графике
+        private const val LINE_POINT_SIZE = 4f
+        //размер текста значения около точки линии на графике
+        private const val LINE_POINT_VALUE_SIZE = 10f
 
         fun newInstance(chartId: Long): Fragment = GraphicFragment()
             //передаем во фрагмент id графика
@@ -68,7 +92,7 @@ class GraphicFragment :
             axisLeft.isEnabled = true //включить подпись слева
             axisLeft.setDrawAxisLine(true) //показывать линию оси Y слева
             axisLeft.setDrawGridLines(true) //показывать горизонтальны линии по значениям оси Y слева
-            axisLeft.textSize = 10f //размер текста
+            axisLeft.textSize = AXIS_FONT_SIZE //размер текста
             axisLeft.isGranularityEnabled = true //отключить промежуточные значения по оси Y
 
             axisRight.isEnabled = false //отключить подпись справа
@@ -78,14 +102,14 @@ class GraphicFragment :
             xAxis.setDrawAxisLine(true) //показывать линию оси X
             xAxis.setDrawGridLines(false) //отключить вертикальные линии по значениям оси X
             xAxis.position = XAxis.XAxisPosition.BOTTOM //подпись по оси X расположить снизу
-            xAxis.textSize = 10f //размер текста
+            xAxis.textSize = AXIS_FONT_SIZE //размер текста
             xAxis.isGranularityEnabled = true //отключить промежуточные значения по оси X
 
             setTouchEnabled(true) //включить обработку нажатий пальцами (масштабирование, перемещение)
             isDragEnabled = true //включить перемещение по диаграмме (смещение графиков пальцем)
             setScaleEnabled(true) //включить масштабирование двумя пальцами
             //setPinchZoom(true) //включить одновременное изменение масштаба по X и Y
-            setMaxVisibleValueCount(100) //максимальное количество значений, которое показывается у каждой точки линий
+            setMaxVisibleValueCount(MAX_VISIBLE_VALUE)
 
             //настройка легенды
             with(legend) {
@@ -94,16 +118,16 @@ class GraphicFragment :
                 orientation = Legend.LegendOrientation.HORIZONTAL
                 setDrawInside(false) //отключить расположение легенды внутри графика
                 form = Legend.LegendForm.CIRCLE //задать форму цветовых меток
-                formSize = 9f //размер цветовой метки
-                textSize = 12f //размер текста легенды
+                formSize = LEGEND_INDICATOR_SIZE //размер цветовой метки
+                textSize = LEGEND_FONT_SIZE //размер текста легенды
                 isWordWrapEnabled = true //переносить метки на новую строку
-                maxSizePercent = 0.9f
+                maxSizePercent = MAX_SIZE_PERCENT
             }
 
-            val zeroLimitLine = LimitLine(0f)
+            val zeroLimitLine = LimitLine(ZERO_VALUE)
             zeroLimitLine.lineColor = Color.BLUE
-            zeroLimitLine.lineWidth = 2f
-            zeroLimitLine.enableDashedLine(30f, 30f, 0f)
+            zeroLimitLine.lineWidth = ZERO_LINE_WIDTH
+            zeroLimitLine.enableDashedLine(ZERO_LINE_LENGTH, ZERO_LINE_LENGTH, ZERO_LINE_PHASE)
             axisLeft.addLimitLine(zeroLimitLine)
         }
     }
@@ -185,9 +209,9 @@ class GraphicFragment :
         //настраиваем линии
         for (lineInd in data.lines.indices) {
             val lineDataSet = LineDataSet(lineValues[lineInd], data.lines[lineInd].name)
-            lineDataSet.lineWidth = 2.5f //толщина линии
-            lineDataSet.circleRadius = 4f //размер точки значения на линии
-            lineDataSet.valueTextSize = 10f //рамер значения на самой линии
+            lineDataSet.lineWidth = LINE_WIDTH //толщина линии
+            lineDataSet.circleRadius = LINE_POINT_SIZE //размер точки значения на линии
+            lineDataSet.valueTextSize = LINE_POINT_VALUE_SIZE //рамер значения на самой линии
             lineDataSet.color = ColorConvert.hexToColor(data.lines[lineInd].color)
             lineDataSet.setCircleColor(ColorConvert.hexToColor(data.lines[lineInd].color))
             dataSets.add(lineDataSet)
@@ -198,7 +222,7 @@ class GraphicFragment :
         //вычисляем масштаб такой, чтобы примерно по оси X было 25 точек
         val zoomScale = max(DEFAULT_ZOOM_SCALE, (maxXValues / APPROXIMATE_QUANTITY_POINT).toFloat())
         binding.lineChart.zoomToCenter(zoomScale, zoomScale/2)
-        binding.lineChart.moveViewTo(Float.MAX_VALUE, 0f, YAxis.AxisDependency.LEFT)
+        binding.lineChart.moveViewTo(Float.MAX_VALUE, ZERO_VALUE, YAxis.AxisDependency.LEFT)
     }
 
     /**
