@@ -1,5 +1,6 @@
 package ru.easygraphics.settingwindow
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.launch
@@ -19,11 +20,13 @@ class SettingViewModel(private val service: SettingService): BaseViewModel<BaseS
 
     /**
      * Выполнить импорт данных.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     * @param uri выбранный файл для импорта.
      */
-    fun importGraphics(context: Context) {
+    fun importGraphics(contentResolver: ContentResolver, uri: Uri) {
         liveData.postValue(SettingState.ProcessImportExport)
         coroutineScope.launch {
-            service.importGraphics(context)
+            service.importGraphics(contentResolver, uri)
             liveData.postValue(SettingState.ImportSuccess)
         }
     }

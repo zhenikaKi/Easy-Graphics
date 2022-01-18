@@ -1,10 +1,10 @@
 package ru.easygraphics.settingwindow
 
+import android.Manifest
 import android.app.AlertDialog
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +14,6 @@ import ru.easygraphics.R
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.databinding.FragmentSettingBinding
 import ru.easygraphics.helpers.AlertDialogs
-import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.SettingState
@@ -23,10 +22,20 @@ class SettingFragment :
     BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::inflate)
 {
     private val scope = getKoin().createScope<SettingFragment>()
-
     private val viewModel: SettingViewModel = scope.get(qualifier = named(Scopes.SETTING_VIEW_MODEL))
-
     private var alertDialogLoading: AlertDialog? = null
+
+    //запуск окна проверки разрешений для импорта данных
+    private val requestImportPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) { selectFileImport.launch(arrayOf("application/json")) }
+        }
+
+    //выбор файла для импорта
+    private val selectFileImport =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            viewModel.importGraphics(requireActivity().contentResolver, uri)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,10 +87,13 @@ class SettingFragment :
      * */
     private fun showSettingItems(data: List<SettingItemType>) {
         val adapterData = SettingAdapter(data, object: SettingAdapterListener {
-            override fun exportGraphics() { selectFolderForExport() }
+            override fun exportGraphics() {  }
 
-            //Открыть файл для загрузки данных.
-            override fun importGraphics() { viewModel.importGraphics(requireContext()) }
+            //Открыть файл для загрузки данных
+            override fun importGraphics() {
+                //проверяем есть ли права на чтение файлов
+                requestImportPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         })
 
         with(binding.settingList) {
@@ -90,10 +102,6 @@ class SettingFragment :
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             visibleData(isLoad = false)
         }
-    }
-
-    /** Выбрать папку для сохранения данных. */
-    private fun selectFolderForExport() {
     }
 
     /**
