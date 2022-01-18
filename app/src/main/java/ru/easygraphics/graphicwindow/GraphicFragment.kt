@@ -3,20 +3,20 @@ package ru.easygraphics.graphicwindow
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.R
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartAllDataViewed
@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.max
 
 class GraphicFragment :
     BaseFragment<FragmentGraphicBinding>(FragmentGraphicBinding::inflate)
@@ -45,6 +46,11 @@ class GraphicFragment :
     private val chartId by lazy { arguments?.getLong(DB.CHART_ID) }
 
     companion object {
+        //примерное количество точек на графике по оси X
+        private const val APPROXIMATE_QUANTITY_POINT = 25
+        //размер масштаба графика по умолчанию
+        private const val DEFAULT_ZOOM_SCALE = 1f
+
         fun newInstance(chartId: Long): Fragment = GraphicFragment()
             //передаем во фрагмент id графика
             .also {
@@ -84,14 +90,14 @@ class GraphicFragment :
             //настройка легенды
             with(legend) {
                 verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-                orientation = Legend.LegendOrientation.VERTICAL
+                horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                orientation = Legend.LegendOrientation.HORIZONTAL
                 setDrawInside(false) //отключить расположение легенды внутри графика
                 form = Legend.LegendForm.CIRCLE //задать форму цветовых меток
                 formSize = 9f //размер цветовой метки
                 textSize = 12f //размер текста легенды
-                setScaleEnabled(true)
-
+                isWordWrapEnabled = true //переносить метки на новую строку
+                maxSizePercent = 0.9f
             }
 
             val zeroLimitLine = LimitLine(0f)
@@ -104,6 +110,8 @@ class GraphicFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setTitle(R.string.title_graphic)
+
         //связываем fragment с viewModel
         model.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
 
@@ -148,6 +156,7 @@ class GraphicFragment :
         //начинаем формировать данные для графика
         val dataSets: ArrayList<ILineDataSet> = ArrayList()
         val lineValues: MutableMap<Int, ArrayList<Entry>> = HashMap() //список значений для каждой линии
+        val maxXValues = data.values.size
         //заполняем значения для линий
         for (ind in data.values.indices) {
             val hV = data.values[ind]
@@ -186,7 +195,10 @@ class GraphicFragment :
 
         val lineData = LineData(dataSets)
         binding.lineChart.data = lineData
-        binding.lineChart.invalidate()
+        //вычисляем масштаб такой, чтобы примерно по оси X было 25 точек
+        val zoomScale = max(DEFAULT_ZOOM_SCALE, (maxXValues / APPROXIMATE_QUANTITY_POINT).toFloat())
+        binding.lineChart.zoomToCenter(zoomScale, zoomScale/2)
+        binding.lineChart.moveViewTo(Float.MAX_VALUE, 0f, YAxis.AxisDependency.LEFT)
     }
 
     /**

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import org.koin.core.qualifier.named
 import org.koin.java.KoinJavaComponent.getKoin
+import ru.easygraphics.R
 import ru.easygraphics.arguments
 import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.data.db.entities.ChartAllData
@@ -70,6 +71,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setTitle(R.string.title_table)
 
         binding.table.adapter = tableAdapterV
 

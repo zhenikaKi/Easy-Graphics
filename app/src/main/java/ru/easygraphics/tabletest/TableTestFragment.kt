@@ -43,6 +43,7 @@ class TableTestFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setTitle(R.string.title_table)
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         loadTableDataById()
 
