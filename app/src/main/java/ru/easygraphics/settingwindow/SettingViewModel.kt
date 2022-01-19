@@ -9,6 +9,12 @@ import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.SettingState
 
 class SettingViewModel(private val service: SettingService): BaseViewModel<BaseState>() {
+
+    override fun handleCoroutineError(throwable: Throwable) {
+        super.handleCoroutineError(throwable)
+        throwable.message?.let { liveData.postValue(BaseState.ErrorState(it)) }
+    }
+
     /** Сформировать список настроек */
     fun getItemSettings(context: Context) {
         liveData.postValue(BaseState.LoadingRoot)
@@ -31,8 +37,15 @@ class SettingViewModel(private val service: SettingService): BaseViewModel<BaseS
         }
     }
 
-    override fun handleCoroutineError(throwable: Throwable) {
-        super.handleCoroutineError(throwable)
-        throwable.message?.let { liveData.postValue(BaseState.ErrorState(it)) }
+    /**
+     * Выполнить экспорт данных.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     */
+    fun exportGraphics(contentResolver: ContentResolver) {
+        liveData.postValue(SettingState.ProcessImportExport)
+        coroutineScope.launch {
+            val fileName = service.exportGraphics(contentResolver)
+            liveData.postValue(SettingState.ExportSuccess(fileName))
+        }
     }
 }

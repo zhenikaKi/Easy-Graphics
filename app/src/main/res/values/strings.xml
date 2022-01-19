@@ -60,4 +60,5 @@
     <string name="setting_import_title">Импорт графиков</string>
     <string name="setting_import_description">Загрузить графики из json-файла</string>
     <string name="import_success">Импорт графиков завершен</string>
+    <string name="export_success">Экспорт графиков завершен. Файл %1$s сохранен в загрузки</string>
 </resources>

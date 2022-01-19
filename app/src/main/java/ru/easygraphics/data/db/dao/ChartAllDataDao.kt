@@ -15,5 +15,9 @@ interface ChartAllDataDao {
 
     @Transaction
     @Query("select * from ${DB.TABLE_CHARTS}")
+    suspend fun getAllDataOnAllCharts(): List<ChartAllData>
+
+    @Transaction
+    @Query("select * from ${DB.TABLE_CHARTS}")
     suspend fun getAllDChartsWithLines(): List<ChartAndLines>
 }

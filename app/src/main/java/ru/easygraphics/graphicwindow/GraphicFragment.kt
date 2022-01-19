@@ -234,7 +234,7 @@ class GraphicFragment :
     private fun convertXAxisValue(dateFormat: String?, value: String): String {
         dateFormat?.let { pattern ->
             try {
-                val mainDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                val mainDateFormat = SimpleDateFormat(App.DATE_FORMAT, Locale.getDefault())
                 val newDateFormat = SimpleDateFormat(pattern, Locale.getDefault())
                 val date = mainDateFormat.parse(value)
                 date?.let { return newDateFormat.format(it) }

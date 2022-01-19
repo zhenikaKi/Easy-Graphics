@@ -31,6 +31,12 @@ class SettingFragment :
             if (isGranted) { selectFileImport.launch(arrayOf("application/json")) }
         }
 
+    //запуск окна проверки разрешений для экспорта данных
+    private val requestExportPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) { viewModel.exportGraphics(requireActivity().contentResolver) }
+        }
+
     //выбор файла для импорта
     private val selectFileImport =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -73,6 +79,13 @@ class SettingFragment :
                 alertDialogLoading?.cancel()
             }
 
+            //экспорт завершен
+            is SettingState.ExportSuccess -> {
+                val message = String.format(getString(R.string.export_success), state.fileName)
+                AlertDialogs.createMessage(requireContext(), message).show()
+                alertDialogLoading?.cancel()
+            }
+
             //какая-то ошибка
             is BaseState.ErrorState -> {
                 AlertDialogs.createMessage(requireContext(), state.text).show()
@@ -87,12 +100,15 @@ class SettingFragment :
      * */
     private fun showSettingItems(data: List<SettingItemType>) {
         val adapterData = SettingAdapter(data, object: SettingAdapterListener {
-            override fun exportGraphics() {  }
+            override fun exportGraphics() {
+                //проверяем есть ли права на запись и чтение файлов
+                requestExportPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
 
             //Открыть файл для загрузки данных
             override fun importGraphics() {
-                //проверяем есть ли права на чтение файлов
-                requestImportPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                //проверяем есть ли права на запись и чтение файлов
+                requestImportPermission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
         })
 

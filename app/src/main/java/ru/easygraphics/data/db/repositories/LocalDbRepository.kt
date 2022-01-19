@@ -35,6 +35,9 @@ class LocalDbRepository(private val db: AppDB) : DataRepository {
     override suspend fun getAllDataOnChartId(chartId: Long): ChartAllData =
         db.chartAllDataDao().getAllDataOnChartId(chartId = chartId)
 
+    override suspend fun getAllDataOnAllCharts(): List<ChartAllData> =
+        db.chartAllDataDao().getAllDataOnAllCharts()
+
     override suspend fun getChartsList(): List<ChartAndLines> {
         return db.chartAllDataDao().getAllDChartsWithLines()
     }
