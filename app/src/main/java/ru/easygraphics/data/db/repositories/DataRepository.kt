@@ -13,6 +13,8 @@ interface DataRepository {
 
     suspend fun getAllDataOnChartId(chartId: Long): ChartAllData
 
+    suspend fun getAllDataOnAllCharts(): List<ChartAllData>
+
     /** Сохранить основные данные по графику */
     suspend fun saveChart(chart: Chart): Long
 

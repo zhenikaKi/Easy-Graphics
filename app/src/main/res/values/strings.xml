@@ -58,6 +58,7 @@
     <string name="setting_export_title">Экспорт графиков</string>
     <string name="setting_export_description">Сохранить все графики в json-формате</string>
     <string name="setting_import_title">Импорт графиков</string>
-    <string name="setting_import_description">Загрузить графики из json-файла. Файл должен быть расположен по адресу:\n%1$s</string>
+    <string name="setting_import_description">Загрузить графики из json-файла</string>
     <string name="import_success">Импорт графиков завершен</string>
+    <string name="export_success">Экспорт графиков завершен. Файл %1$s сохранен в загрузки</string>
 </resources>

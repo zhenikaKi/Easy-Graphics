@@ -1,45 +1,49 @@
 package ru.easygraphics.settingwindow
 
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
-import android.util.Log
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.room.Transaction
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import ru.easygraphics.R
 import ru.easygraphics.data.db.converts.DateTypesConvert
 import ru.easygraphics.data.db.converts.ValueTypesConvert
-import ru.easygraphics.data.db.entities.Chart
-import ru.easygraphics.data.db.entities.ChartLine
-import ru.easygraphics.data.db.entities.HorizontalValue
-import ru.easygraphics.data.db.entities.VerticalValue
+import ru.easygraphics.data.db.entities.*
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.dto.ChartDto
 import ru.easygraphics.data.dto.FileDto
+import ru.easygraphics.data.dto.LineDto
 import ru.easygraphics.helpers.consts.App
+import ru.easygraphics.helpers.consts.DB
+import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
-import java.lang.RuntimeException
-import java.lang.StringBuilder
+import java.io.FileOutputStream
+import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 /** Сервис для обработки данных в настройках перед использованием репозитория */
 class SettingService(private val repository: DataRepository) {
 
     /** Сформировать список пунктов настроек */
     fun getItems(context: Context): List<SettingItemType> {
-        val externalFilesDir = context.getExternalFilesDir(null)?.absolutePath
-        val filePath = externalFilesDir?.let { "$it/${App.FILE_IMPORT_NAME}" } ?: ""
-
         return listOf(
             //экспорт данных
-            /* todo нужно позже включить SettingMainItem(
+            SettingMainItem(
                 title = context.getString(R.string.setting_export_title),
                 description = context.getString(R.string.setting_export_description),
                 itemType = SettingItemType.EXPORT_TYPE
-            ),*/
+            ),
 
             //импорт данных
             SettingMainItem(
                 title = context.getString(R.string.setting_import_title),
-                description = String.format(context.getString(R.string.setting_import_description), filePath),
+                description = context.getString(R.string.setting_import_description),
                 itemType = SettingItemType.IMPORT_TYPE
             )
         )
@@ -47,34 +51,50 @@ class SettingService(private val repository: DataRepository) {
 
     /**
      * Выполнить импорт данных.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     * @param uri выбранный файл для импорта.
      */
-    suspend fun importGraphics(context: Context){
-        val data = getFileData(context)
+    suspend fun importGraphics(contentResolver: ContentResolver, uri: Uri){
+        val data = getFileData(contentResolver, uri)
         importProcess(data)
     }
 
     /**
+     * Выполнить экспорт данных.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     */
+    suspend fun exportGraphics(contentResolver: ContentResolver): String {
+        //формируем данные по всем графикам
+        val data: FileDto = generateFileDto()
+        val jsonData: String = Gson().toJson(data)
+
+        //сохраняем файл
+        val fileName = "${data.date}.json"
+        saveDataInFile(contentResolver, fileName, jsonData)
+
+        return fileName
+    }
+
+    /**
      * Прочитать содержимое файла для импорта.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     * @param uri выбранный файл для импорта.
      * @return содержимое файла.
      */
-    private fun getFileData(context: Context): String {
-        val externalFilesDir = context.getExternalFilesDir(null)
-        val file = File(externalFilesDir, App.FILE_IMPORT_NAME)
-
-        if (file.exists()) {
-            val bufferedReader = FileReader(file)
+    private fun getFileData(contentResolver: ContentResolver, uri: Uri): String {
+        val openInputStream = contentResolver.openInputStream(uri)
+        openInputStream?.let {
+            val bufferedReader = BufferedReader(InputStreamReader(it))
             val stringBuilder = StringBuilder()
-            bufferedReader.readLines().forEach { stringBuilder.append(it) }
+            bufferedReader.readLines().forEach { line -> stringBuilder.append(line) }
             return stringBuilder.toString()
         }
-        else {
-            throw RuntimeException("Отсутствует файл: ${file.absolutePath}")
-        }
+        throw RuntimeException("Не получилось прочитать файл")
     }
 
     /**
      * Процесс загрузки данных.
-     * @param jsonData данные по графикам для импорта.
+     * @param json данные по графикам для импорта.
      */
     private suspend fun importProcess(json: String) {
         //конвертируем json в dto-объект
@@ -82,8 +102,6 @@ class SettingService(private val repository: DataRepository) {
 
         //обходим все графики
         fileDto.charts.forEach { chartDto -> importChart(chartDto) }
-
-        Log.d(App.LOG_TAG, fileDto.toString())
     }
 
     /**
@@ -126,6 +144,83 @@ class SettingService(private val repository: DataRepository) {
                     value = lineDto.yValues[yInd]))
             }
             repository.insertVerticalValues(yValues)
+        }
+    }
+
+    /** Сформировать данные для экспорта. */
+    private suspend fun generateFileDto(): FileDto {
+        //получаем все данные из базы
+        val graphics: List<ChartAllData> = repository.getAllDataOnAllCharts()
+        //конвертируем данные к структуре json
+        val chartsDto: List<ChartDto> = graphics.map { chartAllDataToChartDto(it) }
+
+        val currentDate =
+            SimpleDateFormat(App.DATE_FORMAT, Locale.getDefault()).format(System.currentTimeMillis())
+        return FileDto(
+            version = DB.VERSION,
+            date = currentDate,
+            charts = chartsDto
+        )
+    }
+
+    /**
+     * Преобразовать сущнось графика к dto.
+     * @param chartAllData исходная сущность линии.
+     * @return dto графика для экспорта
+     */
+    private fun chartAllDataToChartDto(chartAllData: ChartAllData): ChartDto {
+        //значения по оси X каждого графика
+        val xValues = chartAllData.xValues.map { horizontalValue -> horizontalValue.value }
+        //список линий со значениями каждого графика
+        val chartLines: List<LineDto> = chartAllData.lines.map { chartLineDataToLineDto(it) }
+
+        return ChartDto(
+            title = chartAllData.chart.name,
+            countDecimal = chartAllData.chart.countDecimal,
+            xValueType = chartAllData.chart.xValueType.value,
+            xValueDateFormat = chartAllData.chart.xValueDateFormat?.value,
+            xName = chartAllData.chart.xName,
+            yName = chartAllData.chart.yName,
+            xValues = xValues,
+            lines = chartLines
+        )
+    }
+
+    /**
+     * Преобразовать сущнось линии к dto.
+     * @param chartLineData исходная сущность линии.
+     * @return dto линии для экспорта
+     */
+    private fun chartLineDataToLineDto(chartLineData: ChartLineData): LineDto {
+        val yValues = chartLineData.yValues.map { verticalValue -> verticalValue.value }
+        return LineDto (
+            title = chartLineData.chartLine.name,
+            color = chartLineData.chartLine.color,
+            yValues = yValues
+        )
+    }
+
+    /**
+     * Выполнить сохранение данных в файл для разных версий Android.
+     * @param contentResolver для выполнения запросов от активности к контент-провайдеру.
+     * @param fileName имя файла для сохранения.
+     * @param jsonData содержимое файла.
+     */
+    private fun saveDataInFile(contentResolver: ContentResolver, fileName: String, jsonData: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            }
+            val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+            uri?.let {
+                val outputStream = contentResolver.openOutputStream(it)
+                outputStream?.write(jsonData.toByteArray())
+            }
+        }
+        else {
+            val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val fileOutputStream = FileOutputStream(File(downloadDir, fileName))
+            fileOutputStream.write(jsonData.toByteArray())
         }
     }
 }

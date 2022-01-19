@@ -13,6 +13,7 @@ import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.data.db.entities.HorizontalValue
 import ru.easygraphics.data.db.entities.VerticalValue
+import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,7 +69,7 @@ abstract class AppDB: RoomDatabase(), DaoDB {
 
         private fun createXValues(db: SupportSQLiteDatabase, chartId: Long): List<Long> {
             val result: MutableList<Long> = mutableListOf()
-            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val simpleDateFormat = SimpleDateFormat(App.DATE_FORMAT, Locale.getDefault())
             val firstDate = System.currentTimeMillis()
             for (day in 50 downTo 0) {
                 val cV = ContentValues()
