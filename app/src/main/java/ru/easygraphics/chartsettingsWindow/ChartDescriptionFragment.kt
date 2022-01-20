@@ -8,6 +8,9 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,6 +33,7 @@ import ru.easygraphics.states.DescriptionState
 import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.toast
 import ru.easygraphics.visibleOrGone
+import kotlin.random.Random
 
 class ChartDescriptionFragment :
     BaseFragment<FragmentChartDescriptionBinding>(FragmentChartDescriptionBinding::inflate) {
@@ -195,12 +199,18 @@ class ChartDescriptionFragment :
     }
 
     /** Выбор цвета */
-    private fun setColorClickListener(v: View?) {
-        val cp = ColorPicker(requireActivity(), 0, 0, 0)
-        cp.show()
-        cp.enableAutoClose()
-        cp.setCallback {
-            v?.setBackgroundColor(it)
+    private fun setColorClickListener(view: View?) {
+        val viewColor: ColorDrawable = view?.background as ColorDrawable
+        val colorPicker = ColorPicker(
+            requireActivity(),
+            viewColor.color.red,
+            viewColor.color.green,
+            viewColor.color.blue
+        )
+        colorPicker.show()
+        colorPicker.enableAutoClose()
+        colorPicker.setCallback {
+            view.setBackgroundColor(it)
         }
     }
 
@@ -251,10 +261,9 @@ class ChartDescriptionFragment :
                 it.lineId?.let { id -> editName.setTag(R.id.tag_line_id, id) }
 
                 colorLine.setBackgroundColor(ColorConvert.hexToColor(it.color))
-            } ?: colorLine.setBackgroundColor(Color.BLACK)
+            } ?: colorLine.setBackgroundColor(setRandomColor())
             //обрабатываем цвет
             colorLine.setOnClickListener { setColorClickListener(it) }
-
             binding.linesBlock.addView(lineView)
         }
     }
@@ -365,5 +374,10 @@ class ChartDescriptionFragment :
         }
 
         lines = linesTmp
+    }
+
+    private fun setRandomColor(): Int {
+        val random = Random.Default
+        return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
     }
 }
