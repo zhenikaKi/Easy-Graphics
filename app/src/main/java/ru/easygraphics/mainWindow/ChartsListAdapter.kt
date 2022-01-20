@@ -43,17 +43,19 @@ class ChartsListAdapter(
         fun bind(data: ChartAndLines, onChartClickListener: OnChartClickListener) {
             itemView.item_title.text = data.chart.name
             itemView.item_description.text = data.lines.map { line -> line.chartLine.name }.toString()
-            itemView.icon_graphic.setOnClickListener{
-                onChartClickListener.onIconGraphicClick(data.chart.chartId!!)
-            }
-            itemView.icon_table.setOnClickListener{
-                onChartClickListener.onIconTableClick(data.chart.chartId!!)
-            }
-            itemView.icon_edit.setOnClickListener{
-                onChartClickListener.onIconEditClick(data.chart.chartId!!)
-            }
-            itemView.icon_delete.setOnClickListener{
-                onChartClickListener.onIconDeleteClick(data.chart.chartId!!,layoutPosition)
+            data.chart.chartId?.let {chartId->
+                itemView.icon_graphic.setOnClickListener {
+                    onChartClickListener.onIconGraphicClick(chartId)
+                }
+                itemView.icon_table.setOnClickListener {
+                    onChartClickListener.onIconTableClick(chartId)
+                }
+                itemView.icon_edit.setOnClickListener {
+                    onChartClickListener.onIconEditClick(chartId)
+                }
+                itemView.icon_delete.setOnClickListener {
+                    onChartClickListener.onIconDeleteClick(chartId, layoutPosition)
+                }
             }
         }
     }
