@@ -121,7 +121,6 @@ class ChartDescriptionFragment :
             addParamLine(line = null, hideIconDelete = false)
         }
 
-        //кнопка перехода к данным графика
 
     }
 
@@ -217,8 +216,6 @@ class ChartDescriptionFragment :
         hideFieldsWhenNoEdit()
 
         with(binding) {
-            editGraphicName.setText(chart.name)
-            editGraphicName.setText(chart.name)
             editGraphicName.setText(chart.name)
             editXName.setText(chart.xName)
             editYName.setText(chart.yName)

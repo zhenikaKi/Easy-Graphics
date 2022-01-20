@@ -12,10 +12,7 @@ import ru.easygraphics.R
 import ru.easygraphics.data.db.entities.ChartAndLines
 
 class ChartsListAdapter(
-    private val onIconGraphicClickListener: OnIconGraphicClickListener,
-    private val onIconTableClickListener: OnIconTableClickListener,
-    private val onIconEditClickListener:OnIconEditClickListener,
-    private val onIconDeleteClickListener:OnIconDeleteClickListener
+    private val onChartClickListener: OnChartClickListener
 ) : RecyclerView.Adapter<ChartsListAdapter.ViewHolder>() {
     private var chartsList: ArrayList<ChartAndLines> = arrayListOf()
     fun setData(l: List<ChartAndLines>) {
@@ -35,7 +32,7 @@ class ChartsListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(chartsList[position], onIconGraphicClickListener, onIconTableClickListener,onIconEditClickListener,onIconDeleteClickListener)
+        holder.bind(chartsList[position],onChartClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -43,34 +40,28 @@ class ChartsListAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ChartAndLines, onIconGraphicClickListener: OnIconGraphicClickListener, onIconTableClickListener: OnIconTableClickListener,onIconEditClickListener: OnIconEditClickListener,onIconDeleteClickListener: OnIconDeleteClickListener) {
+        fun bind(data: ChartAndLines, onChartClickListener: OnChartClickListener) {
             itemView.item_title.text = data.chart.name
             itemView.item_description.text = data.lines.map { line -> line.chartLine.name }.toString()
             itemView.icon_graphic.setOnClickListener{
-                onIconGraphicClickListener.onIconGraphicClick(data.chart.chartId!!)
+                onChartClickListener.onIconGraphicClick(data.chart.chartId!!)
             }
             itemView.icon_table.setOnClickListener{
-                onIconTableClickListener.onIconTableClick(data.chart.chartId!!)
+                onChartClickListener.onIconTableClick(data.chart.chartId!!)
             }
             itemView.icon_edit.setOnClickListener{
-                onIconEditClickListener.onIconEditClick(data.chart.chartId!!)
+                onChartClickListener.onIconEditClick(data.chart.chartId!!)
             }
             itemView.icon_delete.setOnClickListener{
-                onIconDeleteClickListener.onIconDeleteClick(data.chart.chartId!!,layoutPosition)
+                onChartClickListener.onIconDeleteClick(data.chart.chartId!!,layoutPosition)
             }
         }
     }
 
-    interface OnIconGraphicClickListener {
+    interface OnChartClickListener {
         fun onIconGraphicClick(chartId: Long)
-    }
-    interface OnIconTableClickListener {
         fun onIconTableClick(chartId: Long)
-    }
-    interface OnIconEditClickListener {
         fun onIconEditClick(chartId: Long)
-    }
-    interface OnIconDeleteClickListener {
         fun onIconDeleteClick(chartId: Long, pos: Int)
     }
 }

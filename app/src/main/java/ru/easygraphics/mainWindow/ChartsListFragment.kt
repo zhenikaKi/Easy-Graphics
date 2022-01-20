@@ -43,25 +43,20 @@ class ChartsListFragment :
     private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
     private val model: ChartsListViewModel =
         scope.get(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL))
-    private var index: Int? = null
-    private var chartIdItem: Long? = null
-    private val onIconGraphicClickListener = object : ChartsListAdapter.OnIconGraphicClickListener {
+    private val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
         override fun onIconGraphicClick(chartId: Long) {
             router.navigateTo(GraphicScreen(chartId))
         }
-    }
-    private val onIconTableClickListener = object : ChartsListAdapter.OnIconTableClickListener {
+
         override fun onIconTableClick(chartId: Long) {
             router.navigateTo(TableTestScreen(chartId))
         }
-    }
-    private val onIconEditClickListener = object : ChartsListAdapter.OnIconEditClickListener {
+
         override fun onIconEditClick(chartId: Long) {
             router.navigateTo(ChartDescriptionScreen(chartId))
         }
-    }
-    private val onIconDeleteClickListener = object : ChartsListAdapter.OnIconDeleteClickListener {
-        override fun onIconDeleteClick(chartId: Long,index:Int) {
+
+        override fun onIconDeleteClick(chartId: Long, index: Int) {
             AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.dialog_title))
                 .setMessage(getString(R.string.dialog_message))
@@ -83,7 +78,7 @@ class ChartsListFragment :
     }
 
     private val adapter: ChartsListAdapter =
-        ChartsListAdapter(onIconGraphicClickListener, onIconTableClickListener,onIconEditClickListener,onIconDeleteClickListener)
+        ChartsListAdapter(onChartClickListener)
 
 
 
