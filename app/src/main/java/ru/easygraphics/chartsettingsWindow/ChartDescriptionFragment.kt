@@ -122,9 +122,7 @@ class ChartDescriptionFragment :
         }
 
         //кнопка перехода к данным графика
-        binding.buttonTable.setOnClickListener {
-            saveData(true)
-        }
+
     }
 
     /** Заполнить выпадающие списки нужными данными */
@@ -219,6 +217,8 @@ class ChartDescriptionFragment :
         hideFieldsWhenNoEdit()
 
         with(binding) {
+            editGraphicName.setText(chart.name)
+            editGraphicName.setText(chart.name)
             editGraphicName.setText(chart.name)
             editXName.setText(chart.xName)
             editYName.setText(chart.yName)

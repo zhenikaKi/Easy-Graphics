@@ -29,13 +29,13 @@ import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.ChartsListState
+import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.visibleOrGone
 
 class ChartsListFragment :
     BaseFragment<FragmentChartsListBinding>(FragmentChartsListBinding::inflate) {
 
     companion object {
-        const val SHIFT = 10f
         fun newInstance(): Fragment = ChartsListFragment()
     }
 
@@ -45,55 +45,37 @@ class ChartsListFragment :
         scope.get(qualifier = named(Scopes.CHARTS_LIST_VIEW_MODEL))
     private var index: Int? = null
     private var chartIdItem: Long? = null
-    private val onChartClickListener = object : ChartsListAdapter.OnChartClickListener {
-        override fun onChartClick(chartId: Long) {
+    private val onIconGraphicClickListener = object : ChartsListAdapter.OnIconGraphicClickListener {
+        override fun onIconGraphicClick(chartId: Long) {
             router.navigateTo(GraphicScreen(chartId))
         }
     }
-    private val onChartLongClickListener = object : ChartsListAdapter.OnChartLongClickListener {
-        @RequiresApi(Build.VERSION_CODES.N)
-        override fun onChartLongClick(chartId: Long, pos: Int, view: View) {
-            index = pos
-            chartIdItem = chartId
-            registerForContextMenu(view)
-            view.showContextMenu(SHIFT, SHIFT)
+    private val onIconTableClickListener = object : ChartsListAdapter.OnIconTableClickListener {
+        override fun onIconTableClick(chartId: Long) {
+            router.navigateTo(TableTestScreen(chartId))
         }
     }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        val mi = requireActivity().menuInflater
-        mi.inflate(R.menu.context_menu_list_charts, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.edit -> {
-                router.navigateTo(ChartDescriptionScreen(chartIdItem!!))
-            }
-            R.id.delete -> {
-                AlertDialog.Builder(requireContext())
-                    .setTitle(getString(R.string.dialog_title))
-                    .setMessage(getString(R.string.dialog_message))
-                    .setCancelable(false)
-                    .setNegativeButton(getString(R.string.dialog_negative_button)) { dialog, _ ->
-                        dialog.cancel()
-                    }
-                    .setPositiveButton(getString(R.string.dialog_positive_button)) { _, _ ->
-                        model.deleteChart(chartIdItem!!)
-                        adapter.removeItem(index!!)
-                    }
-                    .create()
-                    .show()
-            }
+    private val onIconEditClickListener = object : ChartsListAdapter.OnIconEditClickListener {
+        override fun onIconEditClick(chartId: Long) {
+            router.navigateTo(ChartDescriptionScreen(chartId))
         }
-
-        return true
+    }
+    private val onIconDeleteClickListener = object : ChartsListAdapter.OnIconDeleteClickListener {
+        override fun onIconDeleteClick(chartId: Long,index:Int) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(getString(R.string.dialog_message))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.dialog_negative_button)) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setPositiveButton(getString(R.string.dialog_positive_button)) { _, _ ->
+                    model.deleteChart(chartId)
+                    adapter.removeItem(index)
+                }
+                .create()
+                .show()
+        }
     }
 
     override fun showButtonBack(visible: Boolean) {
@@ -101,7 +83,7 @@ class ChartsListFragment :
     }
 
     private val adapter: ChartsListAdapter =
-        ChartsListAdapter(onChartClickListener, onChartLongClickListener)
+        ChartsListAdapter(onIconGraphicClickListener, onIconTableClickListener,onIconEditClickListener,onIconDeleteClickListener)
 
 
 

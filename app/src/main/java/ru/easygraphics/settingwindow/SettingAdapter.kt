@@ -3,7 +3,7 @@ package ru.easygraphics.settingwindow
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class SettingAdapter(private val items: List<SettingItemType>,
+class  SettingAdapter(private val items: List<SettingItemType>,
                      private val listener: SettingAdapterListener):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
