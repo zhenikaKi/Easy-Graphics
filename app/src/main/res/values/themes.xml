@@ -16,6 +16,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- стиль иконок -->
+    <style name="IconStyle">
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
+        <item name="android:layout_marginTop">@dimen/icon_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/icon_margin_bottom</item>
+        <item name="android:layout_marginStart">@dimen/icon_margin_start</item>
+    </style>
+
     <!-- стиль заголовков -->
     <style name="TextViewStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -86,4 +95,5 @@
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
     </style>
+
 </resources>

@@ -121,10 +121,7 @@ class ChartDescriptionFragment :
             addParamLine(line = null, hideIconDelete = false)
         }
 
-        //кнопка перехода к данным графика
-        binding.buttonTable.setOnClickListener {
-            saveData(true)
-        }
+
     }
 
     /** Заполнить выпадающие списки нужными данными */
