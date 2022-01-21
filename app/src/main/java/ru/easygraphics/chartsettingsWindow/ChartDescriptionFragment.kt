@@ -62,13 +62,17 @@ class ChartDescriptionFragment :
         chartId?.let {
             model.loadGraphicData(it)
             disabledFieldsWhenNoEdit()
-        } ?: addParamLine(line = null, hideIconDelete = true) //сразу по умолчанию добавляем линию
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.linesBlock.removeAllViews()
+        //добавляем одну линию по умолчанию для нового графика
+        if (chartId == null) {
+            addParamLine(line = null, hideIconDelete = true)
+        }
 
         //связываем fragment с viewModel
         model.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
