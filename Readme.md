@@ -4,7 +4,7 @@
 ---
 
 ### Участники проекта
-+ [Григорий Укладников](https://github.com/GeorgeUG02)
++ [Георгий Укладников](https://github.com/GeorgeUG02)
 + [Евгений Кирюшин](https://github.com/zhenikaKi)
 + [Юрий Мищенков](https://github.com/gek-m)
 
