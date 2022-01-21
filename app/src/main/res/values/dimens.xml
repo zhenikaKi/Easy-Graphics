@@ -17,6 +17,7 @@
     <dimen name="default_card_text_size">19sp</dimen>
     <dimen name="default_fragment_padding">7dp</dimen>
     <dimen name="default_fragment_text_size">20sp</dimen>
+    <dimen name="axis_text_size">10sp</dimen>
     <dimen name="zero_size">0dp</dimen>
     <dimen name="icon_size">20dp</dimen>
     <dimen name="item_title_text_size">16sp</dimen>
