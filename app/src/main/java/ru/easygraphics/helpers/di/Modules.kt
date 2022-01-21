@@ -15,6 +15,7 @@ import ru.easygraphics.data.db.AppDB
 import ru.easygraphics.data.db.repositories.DataRepository
 import ru.easygraphics.data.db.repositories.LocalDbRepository
 import ru.easygraphics.graphicwindow.GraphicFragment
+import ru.easygraphics.graphicwindow.GraphicService
 import ru.easygraphics.graphicwindow.GraphicViewModel
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
@@ -93,7 +94,11 @@ object Modules {
     val graphicWindow = module {
         scope<GraphicFragment> {
             viewModel(qualifier = named(Scopes.GRAPHIC_VIEW_MODEL)) {
-                GraphicViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+                GraphicViewModel(get(qualifier = named(Scopes.GRAPHIC_SERVICE)))
+            }
+
+            scoped<GraphicService>(qualifier = named(Scopes.GRAPHIC_SERVICE)) {
+                GraphicService(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }

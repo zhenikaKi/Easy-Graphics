@@ -1,7 +1,7 @@
 package ru.easygraphics.states
 
-import ru.easygraphics.data.db.entities.ChartAllDataViewed
+import ru.easygraphics.graphicwindow.ChartGraphicDto
 
 sealed class GraphicState: BaseState {
-    data class Success(val data: ChartAllDataViewed): GraphicState()
+    data class Success(val chartGraphicDto: ChartGraphicDto): GraphicState()
 }

@@ -96,4 +96,19 @@
         <item name="layout_constraintBottom_toBottomOf">parent</item>
     </style>
 
+    <!-- стиль названия графика в заголовках -->
+    <style name="TextViewGraphicNameStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/default_fragment_text_size</item>
+        <item name="android:paddingBottom">@dimen/default_fragment_padding</item>
+    </style>
+
+    <!-- стиль подписей по осям графика -->
+    <style name="TextViewGraphicAxisNameStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/axis_text_size</item>
+    </style>
+
 </resources>

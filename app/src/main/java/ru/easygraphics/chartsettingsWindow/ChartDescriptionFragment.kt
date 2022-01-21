@@ -14,7 +14,6 @@ import androidx.core.graphics.red
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.github.terrakok.cicerone.Router
 import com.google.android.material.textfield.TextInputLayout
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker
 import org.koin.core.qualifier.named
@@ -30,7 +29,6 @@ import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
-import ru.easygraphics.tabletest.TableTestScreen
 import ru.easygraphics.toast
 import ru.easygraphics.visibleOrGone
 import kotlin.random.Random
@@ -41,7 +39,6 @@ class ChartDescriptionFragment :
     private val scope = getKoin().createScope<ChartDescriptionFragment>()
     private val model: ChartDescriptionViewModel =
         scope.get(qualifier = named(Scopes.DESCRIPTION_VIEW_MODEL))
-    private val router: Router = scope.get(qualifier = named(Scopes.ROUTER))
 
     private var chartId: Long? = null
     private var chart: Chart? = null
@@ -86,20 +83,25 @@ class ChartDescriptionFragment :
         setButtonListener()
     }
 
-    /** Скрыть поля, которые нельзя редактировать при редактировании графика */
-    private fun hideFieldsWhenNoEdit() {
+    /** Заблокировать поля, которые нельзя редактировать при редактировании графика */
+    private fun hideFieldsWhenNoEdit(xValueType: DB.ValueTypes? = null,
+                                     xValueDateFormat: DB.DateTypes? = null) {
+        //выбираем в списке нужный тип отображения подписи по X
+        xValueType?.let { selectedXValueType(it) }
+        //выбираем в списке нужный формат даты
+        xValueType
+            ?.takeIf { it == DB.ValueTypes.DATE }
+            ?.let {
+                xValueDateFormat?.let { dateType -> selectedDateFormat(dateType) }
+            }
+
         //при редактировании нельзя менять тип подписи по X
-        binding.inputXType.visibility = View.GONE
-        binding.inputXDateFormat.visibility = View.GONE
+        binding.inputXType.isEnabled = false
+        binding.inputXDateFormat.isEnabled = false
     }
 
     /** Сохранение графика */
     override fun saveData() {
-        saveData(false)
-    }
-
-    /** Сохранение графика */
-    private fun saveData(openTableAfterSave: Boolean) {
         //проверяем заполненность полей
         if (!validateEdits()) {
             return
@@ -112,7 +114,7 @@ class ChartDescriptionFragment :
         //сохраняем данные
         chart?.let { chartToSave ->
             lines?.let { linesToSave ->
-                model.saveGraphicData(chartToSave, linesToSave, linesDelete, openTableAfterSave)
+                model.saveGraphicData(chartToSave, linesToSave, linesDelete)
             }
         }
         this@ChartDescriptionFragment.toast(resources.getString(R.string.message_save))
@@ -124,8 +126,6 @@ class ChartDescriptionFragment :
         binding.buttonAddLine.setOnClickListener {
             addParamLine(line = null, hideIconDelete = false)
         }
-
-
     }
 
     /** Заполнить выпадающие списки нужными данными */
@@ -183,11 +183,6 @@ class ChartDescriptionFragment :
                 showLoadedData(state.chart, state.lines)
                 binding.progressBar.visibleOrGone(false)
             }
-            is DescriptionState.SavedForOpenTable -> {
-                showLoadedData(state.chart, state.lines)
-                binding.progressBarOnBottom.visibleOrGone(false)
-                state.chart.chartId?.let { router.navigateTo(TableTestScreen(it)) }
-            }
 
             //какая-то ошибка
             is BaseState.ErrorState -> Log.d(App.LOG_TAG, state.text)
@@ -223,7 +218,7 @@ class ChartDescriptionFragment :
         this.chart = chart
         this.lines = lines
         this.chartId = chart.chartId
-        hideFieldsWhenNoEdit()
+        hideFieldsWhenNoEdit(chart.xValueType, chart.xValueDateFormat)
 
         with(binding) {
             editGraphicName.setText(chart.name)
@@ -277,7 +272,7 @@ class ChartDescriptionFragment :
         val fieldNull = getString(R.string.field_null)
         with(binding) {
             //сформируем список полей для проверки
-            var fields: MutableList<Pair<EditText, TextInputLayout>> = mutableListOf(
+            val fields: MutableList<Pair<EditText, TextInputLayout>> = mutableListOf(
                 Pair(editGraphicName, inputGraphicName),
                 Pair(editXName, inputXName),
                 Pair(editYName, inputYName),
@@ -376,8 +371,36 @@ class ChartDescriptionFragment :
         lines = linesTmp
     }
 
+    /** Сформировать случайны цвет. */
     private fun setRandomColor(): Int {
         val random = Random.Default
         return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
+    }
+
+    /**
+     * Выбрать из списка нужный тип подписи по X.
+     * @param xValueType тип подписи, который нужно выбрать.
+     */
+    private fun selectedXValueType(xValueType: DB.ValueTypes) {
+        for (ind in DB.ValueTypes.values().indices) {
+            if (xValueType == DB.ValueTypes.values()[ind]) {
+                binding.editXType.setText(xValueType.title)
+                break
+            }
+        }
+    }
+
+    /**
+     * Выбрать из списка нужный формат даты для типа подписи [DB.ValueTypes.DATE].
+     * @param dateType формат даты, который нужно выбрать.
+     */
+    private fun selectedDateFormat(dateType: DB.DateTypes) {
+        for (ind in DB.DateTypes.values().indices) {
+            if (dateType == DB.DateTypes.values()[ind]) {
+                binding.inputXDateFormat.isVisible = true
+                binding.editXDateFormat.setText(dateType.title)
+                break
+            }
+        }
     }
 }

@@ -12,23 +12,11 @@ class ChartDescriptionViewModel(private val service: ChartDescriptionService):Ba
     fun saveGraphicData(
         chart: Chart,
         lines: List<ChartLine>,
-        linesDelete: List<Long>?,
-        openTableAfterSave: Boolean){
-        if (openTableAfterSave) {
-            liveData.postValue(BaseState.SavedWithTableOpening)
-        }
-        else {
-            liveData.postValue(BaseState.LoadingSaved)
-        }
+        linesDelete: List<Long>?){
+        liveData.postValue(BaseState.LoadingSaved)
         coroutineScope.launch {
             val saved = service.saveDataToDB(chart, lines, linesDelete)
-
-            if (openTableAfterSave) {
-                liveData.postValue(DescriptionState.SavedForOpenTable(saved.first, saved.second))
-            }
-            else {
-                liveData.postValue(DescriptionState.Saved(saved.first, saved.second))
-            }
+            liveData.postValue(DescriptionState.Saved(saved.first, saved.second))
         }
     }
 
