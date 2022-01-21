@@ -61,7 +61,7 @@ class ChartDescriptionFragment :
         //запускаем процесс получения данных по графику
         chartId?.let {
             model.loadGraphicData(it)
-            hideFieldsWhenNoEdit()
+            disabledFieldsWhenNoEdit()
         } ?: addParamLine(line = null, hideIconDelete = true) //сразу по умолчанию добавляем линию
     }
 
@@ -84,8 +84,8 @@ class ChartDescriptionFragment :
     }
 
     /** Заблокировать поля, которые нельзя редактировать при редактировании графика */
-    private fun hideFieldsWhenNoEdit(xValueType: DB.ValueTypes? = null,
-                                     xValueDateFormat: DB.DateTypes? = null) {
+    private fun disabledFieldsWhenNoEdit(xValueType: DB.ValueTypes? = null,
+                                         xValueDateFormat: DB.DateTypes? = null) {
         //выбираем в списке нужный тип отображения подписи по X
         xValueType?.let { selectedXValueType(it) }
         //выбираем в списке нужный формат даты
@@ -218,7 +218,7 @@ class ChartDescriptionFragment :
         this.chart = chart
         this.lines = lines
         this.chartId = chart.chartId
-        hideFieldsWhenNoEdit(chart.xValueType, chart.xValueDateFormat)
+        disabledFieldsWhenNoEdit(chart.xValueType, chart.xValueDateFormat)
 
         with(binding) {
             editGraphicName.setText(chart.name)
