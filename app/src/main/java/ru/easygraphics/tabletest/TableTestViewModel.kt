@@ -139,7 +139,7 @@ class TableTestViewModel(private val repository: DataRepository) : BaseViewModel
                             yValueId = cells[ind].id,
                             lineId = lineId,
                             xValueId = xValueId,
-                            value = cells[ind].value?.toDouble()
+                            value = cells[ind].value?.toDoubleOrNull()
                         )
                     )
                 }
