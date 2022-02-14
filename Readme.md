@@ -19,6 +19,7 @@ __EasyGraphics__ - это приложение для формирования �
 --- 
 ### Стек
 - Kotlin
+- LiveData, ViewModel
 - Cicerone
 - Coroutines
 - Room
