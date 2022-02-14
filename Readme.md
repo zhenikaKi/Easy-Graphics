@@ -26,3 +26,4 @@ __EasyGraphics__ - это приложение для формирования �
 - Koin
 - Gson
 - MPAndroidChart
+- MaterialColorPicker
