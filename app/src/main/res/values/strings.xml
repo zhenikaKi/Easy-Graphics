@@ -21,6 +21,11 @@
     <string name="to_table">К таблице значений</string>
     <string name="db_read_error">Невозможно прочитать из базы данных</string>
 
+    <!-- окно таблицы -->
+    <string name="table_column_corner">№</string>
+    <string name="table_default_hint">Значение</string>
+    <string name="table_row_edit">Редактирование</string>
+
     <string name="button_add">Добавить строку</string>
     <string name="button_log">в логи</string>
     <string name="example_title">Для теста</string>

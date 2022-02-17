@@ -28,6 +28,7 @@ object Version {
     const val GSON = "2.8.2"
 
     const val SCROLL_TABLE_VIEW = "1.0.4"
+    const val TABLE_VIEW = "v0.8.9.4"
     const val COLOR_PICKER = "1.2.5"
     const val CHART_LIBRARY = "v3.1.0"
     const val CICERONE = "7.1"

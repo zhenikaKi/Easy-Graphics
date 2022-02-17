@@ -8,10 +8,8 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import ru.easygraphics.data.db.entities.ChartAllData
@@ -39,13 +37,6 @@ fun View.longClick(click: () -> Unit) = setOnLongClickListener {
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
     this.arguments = bundleOf(*arguments)
     return this
-}
-
-fun Fragment.toast(string: String?) {
-    Toast.makeText(context, string, Toast.LENGTH_SHORT).apply {
-        setGravity(Gravity.BOTTOM, 0, 250)
-        show()
-    }
 }
 
 fun TextView.addBottomBorder(width: Int) {

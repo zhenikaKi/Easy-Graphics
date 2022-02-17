@@ -27,4 +27,13 @@
     <dimen name="icon_margin_top">10dp</dimen>
     <dimen name="icon_margin_bottom">10dp</dimen>
     <dimen name="icon_margin_start">30dp</dimen>
+
+    <!-- Таблица -->
+    <dimen name="table_header_height">36dp</dimen>
+    <dimen name="table_cell_height">30dp</dimen>
+    <dimen name="item_table_text_size">14sp</dimen>
+    <dimen name="item_table_row_number_text_size">10sp</dimen>
+    <dimen name="item_table_line_size">2dp</dimen>
+    <dimen name="item_table_text_padding">6dp</dimen>
+    <dimen name="table_icon_size">16dp</dimen>
 </resources>

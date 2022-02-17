@@ -14,6 +14,7 @@ object Scopes {
 
     const val DESCRIPTION_SERVICE = "descriptionService"
     const val SETTING_SERVICE = "settingService"
+    const val TABLE_SERVICE = "tableService"
     const val GRAPHIC_SERVICE = "graphicService"
 
     const val DATA_REPOSITORY = "dataRepository"

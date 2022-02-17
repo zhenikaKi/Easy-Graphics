@@ -49,7 +49,8 @@ android {
 }
 
 dependencies {
-    implementation("io.github.ekiryushin:scrolltableview:${Version.SCROLL_TABLE_VIEW}")
+    //implementation("io.github.ekiryushin:scrolltableview:${Version.SCROLL_TABLE_VIEW}")
+    implementation("com.github.evrencoskun:TableView:${Version.TABLE_VIEW}")
 
     implementation("com.pes.materialcolorpicker:library:${Version.COLOR_PICKER}")
     //MPAndroidChart

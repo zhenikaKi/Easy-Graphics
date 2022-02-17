@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/table_cell_height">
+
+    <TextView
+        android:id="@+id/cell_text"
+        style="@style/TableCellStyle"
+        android:gravity="start|center_vertical"/>
+</LinearLayout>

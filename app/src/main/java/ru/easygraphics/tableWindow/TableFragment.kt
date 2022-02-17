@@ -12,13 +12,13 @@ import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.data.db.entities.ChartAllData
 import ru.easygraphics.data.domain.TableLineData
 import ru.easygraphics.databinding.FragmentTableBinding
+import ru.easygraphics.extensions.toast
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.parseToListOfTableLineData
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableState
 import ru.easygraphics.tableWindow.adapter.TableAdapterV
-import ru.easygraphics.toast
 
 class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::inflate),
     TableAdapterV.Delegate {
@@ -110,7 +110,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     }
 
     override fun onRowSelectedV(tableLineData: TableLineData) {
-        this.toast(tableLineData.lineName)
+        requireContext().toast(tableLineData.lineName)
         //tableAdapterV.removeItem()
     }
 
@@ -124,7 +124,7 @@ class TableFragment : BaseFragment<FragmentTableBinding>(FragmentTableBinding::i
     }*/
 
     override fun onDeleteSelectedV(position: Int) {
-        this.toast("$position to delete")
+        requireContext().toast("$position to delete")
         tableAdapterV.removeItem(position = position)
     }
 }

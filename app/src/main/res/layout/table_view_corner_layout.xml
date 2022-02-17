@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/default_row_header_width"
+    android:layout_height="@dimen/default_row_header_width">
+        <TextView
+            android:id="@+id/column_header_text"
+            style="@style/TableCellStyle"
+            android:background="@color/table_header_backcolor"
+            android:textStyle="bold"
+            android:text="@string/table_column_corner"/>
+</LinearLayout>
