@@ -104,15 +104,15 @@ object AlertDialogs {
             isFirstValue && xValueType == DB.ValueTypes.DATE -> {
                 setEditTextAsDate(context, editText, value)
             }
-            xValueType == DB.ValueTypes.NUMBER -> {
+            isFirstValue && xValueType == DB.ValueTypes.STRING -> {
+                editText.inputType = InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+                editText.setText(value)
+            }
+            else -> {
                 editText.inputType = InputType.TYPE_CLASS_NUMBER or
                         InputType.TYPE_NUMBER_FLAG_DECIMAL or
                         InputType.TYPE_NUMBER_FLAG_SIGNED
                 editText.setTextIfValueAsFloat(value)
-            }
-            else -> {
-                editText.inputType = InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-                editText.setText(value)
             }
         }
     }
