@@ -82,7 +82,7 @@ class TableTestFragment :
     private fun showTableData(columnHeaders: List<Cell>,
                               rowHeaders: List<RowHeaderCell>,
                               cells: List<List<Cell>>,
-                              graphicName: String) {
+                              graphicName: String?) {
         countColumns = columnHeaders.size
         binding.graphName.text = graphicName
         val tableAdapter = TableTestAdapter(rowEventListener)
@@ -142,8 +142,7 @@ class TableTestFragment :
         }
 
         //получаем данные по строке
-        val columns: List<Cell>? =
-            getAdapter().getCellRowItems(rowId)
+        val columns: List<Cell>? = getAdapter().getCellRowItems(rowId)
         //данные по заголовку
         val headers: List<Cell> = getAdapter().getHeaders()
         columns?.let {
@@ -153,6 +152,7 @@ class TableTestFragment :
                 it,
                 headers,
                 asNewRow,
+                viewModel.getXValueType(),
                 object: TableEditDialogListener{
                     override fun applyDialog(view: LinearLayout) {
                         applyDialog(rowId, view)

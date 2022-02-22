@@ -13,6 +13,7 @@ import ru.easygraphics.extensions.asDDMMYYYY
 import ru.easygraphics.extensions.setTextIfValueAsDDMMYYYY
 import ru.easygraphics.extensions.setTextIfValueAsFloat
 import ru.easygraphics.helpers.consts.App
+import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.tabletest.TableEditDialogListener
 import ru.easygraphics.tabletest.data.Cell
 import java.text.SimpleDateFormat
@@ -45,14 +46,16 @@ object AlertDialogs {
      * @param rowId строка, по которой нажали.
      * @param columns список ячеек в строке.
      * @param headers список ячеек заголовка таблицы.
-     * @param listener слушатель нажатия кнопок диалогового окна
      * @param asNewRow диалоговое окно создается для новой строки или нет
+     * @param xValueType тип подписи по оси X
+     * @param listener слушатель нажатия кнопок диалогового окна
      */
     fun createEditRowTable(context: Context,
                            rowId: Int,
                            columns: List<Cell>,
                            headers: List<Cell>?,
                            asNewRow: Boolean = false,
+                           xValueType: DB.ValueTypes?,
                            listener: TableEditDialogListener): AlertDialog {
         val inflater = LayoutInflater.from(context)
         val viewDialog = inflater.inflate(R.layout.table_dialog_edit_view, null)
@@ -66,7 +69,7 @@ object AlertDialogs {
                 view.findViewById<TextInputLayout>(R.id.input_value).hint = title
             }
             //задаем значение
-            setEditTextValue(context, editText, index == 0, cell.value)
+            setEditTextValue(context, editText, xValueType, index == 0, cell.value)
 
             //задаем параметры, чтобы потом по ним обновить данные в таблице
             editText.setTag(R.id.tag_column_id, cell.id)
@@ -88,16 +91,29 @@ object AlertDialogs {
      * Заполнить поле ввода значением и задать тип поля ввода.
      * @param context приложения.
      * @param editText поле ввода.
+     * @param xValueType тип подписи по оси X.
      * @param isFirstValue первое или нет значение в списке. Если первое, то это подпись по оси X.
      * @param value значение для поля ввода
      */
-    private fun setEditTextValue(context: Context, editText: EditText, isFirstValue: Boolean, value: String?) {
-        if (isFirstValue) {
-            setEditTextAsDate(context, editText, value)
-        }
-        else {
-            editText.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
-            editText.setTextIfValueAsFloat(value)
+    private fun setEditTextValue(context: Context,
+                                 editText: EditText,
+                                 xValueType: DB.ValueTypes?,
+                                 isFirstValue: Boolean,
+                                 value: String?) {
+        when {
+            isFirstValue && xValueType == DB.ValueTypes.DATE -> {
+                setEditTextAsDate(context, editText, value)
+            }
+            xValueType == DB.ValueTypes.NUMBER -> {
+                editText.inputType = InputType.TYPE_CLASS_NUMBER or
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL or
+                        InputType.TYPE_NUMBER_FLAG_SIGNED
+                editText.setTextIfValueAsFloat(value)
+            }
+            else -> {
+                editText.inputType = InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+                editText.setText(value)
+            }
         }
     }
 
@@ -107,7 +123,9 @@ object AlertDialogs {
      * @param editText поле ввода.
      * @param value значение, которое нужно подставить в поле ввода.
      */
-    private fun setEditTextAsDate(context: Context, editText: EditText, value: String?) {
+    private fun setEditTextAsDate(context: Context,
+                                  editText: EditText,
+                                  value: String?) {
         //сформируем дату календаря
         val calendar = getGregorianCalendar(value)
 

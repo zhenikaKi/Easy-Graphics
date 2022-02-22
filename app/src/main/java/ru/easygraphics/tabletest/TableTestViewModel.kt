@@ -3,6 +3,7 @@ package ru.easygraphics.tabletest
 import kotlinx.coroutines.launch
 import ru.easygraphics.baseobjects.BaseViewModel
 import ru.easygraphics.data.db.entities.ChartAllDataViewed
+import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.TableTestState
 import ru.easygraphics.tabletest.data.Cell
@@ -11,23 +12,32 @@ import ru.easygraphics.tabletest.data.RowHeaderCell
 
 class TableTestViewModel(private val service: TableTestService) : BaseViewModel<BaseState>() {
 
-    private lateinit var graphicData: ChartAllDataViewed
+    private var graphicData: ChartAllDataViewed? = null
 
     //сформировать данные для графика
     fun loadTableData(chartId: Long) {
         liveData.postValue(BaseState.Loading)
         coroutineScope.launch {
             graphicData = service.getGraphicData(chartId = chartId)
-            //сформируем шапку таблицы
-            val columnHeaders = service.getColumnHeaders(graphicData)
-            //сформируем список заголовка каждой строки
-            val rowHeaders = service.getRowHeaders(graphicData)
-            //сформируем основные данные для отображения
-            val data = service.getTableRowCells(graphicData)
+            var columnHeaders: List<Cell> = listOf()
+            var rowHeaders: List<RowHeaderCell> = listOf()
+            var data: List<List<Cell>> = listOf()
 
-            liveData.postValue(TableTestState.LoadData(columnHeaders, rowHeaders, data, graphicData.chart.name))
+            graphicData?.let {
+                //сформируем шапку таблицы
+                columnHeaders = service.getColumnHeaders(it)
+                //сформируем список заголовка каждой строки
+                rowHeaders = service.getRowHeaders(it)
+                //сформируем основные данные для отображения
+                data = service.getTableRowCells(it)
+            }
+
+            liveData.postValue(TableTestState.LoadData(columnHeaders, rowHeaders, data, graphicData?.chart?.name))
         }
     }
+
+    /** Получить тип подписи по оси X */
+    fun getXValueType(): DB.ValueTypes? = graphicData?.chart?.xValueType
 
     /** Добавить в таблицу новую строку */
     fun addNewRow(adapter: TableTestAdapter): Int {
