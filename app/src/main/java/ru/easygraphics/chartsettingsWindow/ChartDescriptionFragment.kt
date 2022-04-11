@@ -23,13 +23,13 @@ import ru.easygraphics.baseobjects.BaseFragment
 import ru.easygraphics.data.db.entities.Chart
 import ru.easygraphics.data.db.entities.ChartLine
 import ru.easygraphics.databinding.FragmentChartDescriptionBinding
+import ru.easygraphics.extensions.toast
 import ru.easygraphics.helpers.ColorConvert
 import ru.easygraphics.helpers.consts.App
 import ru.easygraphics.helpers.consts.DB
 import ru.easygraphics.helpers.consts.Scopes
 import ru.easygraphics.states.BaseState
 import ru.easygraphics.states.DescriptionState
-import ru.easygraphics.toast
 import ru.easygraphics.visibleOrGone
 import kotlin.random.Random
 
@@ -121,7 +121,7 @@ class ChartDescriptionFragment :
                 model.saveGraphicData(chartToSave, linesToSave, linesDelete)
             }
         }
-        this@ChartDescriptionFragment.toast(resources.getString(R.string.message_save))
+        requireContext().toast(resources.getString(R.string.message_save))
     }
 
     /** Навешать обработчики на кнопки */

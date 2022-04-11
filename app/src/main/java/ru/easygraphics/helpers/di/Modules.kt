@@ -27,6 +27,7 @@ import ru.easygraphics.settingwindow.SettingViewModel
 import ru.easygraphics.tableWindow.TableFragment
 import ru.easygraphics.tableWindow.TableViewModel
 import ru.easygraphics.tabletest.TableTestFragment
+import ru.easygraphics.tabletest.TableTestService
 import ru.easygraphics.tabletest.TableTestViewModel
 
 object Modules {
@@ -116,7 +117,11 @@ object Modules {
     val tableTestWindow = module {
         scope<TableTestFragment> {
             viewModel(qualifier = named(Scopes.TABLE_TEST_VIEW_MODEL)) {
-                TableTestViewModel(get(qualifier = named(Scopes.DATA_REPOSITORY)))
+                TableTestViewModel(get(qualifier = named(Scopes.TABLE_SERVICE)))
+            }
+
+            scoped<TableTestService>(qualifier = named(Scopes.TABLE_SERVICE)) {
+                TableTestService(get(qualifier = named(Scopes.DATA_REPOSITORY)))
             }
         }
     }

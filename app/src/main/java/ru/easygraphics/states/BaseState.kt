@@ -11,4 +11,5 @@ sealed interface BaseState {
     object LoadingRoot: BaseState
     object LoadingSaved: BaseState
     object SavedWithTableOpening: BaseState
+    object Null: BaseState
 }

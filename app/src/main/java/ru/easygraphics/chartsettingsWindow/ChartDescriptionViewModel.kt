@@ -31,7 +31,7 @@ class ChartDescriptionViewModel(private val service: ChartDescriptionService):Ba
 
     //очистка состояния
     fun clearState() {
-        liveData.postValue(null)
+        liveData.postValue(BaseState.Null)
     }
 
     override fun handleCoroutineError(throwable: Throwable) {

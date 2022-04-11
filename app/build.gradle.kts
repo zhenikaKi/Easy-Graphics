@@ -1,8 +1,15 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     kotlin("android.extensions")
+}
+
+val props = Properties().apply {
+    load(FileInputStream(File(rootProject.rootDir, "local.properties")))
 }
 
 android {
@@ -24,13 +31,36 @@ android {
         }
     }
 
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                output.outputFileName = "EasyGraphics_v${Config.VERSION_NAME}.apk"
+            }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(props.getProperty("sign.storeFile"))
+            storePassword = props.getProperty("sign.storePassword")
+            keyAlias = props.getProperty("sign.keyAlias")
+            keyPassword = props.getProperty("sign.keyPassword")
+        }
+    }
+
     buildTypes {
         getByName("release") {
+            signingConfig = signingConfigs["release"]
             isMinifyEnabled = false
             proguardFiles (
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "../proguard-rules.pro"
             )
+        }
+
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -49,7 +79,8 @@ android {
 }
 
 dependencies {
-    implementation("io.github.ekiryushin:scrolltableview:${Version.SCROLL_TABLE_VIEW}")
+    //implementation("io.github.ekiryushin:scrolltableview:${Version.SCROLL_TABLE_VIEW}")
+    implementation("com.github.evrencoskun:TableView:${Version.TABLE_VIEW}")
 
     implementation("com.pes.materialcolorpicker:library:${Version.COLOR_PICKER}")
     //MPAndroidChart
